@@ -1,0 +1,11 @@
+.element__button{
+    margin: 0;
+    padding:0;
+    width: 22px;
+    height: 19px;
+    display: inline;
+    position: absolute;
+    background-color: transparent;
+    border-width: 0;
+    z-index: 1;
+}

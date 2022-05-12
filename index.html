@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Место</title>
+  <link rel="stylesheet" href="./pages/index.css">
+</head>
+
+<body class="page">
+  <header class="header">
+    <img alt="Логотип Место" class="header__logo" src="./images/header-logo.svg">
+  </header>
+  <main class="content">
+    <section class="profile">
+      <img alt="Аватарка" src="./images/profile-avatar.jpg" class="profile__avatar">
+      <div class="profile__flex">
+        <div class="profile__user-container">
+          <h3 class="profile__user-name">Жак-Ив Кусто</h3>
+          <p class="profile__user-about">Исследователь океана</p>
+        </div>
+        <div class="profile__button-edit-container">
+          <button type="button" class="profile__edit-button"><span class="profile__edit-button-style"></span></button>
+        </div>
+      </div>
+      <div class="profile__button-add-container">
+        <button type="button" class="profile__add-button"><span class="profile__add-button-style"></span></button>
+      </div>
+    </section>
+    <section class="elements">
+      <ul class="elements__grid-container">
+        <li>
+          <figure class="element">
+            <img alt="Карачаевск" src="./images/karachaev-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Карачаевск</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="element">
+            <img alt="Гора Эльбрус" src="./images/elbrus-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Гора Эльбрус</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="element">
+            <img alt="Домбай" src="./images/dombai-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Домбай</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="element">
+            <img alt="Гора Эльбрус" src="./images/elbrus-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Гора Эльбрус</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="element">
+            <img alt="Домбай" src="./images/dombai-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Домбай</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+        <li>
+          <figure class="element">
+            <img alt="Карачаево-Черкесия" src="./images/karachaev-unsplash.jpg" class="element__image">
+            <figcaption class="element__caption-container">
+              <h3 class="element__caption-about">Карачаево-Черкесия</h3>
+              <div class="element__button-container">
+                <button type="button" class="element__button">
+                  <span class="element__button-style element__button-style_active"></span></button>
+              </div>
+            </figcaption>
+          </figure>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <!--попап редактирование -->
+  <div class="popup popup_opened">
+    <form class="popup__container">
+      <h3 class="popup__header">Редактировать профиль</h3>
+      <fieldset class="popup__input popup__input-name"><input class="popup__input-style" value="Жак-Ив Кусто"
+          type="name"></fieldset>
+      <fieldset class="popup__input popup__input-about"><input class="popup__input-style" value="Исследователь океана"
+          type="name"></fieldset>
+      <button class="popup__button"><span>Сохранить</span></button>
+      <button class="popup__close-icon"><span class="popup__close-icon-style"></span></button>
+    </form>
+
+  </div>
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
+  </footer>
+</body>
+
+</html>

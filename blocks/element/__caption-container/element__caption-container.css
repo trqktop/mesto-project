@@ -1,0 +1,7 @@
+.element__caption-container{
+    margin: 0%;
+    display: flex;
+    height: 79px;
+    justify-content: space-between;
+    border: none;
+}
