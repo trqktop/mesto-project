@@ -1,12 +1,17 @@
 .profile__flex {
     display: flex;
+    margin: 0;
     column-gap: 18px;
+    padding-left: 30px;
+    align-items: baseline;
 }
 
-@media screen and (max-width:700px) {
+@media screen and (max-width:800px) {
     .profile__flex {
+        margin:22.25px auto 36px auto;
         column-gap: 10px;
-        margin-top: 22.25px;
-        margin-bottom: 36px;
+        max-width: 88.125%;
+        
+        
     }
 }

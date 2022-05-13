@@ -3,4 +3,13 @@
     margin: 0 auto 0 auto;
     max-width: 880px;
     display: block;
+    margin-bottom: 60px;
 }
+
+@media screen and (max-width:998px){
+    .footer{
+     margin-left:5.9375%;
+     margin-bottom: 36px;
+    }
+}
+

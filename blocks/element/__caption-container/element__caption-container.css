@@ -1,7 +1,8 @@
 .element__caption-container{
+    box-sizing: border-box;
     margin: 0%;
+    padding: 30px 20px 30px 21px;
     display: flex;
-    height: 79px;
     justify-content: space-between;
     border: none;
 }

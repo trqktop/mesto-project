@@ -6,7 +6,12 @@
    font-weight: 400;
    }
    
-@media screen and (max-width:400px){
+   @media screen and (max-width:800px){
+      .profile__user-about{
+         text-align: center;
+      }
+   }
+@media screen and (max-width:650px){
    .profile__user-about{
       font-size: 14px;
       line-height: 17px;

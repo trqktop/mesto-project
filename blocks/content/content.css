@@ -4,10 +4,8 @@
 }
 
 
-@media screen and (max-width:700px) {
+@media screen and (max-width:900px) {
     .content{
-        margin-top: 38.25px;
-        margin-bottom: 48px;
+        margin: 11.25% 5.9375% 15% 5.9375%;
     }
-    
 }

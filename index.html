@@ -17,16 +17,12 @@
       <img alt="Аватарка" src="./images/profile-avatar.jpg" class="profile__avatar">
       <div class="profile__flex">
         <div class="profile__user-container">
-          <h3 class="profile__user-name">Жак-Ив Кусто</h3>
+          <h1 class="profile__user-name">Жак-Ив Кусто</h1>
           <p class="profile__user-about">Исследователь океана</p>
         </div>
-        <div class="profile__button-edit-container">
-          <button type="button" class="profile__edit-button"><span class="profile__edit-button-style"></span></button>
-        </div>
+        <button aria-label="edit" type="button" class="profile__edit-button"></button>
       </div>
-      <div class="profile__button-add-container">
-        <button type="button" class="profile__add-button"><span class="profile__add-button-style"></span></button>
-      </div>
+      <button aria-label="add" type="button" class="profile__add-button"></button>
     </section>
     <section class="elements">
       <ul class="elements__grid-container">
@@ -35,10 +31,7 @@
             <img alt="Карачаевск" src="./images/karachaev-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Карачаевск</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -47,10 +40,7 @@
             <img alt="Гора Эльбрус" src="./images/elbrus-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Гора Эльбрус</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -59,10 +49,7 @@
             <img alt="Домбай" src="./images/dombai-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Домбай</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -71,10 +58,7 @@
             <img alt="Гора Эльбрус" src="./images/elbrus-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Гора Эльбрус</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -83,10 +67,7 @@
             <img alt="Домбай" src="./images/dombai-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Домбай</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -95,10 +76,7 @@
             <img alt="Карачаево-Черкесия" src="./images/karachaev-unsplash.jpg" class="element__image">
             <figcaption class="element__caption-container">
               <h3 class="element__caption-about">Карачаево-Черкесия</h3>
-              <div class="element__button-container">
-                <button type="button" class="element__button">
-                  <span class="element__button-style element__button-style_active"></span></button>
-              </div>
+              <button aria-label="like" type="button" class="element__button element__button_active"></button>
             </figcaption>
           </figure>
         </li>
@@ -106,18 +84,18 @@
     </section>
   </main>
   <!--попап редактирование -->
-  <div class="popup popup_opened">
-    <form class="popup__container">
-      <h3 class="popup__header">Редактировать профиль</h3>
-      <fieldset class="popup__input popup__input-name"><input class="popup__input-style" value="Жак-Ив Кусто"
-          type="name"></fieldset>
-      <fieldset class="popup__input popup__input-about"><input class="popup__input-style" value="Исследователь океана"
-          type="name"></fieldset>
-      <button class="popup__button"><span>Сохранить</span></button>
-      <button class="popup__close-icon"><span class="popup__close-icon-style"></span></button>
-    </form>
-
-  </div>
+  <section class="popup popup_opened">
+    <div class="popup__container">
+      <button aria-label="close" class="popup__close-button" type="button"></button>
+      <h3 class="popup__title">Редактировать профиль</h3>
+      <form name="user-edit" class="popup__edit-form">
+        <input class="popup__edit-input popup__edit-input_name" placeholder="Имя" type="text" id="name" name="username">
+        <input class="popup__edit-input popup__edit-input_about" type="text" placeholder="Профессия" id="about"
+          name="userabout">
+        <button type="submit" class="popup__submit-button">Сохранить</button>
+      </form>
+    </div>
+  </section>
   <footer class="footer">
     <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
   </footer>
