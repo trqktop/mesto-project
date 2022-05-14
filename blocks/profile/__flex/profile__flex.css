@@ -2,16 +2,23 @@
     display: flex;
     margin: 0;
     column-gap: 18px;
-    padding-left: 30px;
     align-items: baseline;
+    max-width: calc(100% - 300px);
 }
 
 @media screen and (max-width:800px) {
     .profile__flex {
-        margin:22.25px auto 36px auto;
+        margin: 26px 7.1% 0 16.31%;
+        padding: 0;
         column-gap: 10px;
         max-width: 88.125%;
-        
-        
+
     }
+}
+
+@media screen and (max-width:400px) {
+    .profile__flex {
+        max-width: 76.95%;
+    }
+
 }

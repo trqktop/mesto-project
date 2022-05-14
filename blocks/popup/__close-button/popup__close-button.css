@@ -11,6 +11,7 @@
     background-image: url(../../../images/Close-Icon.svg);
     background-size: cover;
     border: 0ch;
+    outline: none;
 }
 
 .popup__close-button:hover {
