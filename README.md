@@ -2,16 +2,21 @@
 
 
 
-# Проект: Место <img src='https://img.shields.io/badge/technology-html-red'>  <img src='https://img.shields.io/badge/technology-css-blue'>
+# Проект: Место <img src='https://img.shields.io/badge/technology-html-red'>  <img src='https://img.shields.io/badge/technology-css-blue'>  <img src="https://img.shields.io/badge/technology-javascript-yellow">
 
-
+ 
 
   
   
-**Третья практическая работа в рамках обучающей программы "Яндекс практикум" на курсе "веб-разработчик" . ✅**
+### **Третья практическая работа в рамках обучающей программы "Яндекс практикум" на курсе "веб-разработчик"**<img src="https://media.giphy.com/media/llQMjpdCwjdrVGzz1d/giphy.gif" width="30px">
 
-## Описание
-Сервис Mesto: интерактивная страница, на которую можно добавлять фотографии, удалять их и ставить лайки.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+## Описаниe
+Сервис Mesto: интерактивная страница, на которую можно добавлять фотографии, удалять их и ставить лайки. <img src="https://media.giphy.com/media/lqeqcjvmZuxkS3o9b7/giphy.gif" width="40px">
 
 ## Технологии
 - HTML5
