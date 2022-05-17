@@ -1,5 +1,13 @@
-# Проект: Место
+![Vector (1)](https://user-images.githubusercontent.com/102030035/168868073-4f310a8b-d662-4c9b-bbf7-f762015106ed.png)
 
+
+
+# Проект: Место <img src='https://img.shields.io/badge/technology-html-red'>  <img src='https://img.shields.io/badge/technology-css-blue'>
+
+
+
+  
+  
 **Третья практическая работа в рамках обучающей программы "Яндекс практикум" на курсе "веб-разработчик" . ✅**
 
 ## Описание
@@ -22,6 +30,17 @@
 
 ## **Адаптив**
 
+<div align="center">
+  <img src="https://media.giphy.com/media/YULPJoecGetvtOm1H0/giphy.gif" width="100"/>
   <img src="https://user-images.githubusercontent.com/102030035/168161242-781c3e17-3255-4360-8758-f9a86acc2eb2.jpg">
-  _______________________________________________________________________________________________________________________________________________________
-  <img src="https://user-images.githubusercontent.com/102030035/168161073-3699f258-d38b-4fab-aec7-18ae012d09fa.jpg">
+</div>
+
+<div align="center">
+ <img src="https://media.giphy.com/media/SQTSmiJl0uKoZNdv1T/giphy.gif" width="100" align="top"/>
+</div>
+<div align="center">
+ <img src="https://user-images.githubusercontent.com/102030035/168161073-3699f258-d38b-4fab-aec7-18ae012d09fa.jpg"> 
+</div>
+
+
+  
