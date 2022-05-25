@@ -8,7 +8,6 @@ openEditProfile.addEventListener('click', openClose);//отслеживаем к
 closeEditProfile.addEventListener('click', openClose);//отслеживаем клик и даем ссылку на обработчик для закрытия попапа
 
 function openClose() {
-
     popupEditProfile.classList.toggle('popup_opened');
 } //обработчик открытия и закрытия попап
 
@@ -22,8 +21,8 @@ let porfileName = document.querySelector('.profile__user-name');//имя пол�
 let porfileAbout = document.querySelector('.profile__user-about');//профессия пользователя на главной
 
 
-let popupInputName = document.querySelector('#popup__name-input ');//ввод имя пользователя 
-let popupInputAbout = document.querySelector('#popup__about-input');//ввод профессии пользователя
+let popupInputName = document.querySelector('#popupNameInput ');//ввод имя пользователя 
+let popupInputAbout = document.querySelector('#popupAboutInput');//ввод профессии пользователя
 
 let popupSubmit = document.querySelector('.popup__submit-button')//кнопка сохранить изменения в попапе редактирования профиля
 
@@ -32,12 +31,34 @@ let popupSubmit = document.querySelector('.popup__submit-button')//кнопка 
 
 popupSubmit.addEventListener('click', saveClose);//отслеживаем клик и даем ссылку на обработчик для сохранения инфы в попапе
 
-function saveClose() {
+
+popupInputName.value = porfileName.textContent;
+popupInputAbout.value = porfileAbout.textContent;
+
+function saveClose(evt) {
+    evt.preventDefault();
     porfileName.textContent = popupInputName.value;
     porfileAbout.textContent = popupInputAbout.value;
+    openClose()
 }//обработчик кнопки сохранить в попап редактор профиля
 
 
+//нИЖЕ ПОПАП ДОБАВЛЕНИЯ НОВОГО МЕСТА НА СТРАНИЦЕ ПО АЙДИШНИКАМ
+
+let popupMesto = document.querySelector('#popupMesto')//попап редактирования места
+
+let profileAddButton = document.querySelector('.profile__add-button')//кнопка открытия попапа редактирования места 
+
+let createMesto = document.querySelector('#createMesto')//кнопка сохранения места 
+
+let mestoCloseButton = document.querySelector('#mestoCloseButton');
+
+mestoCloseButton.addEventListener('click',addMestoOpen)//СОБЫТИЕ ЗАКРЫТИЯ ПОПАПА МЕСТО
+createMesto.addEventListener('click',addMestoOpen)//событие кнопки сохранить
+
+profileAddButton.addEventListener('click',addMestoOpen)//событие кнопки открыть попап редактирования места
 
 
-
+function addMestoOpen(){
+    popupMesto.classList.toggle('popup_opened');
+}//ОБРАБОТЧИК ЗАКРЫТТИЯ ПОПАПА

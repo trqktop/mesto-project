@@ -89,9 +89,21 @@
       <button aria-label="close" class="popup__close-button" type="button"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form name="user-edit" class="popup__edit-form">
-        <input class="popup__input" value="" placeholder="Имя" type="text" id="popup__name-input"  name="username">
-        <input class="popup__input" value="" type="text" placeholder="Профессия" id="popup__about-input" name="userabout">
+        <input class="popup__input" value="" placeholder="Имя" type="text" id="popupNameInput" name="username">
+        <input class="popup__input" value="" type="text" placeholder="Профессия" id="popupAboutInput" name="userabout">
         <button aria-label="submit" type="button" class="popup__submit-button">Сохранить</button>
+      </form>
+    </div>
+  </section>
+  <!--попап добавления фото места-->
+  <section class="popup" id="popupMesto">
+    <div class="popup__container">
+      <button aria-label="close" class="popup__close-button" id="mestoCloseButton" type="button"></button>
+      <h3 class="popup__title">Новое место</h3>
+      <form name="user-edit" class="popup__edit-form">
+        <input class="popup__input" value="" placeholder="Название" type="text" id="nameImageInput" name="imagename">
+        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput" name="imageurl">
+        <button aria-label="submit" type="button" id="createMesto" class="popup__submit-button">Создать</button>
       </form>
     </div>
   </section>
