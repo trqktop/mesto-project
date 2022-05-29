@@ -64,66 +64,26 @@ function addMestoOpen() {
 }//Открытие и закрытие попапа
 
 
-//Шесть карточек «из коробки»
-const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
+ 
+//ниже пробую темплейт добавления карточки 
 
+let elementGridContainer = document.querySelector('.elements__grid-container') //определил контейнер для темплейта 
 
+let templateCard = document.querySelector('.template').content;//определил шаблон темплейт
 
-//добавляем новое место по кнопке добавить
-
-
-
-
-createMesto.addEventListener('click', addNewMesto)
+createMesto.addEventListener('click', addNewMesto) //отслеживаем нажатие 
 
 function addNewMesto(evt) {
     evt.preventDefault();
-
-    let elementGridContainer = document.querySelector('.elements__grid-container')//нашел контейнер
-    let elementCard = document.querySelector('.element')//нашел елемент
-    let elementNewCardContainer = document.createElement('li')//добавляю елемент в контейнер
-    let elementNewCard = document.createElement('figure')//создал карточку для заливки в нее стилей
-    elementNewCard.innerHTML = elementCard.innerHTML //скопировал каркас хтмл с готовой карточки
-    elementNewCard.classList.add('element') //добавил класс для подтягивания стилей
-    elementGridContainer.prepend(elementNewCardContainer) //добавляю на страницу елемент при клике 
-    elementNewCardContainer.append(elementNewCard) //добавляю на страницу елемент при клике 
-
-
-    let urlImageInput = document.querySelector('#urlImageInput')//ищем строку ввода ссылки на картинку
-    let elementCardImage = elementNewCardContainer.querySelector('.element__image')//ищем в созданой выше карточке класс картинки
-    elementCardImage.setAttribute('src', urlImageInput.value) //передаем с инпута в картинку ссылку
-
-    let elementCaptionAbout = elementNewCardContainer.querySelector('.element__caption-about') //ищем в созданой карточке загловок
-    let nameImageInput = document.querySelector('#nameImageInput') //ищем строку ввода для заголовка
-    elementCaptionAbout.textContent = nameImageInput.value //передаем значение строки ввода в заголовок
-
-
+    let templateCardItem = templateCard.querySelector('li').cloneNode(true);//скопировал его содержимое 
+    let templateImage = templateCardItem.querySelector('.element__image')//определил в скопированном шаблоне картинку
+    let templateTitle = templateCardItem.querySelector('.element__caption-about')//определил заголовок в скопированом шаблоне
+    templateImage.src = urlImageInput.value; //передаем велью из строк инпут
+    templateTitle.textContent = nameImageInput.value //передаем велью из строк инпут
+    elementGridContainer.prepend(templateCardItem)
 }
+
+
 
 
 
