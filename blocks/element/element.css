@@ -4,4 +4,6 @@
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
+    max-height: 361px;
+    box-sizing: border-box;
 }

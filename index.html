@@ -22,7 +22,7 @@
         </div>
         <button aria-label="edit" type="button" class="profile__edit-button"></button>
       </div>
-      <button aria-label="add" type="button" class="profile__add-button"></button>
+      <button aria-label="add" type="submit" class="profile__add-button"></button>
     </section>
     <section class="elements">
       <ul class="elements__grid-container">
@@ -91,7 +91,8 @@
       <form name="user-edit" class="popup__edit-form">
         <input class="popup__input" value="" placeholder="Имя" type="text" id="popupNameInput" name="username">
         <input class="popup__input" value="" type="text" placeholder="Профессия" id="popupAboutInput" name="userabout">
-        <button aria-label="submit" type="button" class="popup__submit-button">Сохранить</button>
+        <button method="GET" action="#" type="submit" name="submitButton"
+          class="popup__submit-button">Сохранить</button>
       </form>
     </div>
   </section>
@@ -102,8 +103,9 @@
       <h3 class="popup__title">Новое место</h3>
       <form name="user-edit" class="popup__edit-form">
         <input class="popup__input" value="" placeholder="Название" type="text" id="nameImageInput" name="imagename">
-        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput" name="imageurl">
-        <button aria-label="submit" type="button" id="createMesto" class="popup__submit-button">Создать</button>
+        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput"
+          name="imageurl">
+        <button method="GET" action="#" type="submit" id="createMesto" class="popup__submit-button">Создать</button>
       </form>
     </div>
   </section>
