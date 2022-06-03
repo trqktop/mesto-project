@@ -6,4 +6,5 @@
     overflow: hidden;
     max-height: 361px;
     box-sizing: border-box;
+    position: relative;
 }

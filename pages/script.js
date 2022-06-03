@@ -1,49 +1,58 @@
 //1. Работа модальных окон
-const popupEditProfile = document.querySelector('.popup');//попап редактировать профиль
-const closeEditProfile = popupEditProfile.querySelector('.popup__close-button');//кнопка -закрыть попап редактирования профиля
-const openEditProfile = document.querySelector('.profile__edit-button');//кнопка -открыть попап редактирования профиля
-const porfileName = document.querySelector('.profile__user-name');//имя пользователя на главной
-const porfileAbout = document.querySelector('.profile__user-about');//профессия пользователя на главной
-const popupInputName = document.querySelector('#popupNameInput ');//ввод имя пользователя в попапе
-const popupInputAbout = document.querySelector('#popupAboutInput');//ввод профессии пользователя в попапе
-const popupSubmit = document.querySelector('.popup__submit-button')//кнопка сохранить изменения в попапе редактирования профиля
-
-//Открытие и закрытие модального окна
-
-openEditProfile.addEventListener('click', openClose);//отслеживаем клик и даем ссылку на обработчик для открытия попапа
-closeEditProfile.addEventListener('click', openClose);//отслеживаем клик и даем ссылку на обработчик для закрытия попапа
-popupSubmit.addEventListener('click', saveClose);//отслеживаем клик и даем ссылку на обработчик для сохранения инфы в попапе
+//переменные -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+let popupProfileEdit = document.querySelector('.popup')//по-пап редактировать профиль 
+const profile = document.querySelector('.profile')//секция профиль
+let openPopupProfileEdit = profile.querySelector('.profile__edit-button')//кнопка редактирование
+let closePopupProfileEdit = popupProfileEdit.querySelector('.popup__close-button')//кнопка закрытия 
 
 
-
-popupInputName.value = porfileName.textContent;
-popupInputAbout.value = porfileAbout.textContent;
-
-
-//обработчики кнопок попапа редактирования профиля
-function saveClose(evt) {
-    evt.preventDefault();
-    porfileName.textContent = popupInputName.value;
-    porfileAbout.textContent = popupInputAbout.value;
-    openClose()
-}//обработчик кнопки сохранить в попап редактор профиля
+let profileUserName = profile.querySelector('.profile__user-name');//профиль имя
+let profileUserJob = profile.querySelector('.profile__user-about');//профиль профессия
 
 
+let profileNameInput = popupProfileEdit.querySelector('#profileNameInput');//input профиль имя
+let profileJobInput = popupProfileEdit.querySelector('#profileJobInput')//input профиль профессия
+let popupSubmitProfile = document.querySelector('#popupSubmitProfile')//кнопка сохранить изменения в по-папе
+
+profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+//слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+closePopupProfileEdit.addEventListener('click', function () {
+    openClose(popupProfileEdit)
+})//слушатель событий кнопки закрыть по-пап редактирования профиля
 
 
-function openClose() {
-    popupEditProfile.classList.toggle('popup_opened');
-} //обработчик открытия и закрытия попап
+openPopupProfileEdit.addEventListener('click', function () {
+    openClose(popupProfileEdit)
+})//слушатель событий кнопки открыть по-пап редактирования профиля
+
+
+popupSubmitProfile.addEventListener('click', function (evt) {
+    evt.preventDefault()
+    saveChange()
+})//слушатель событий сохранить изменения в профиль
+
+
+//функции-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function saveChange() {
+    profileUserJob.textContent = profileJobInput.value;
+    profileUserName.textContent = profileNameInput.value;
+}//функция грузит из input в профиль значения
+
+
+function openClose(popupElement) {
+    popupElement.classList.toggle('popup_opened')
+}//функция открытия и закрытия по-папа
+
 
 
 
 //2. Шесть карточек «из коробки»
+//переменные---------------------------------------------------------------------------------------------------------------------------------------
 
-let elementGridContainer = document.querySelector('.elements__grid-container') //определил контейнер для темплейта 
-let templateCard = document.querySelector('.template').content;//определил шаблон темплейта
-
-
-
+let elementsGridContainer = document.querySelector('.elements__grid-container')//контейнер для вставки ли блока
 const initialCards = [
     {
         name: 'Архыз',
@@ -69,89 +78,63 @@ const initialCards = [
         name: 'Байкал',
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
-];
+];//массив карточек
 
-function initialCardsPush(event) {
-    initialCards.push(event)
-}//функция пуша в основной массив
+//функции---------------------------------------------------------------------------------------------------------------------------------------
 
+initialCards.forEach(function (item) {
+    addCardsOnPage(item.link, item.name)
 
+})//перебираем массив и вызываем функцию к каждому элементу массива 
 
-
-
-initialCards.forEach(function (element) {
-    const initialCardsElement = templateCard.cloneNode(true);
-    initialCardsElement.querySelector('.element__caption-about').textContent = element.name;
-    initialCardsElement.querySelector('.element__image').src = element.link;
-    elementGridContainer.append(initialCardsElement);
-
-});//закоментил карточки в хтмл и для каждого елемента массива выше,через темплейт создал карточку
-
-
-
-
-
-//3. Форма добавления карточки
-let popupMesto = document.querySelector('#popupMesto')//ищем попап места
-let profileAddButton = document.querySelector('.profile__add-button')//определил кнопку добавления места
-let mestoCloseButton = popupMesto.querySelector('#mestoCloseButton')//ищем кнопку закрытия попапа места
-
-let nameImageInput = popupMesto.querySelector('#nameImageInput');//ищем значения в полях ввода данных в попапе
-let urlImageInput = popupMesto.querySelector('#urlImageInput');//ищем значения в полях ввода данных в попапе
-let createMesto = popupMesto.querySelector('#createMesto')//кнопка СОЗДАТЬ
-
-//4. Добавление карточки
-
-profileAddButton.addEventListener('click', addMestoOpenClose) //отслеживаем клик и вешаем оброботчик открытия
-mestoCloseButton.addEventListener('click', addMestoOpenClose)//отслеживаем клик и вешаем оброботчик закрытия
-
-//отслеживаем клик кнопки сохранить . копируем темплейт, сохраняем изменения в копированный темплейт с полей инпут, добавляем карточку темплейт в начало грид контейнера 
-createMesto.addEventListener('click', function (evt) {
-    evt.preventDefault()
-    const initialCardsElement = templateCard.cloneNode(true);
-    initialCardsElement.querySelector('.element__caption-about').textContent = nameImageInput.value;
-    initialCardsElement.querySelector('.element__image').src = urlImageInput.value;
-    likeArr.push(initialCardsElement.querySelector('.element__button'));//пушу в массив лайков новосозданый лайк из новосозданой карточки
-    elementGridContainer.prepend(initialCardsElement)
-
-})
-
-//второй обработчик для пуша данных в массив 
-createMesto.addEventListener('click',
-    function () {
-        let element = document.querySelector('.element');
-        element = {
-            name: nameImageInput.value,
-            link: urlImageInput.value
-        };
-        initialCards.push(element);
-        addMestoOpenClose()
-    }
-)
-
-//Открытие и закрытие попапа
-function addMestoOpenClose() {
-    popupMesto.classList.toggle('popup_opened');
+function addCardsOnPage(srcValue, titleValue) {
+    let userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
+    let userTemplateLi = userTemplate.querySelector('li');//берем контейнер для копирования 
+    let cardElement = userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную
+    cardElement.querySelector('.element__image').setAttribute('src', srcValue) //установил аттрибут ссылки на картинку и задал источник
+    cardElement.querySelector('.element__image').setAttribute('alt', titleValue)
+    cardElement.querySelector('.element__caption-about').textContent = titleValue;// установил текст контент из источника
+    elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
 }
 
 
+//3. Форма добавления карточки
+//переменные------------------------------------------------------------------------------------------------------------------------------------
+let profileAddCardButton = profile.querySelector('.profile__add-button')
+let popupMesto = document.querySelector('#popupMesto')
+let mestoCloseButton = popupMesto.querySelector('#mestoCloseButton')
 
+
+
+//функции-----------------------------------------------------------------------------------------------------------------------------------
+
+mestoCloseButton.addEventListener('click', function () {
+    openClose(popupMesto)
+})
+profileAddCardButton.addEventListener('click', function () {
+    openClose(popupMesto)
+})
+//4. Добавление карточки
+//переменные----------------------------------------------------------------------------------------------------------------------------------
+let nameImageInput = document.querySelector('#nameImageInput')//поля ввода - имя картинки
+let urlImageInput = document.querySelector('#urlImageInput')//поля ввода - ссылка на картинку
+let popupMestoSubmit = document.querySelector('#createMesto') //кнопка - сохранить
+//функции-----------------------------------------------------------------------------------------------------------------------------------
+popupMestoSubmit.addEventListener('click', function (evt) {
+    evt.preventDefault()
+    addCardsOnPage(urlImageInput.value, nameImageInput.value)
+    openClose(popupMesto)
+
+})//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 
 //5. Лайк карточки
-
-var like = document.querySelectorAll('.element__button')//нашел и обьявил нодлист лайков на  сатранице
-var likeArr = Array.from(like)//перевел лайки в массив 
+//переменные---------------------------------------------------------------------------------------------------------------------------------------
+let like = document.querySelectorAll('.element__button')//наше все лайки на странице
+let likeArr = Array.from(like)//перевел лайки в массив
+//функции-----------------------------------------------------------------------------------------------------------------------------------
 likeArr.forEach(function (item) {
     item.addEventListener('click', function () {
         item.classList.toggle('element__button_active')
     })
-})//подключил активное состояние при клике 
-
-
-
-
-
-
-
-
+})
 
