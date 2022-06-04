@@ -91,8 +91,8 @@
       <form name="user-edit" class="popup__edit-form">
         <input class="popup__input" value="" placeholder="Имя" type="text" id="profileNameInput" name="username">
         <input class="popup__input" value="" type="text" placeholder="Профессия" id="profileJobInput" name="userabout">
-        <button method="GET" action="#" type="submit" name="submitButton"
-          class="popup__submit-button" id="popupSubmitProfile">Сохранить</button>
+        <button method="GET" action="#" type="submit" name="submitButton" class="popup__submit-button"
+          id="popupSubmitProfile">Сохранить</button>
       </form>
     </div>
   </section>
@@ -109,12 +109,26 @@
       </form>
     </div>
   </section>
+  <!--попап картинка-->
+  <section class="popup" >
+    <div class="popup__container">
+      <button aria-label="close" class="popup__close-button"  type="button"></button>
+      <h3 class="popup__title">Новое место</h3>
+      <form name="user-edit" class="popup__edit-form">
+        <input class="popup__input" value="" placeholder="Название" type="text"  name="">
+        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" 
+          name="">
+        <button method="GET" action="#" type="submit"  class="popup__submit-button">Создать</button>
+      </form>
+    </div>
+  </section>
   <footer class="footer">
     <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
   </footer>
   <template class="template">
     <li>
       <figure class="element">
+        <button class="element__delete-button"></button>
         <img class="element__image">
         <figcaption class="element__caption-container">
           <h3 class="element__caption-about"></h3>

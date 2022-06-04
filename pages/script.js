@@ -89,7 +89,25 @@ function addCardsOnPage(srcValue, titleValue) {
     cardElement.querySelector('.element__image').setAttribute('alt', titleValue)
     cardElement.querySelector('.element__caption-about').textContent = titleValue;// установил текст контент из источника
     elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
+
+
+
+    localTrash = []//пустой массив для кнопок удалить
+    localTrash.push(cardElement.querySelector('.element__delete-button'))
+    localTrash.forEach((item) =>
+        item.addEventListener('click', () =>
+            cardDelete(cardElement)
+        ))
+
+
+    let localLike = []//пустой массив для лайков
+    localLike.push(cardElement.querySelector('.element__button'))//каждую итерацию пушим лайк в массив
+    localLike.forEach((item) =>
+        item.addEventListener('click', () =>
+            likeActive(item)
+        ))//на каждый лайк из массива вешаем слушатель и функцию по ссылке
 }
+
 
 
 //3. Форма добавления карточки
@@ -123,12 +141,13 @@ popupMestoSubmit.addEventListener('click', (evt) => {
 
 //5. Лайк карточки
 //переменные---------------------------------------------------------------------------------------------------------------------------------------
-let like = document.querySelectorAll('.element__button')//наше все лайки на странице
-let likeArr = Array.from(like)//перевел лайки в массив
-//функции-----------------------------------------------------------------------------------------------------------------------------------
-likeArr.forEach((item) => {
-    item.addEventListener('click', function () {
-        item.classList.toggle('element__button_active')
-    })
-})
+//функции
+function likeActive(item) {
+    item.classList.toggle('element__button_active')
+}
 
+//6. Удаление карточки
+//переменные---------------------------------------------------------------------------------------------------------------------------------------
+function cardDelete(element) {
+    element.remove()
+}
