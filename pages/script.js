@@ -18,19 +18,13 @@ profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе
 profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-closePopupProfileEdit.addEventListener('click', function () {
-    openClose(popupProfileEdit)
-})//слушатель событий кнопки закрыть по-пап редактирования профиля
+closePopupProfileEdit.addEventListener('click', () => openClose(popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
+openPopupProfileEdit.addEventListener('click', () => openClose(popupProfileEdit))//слушатель событий кнопки открыть по-пап редактирования профиля
 
-
-openPopupProfileEdit.addEventListener('click', function () {
-    openClose(popupProfileEdit)
-})//слушатель событий кнопки открыть по-пап редактирования профиля
-
-
-popupSubmitProfile.addEventListener('click', function (evt) {
-    evt.preventDefault()
-    saveChange()
+popupSubmitProfile.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    saveChange();
+    openClose(popupProfileEdit);
 })//слушатель событий сохранить изменения в профиль
 
 
@@ -82,10 +76,10 @@ const initialCards = [
 
 //функции---------------------------------------------------------------------------------------------------------------------------------------
 
-initialCards.forEach(function (item) {
-    addCardsOnPage(item.link, item.name)
+initialCards.forEach(item => addCardsOnPage(item.link, item.name))//перебираем массив и вызываем функцию к каждому элементу массива 
 
-})//перебираем массив и вызываем функцию к каждому элементу массива 
+
+
 
 function addCardsOnPage(srcValue, titleValue) {
     let userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
@@ -108,19 +102,19 @@ let mestoCloseButton = popupMesto.querySelector('#mestoCloseButton')
 
 //функции-----------------------------------------------------------------------------------------------------------------------------------
 
-mestoCloseButton.addEventListener('click', function () {
-    openClose(popupMesto)
-})
-profileAddCardButton.addEventListener('click', function () {
-    openClose(popupMesto)
-})
+mestoCloseButton.addEventListener('click', () => openClose(popupMesto))
+
+
+profileAddCardButton.addEventListener('click', () => openClose(popupMesto))
+
+
 //4. Добавление карточки
 //переменные----------------------------------------------------------------------------------------------------------------------------------
 let nameImageInput = document.querySelector('#nameImageInput')//поля ввода - имя картинки
 let urlImageInput = document.querySelector('#urlImageInput')//поля ввода - ссылка на картинку
 let popupMestoSubmit = document.querySelector('#createMesto') //кнопка - сохранить
 //функции-----------------------------------------------------------------------------------------------------------------------------------
-popupMestoSubmit.addEventListener('click', function (evt) {
+popupMestoSubmit.addEventListener('click', (evt) => {
     evt.preventDefault()
     addCardsOnPage(urlImageInput.value, nameImageInput.value)
     openClose(popupMesto)
@@ -132,7 +126,7 @@ popupMestoSubmit.addEventListener('click', function (evt) {
 let like = document.querySelectorAll('.element__button')//наше все лайки на странице
 let likeArr = Array.from(like)//перевел лайки в массив
 //функции-----------------------------------------------------------------------------------------------------------------------------------
-likeArr.forEach(function (item) {
+likeArr.forEach((item) => {
     item.addEventListener('click', function () {
         item.classList.toggle('element__button_active')
     })
