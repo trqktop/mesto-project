@@ -8,7 +8,7 @@
 
   
   
-### **Третья практическая работа в рамках обучающей программы "Яндекс практикум" на курсе "веб-разработчик"**<img src="https://media.giphy.com/media/llQMjpdCwjdrVGzz1d/giphy.gif" width="30px">
+### **Третья практическая работа в рамках обучающей программы "Яндекс практикум" на курсе "веб-разработчик"**<img src="https://media.giphy.com/media/llQMjpdCwjdrVGzz1d/giphy.gif" width="30px" height="30px">
 
 
 
