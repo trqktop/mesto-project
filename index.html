@@ -109,18 +109,15 @@
       </form>
     </div>
   </section>
-  <!--попап картинка-->
-  <section class="popup" >
-    <div class="popup__container">
-      <button aria-label="close" class="popup__close-button"  type="button"></button>
-      <h3 class="popup__title">Новое место</h3>
-      <form name="user-edit" class="popup__edit-form">
-        <input class="popup__input" value="" placeholder="Название" type="text"  name="">
-        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" 
-          name="">
-        <button method="GET" action="#" type="submit"  class="popup__submit-button">Создать</button>
-      </form>
-    </div>
+  <!--попап открытие картинки-->
+  <section class="popup popup__fullscreen ">
+    <figure class="popup__fullscreen-container">
+      <button aria-label="close" class="popup__close-button popup__image-button" type="button"></button>
+      <img alt="" src="./images/dombai-unsplash.jpg" class="popup__fullscreen-image">
+      <figcaption class="popup__caption-container">
+        <h3 class="popup__caption">Карачаево-Черкесия</h3>
+      </figcaption>
+    </figure>
   </section>
   <footer class="footer">
     <p class="footer__copyright">&copy; 2022 Mesto Russia</p>

@@ -32,9 +32,11 @@
 @import url(../blocks/footer/__copyright/footer__copytight.css);
 
 
-.element__delete-button{
+
+
+.element__delete-button {
     background-color: transparent;
-    background-image:url(../images/Trash.svg);
+    background-image: url(../images/Trash.svg);
     background-size: cover;
     background-repeat: no-repeat;
     position: absolute;
@@ -44,8 +46,47 @@
     top: 20px;
     border: none;
     cursor: pointer;
+
 }
 
-.element__delete-button:hover{
+.element__delete-button:hover {
     opacity: .6;
+}
+
+
+.popup__fullscreen-container{
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+   
+}
+
+
+
+.popup__fullscreen-image{
+    margin: auto;
+    max-width: 75vw;
+    min-width: 25vw;
+    min-height: 25vh;
+    max-height: 75vh;
+    object-fit: contain;
+    object-position: center;
+   
+}
+
+.popup__fullscreen{
+    background-color:rgba(0,0,0,.9) ;
+}
+
+.popup__caption{
+    margin: 0;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 15px;
+    font-weight: 400;
+  
+}
+
+.popup__caption-container{
+    margin: 0;
 }

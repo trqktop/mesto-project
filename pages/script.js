@@ -91,7 +91,15 @@ function addCardsOnPage(srcValue, titleValue) {
     elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
 
 
+    //фуллскрин картинки
+    cardElement.querySelector('.element__image').addEventListener('click', function () {
+        popupFullScreen.querySelector('.popup__fullscreen-image').src = cardElement.querySelector('.element__image').src;
+        popupFullScreen.querySelector('.popup__caption').textContent = cardElement.querySelector('.element__caption-about').textContent;
+        popupFullScreen.querySelector('.popup__fullscreen-image').alt = cardElement.querySelector('.element__image').alt
+        openClose(popupFullScreen)
+    })
 
+    //кнопка удалить
     localTrash = []//пустой массив для кнопок удалить
     localTrash.push(cardElement.querySelector('.element__delete-button'))
     localTrash.forEach((item) =>
@@ -99,13 +107,16 @@ function addCardsOnPage(srcValue, titleValue) {
             cardDelete(cardElement)
         ))
 
-
+    //кнопка лайк 
     let localLike = []//пустой массив для лайков
     localLike.push(cardElement.querySelector('.element__button'))//каждую итерацию пушим лайк в массив
     localLike.forEach((item) =>
         item.addEventListener('click', () =>
             likeActive(item)
         ))//на каждый лайк из массива вешаем слушатель и функцию по ссылке
+
+
+
 }
 
 
@@ -151,3 +162,14 @@ function likeActive(item) {
 function cardDelete(element) {
     element.remove()
 }
+
+//7. Открытие попапа с картинкой
+//переменные---------------------------------------------------------------------------------------------------------------------------------------
+
+let popupFullScreen = document.querySelector('.popup__fullscreen')
+let fullScreenCloseButton = popupFullScreen.querySelector('.popup__close-button')
+
+
+//функции
+
+fullScreenCloseButton.addEventListener('click', () => openClose(popupFullScreen))
