@@ -22,7 +22,7 @@
         </div>
         <button aria-label="edit" type="button" class="profile__edit-button"></button>
       </div>
-      <button aria-label="add" type="submit" class="profile__add-button"></button>
+      <button aria-label="add" type="button" class="profile__add-button"></button>
     </section>
     <section class="elements">
       <ul class="elements__grid-container">
@@ -83,15 +83,18 @@
       </ul>
     </section>
   </main>
+  <footer class="footer">
+    <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
+  </footer>
   <!--попап редактирование -->
   <section class="popup">
     <div class="popup__container">
       <button aria-label="close" class="popup__close-button" type="button"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <form name="user-edit" class="popup__edit-form">
+      <form name="user-edit" action="#" class="popup__edit-form">
         <input class="popup__input" value="" placeholder="Имя" type="text" id="profileNameInput" name="username">
         <input class="popup__input" value="" type="text" placeholder="Профессия" id="profileJobInput" name="userabout">
-        <button method="GET" action="#" type="submit" name="submitButton" class="popup__submit-button"
+        <button type="submit" name="submitButton" class="popup__submit-button"
           id="popupSubmitProfile">Сохранить</button>
       </form>
     </div>
@@ -101,11 +104,11 @@
     <div class="popup__container">
       <button aria-label="close" class="popup__close-button" id="mestoCloseButton" type="button"></button>
       <h3 class="popup__title">Новое место</h3>
-      <form name="user-edit" class="popup__edit-form">
+      <form name="user-edit" action="#" class="popup__edit-form" id="formNewPhoto">
         <input class="popup__input" value="" placeholder="Название" type="text" id="nameImageInput" name="imagename">
         <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput"
           name="imageurl">
-        <button method="GET" action="#" type="submit" id="createMesto" class="popup__submit-button">Создать</button>
+        <button type="submit" id="createMesto" class="popup__submit-button">Создать</button>
       </form>
     </div>
   </section>
@@ -119,9 +122,6 @@
       </figcaption>
     </figure>
   </section>
-  <footer class="footer">
-    <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
-  </footer>
   <template class="template">
     <li>
       <figure class="element">
@@ -134,7 +134,8 @@
       </figure>
     </li>
   </template>
-  <script src="./pages/script.js"></script>
+  <script src="./scripts/script.js"></script>
+
 </body>
 
 </html>
