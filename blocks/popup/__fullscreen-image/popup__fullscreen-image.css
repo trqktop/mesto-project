@@ -1,0 +1,10 @@
+.popup__fullscreen-image{
+    margin: auto;
+    max-width: 75vw;
+    min-width: 25vw;
+    min-height: 25vh;
+    max-height: 75vh;
+    object-fit: contain;
+    object-position: center;
+   
+}
