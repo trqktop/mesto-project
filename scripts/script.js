@@ -1,7 +1,7 @@
 
 //1. Работа модальных окон
 //переменные -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const popupProfileEdit = document.querySelector('.popup')//по-пап редактировать профиль 
+const popupProfileEdit = document.querySelector('#popupEditProfile')//по-пап редактировать профиль 
 const profile = document.querySelector('.profile')//секция профиль
 const openPopupProfileEdit = profile.querySelector('.profile__edit-button')//кнопка редактирование
 const closePopupProfileEdit = popupProfileEdit.querySelector('.popup__close-button')//кнопка закрытия 
@@ -87,12 +87,15 @@ const initialCards = [
 
 //функции---------------------------------------------------------------------------------------------------------------------------------------
 
-initialCards.forEach(item => addCardsOnPage(item.link, item.name))//перебираем массив и вызываем функцию к каждому элементу массива 
+initialCards.forEach(item => {
+    insertCard(createCards(item.link, item.name))
+}
+)//перебираем массив и вызываем функцию к каждому элементу массива 
 
 
 
 
-function addCardsOnPage(srcValue, titleValue) {
+function createCards(srcValue, titleValue) {
     const userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
     const userTemplateLi = userTemplate.querySelector('li');//берем контейнер для копирования 
     const cardElement = userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную
@@ -100,19 +103,44 @@ function addCardsOnPage(srcValue, titleValue) {
     elementImage.setAttribute('src', srcValue) //установил аттрибут ссылки на картинку и задал источник
     elementImage.setAttribute('alt', titleValue)
     cardElement.querySelector('.element__caption-about').textContent = titleValue;// установил текст контент из источника
-    insertCard(cardElement)
+    listenerFullScreenImage(elementImage, cardElement)
+    deleteCardButtonListener(cardElement)
+    likeButtonListener(cardElement)
+    return cardElement
+}
 
+
+
+
+
+function insertCard(cardElement) {
+    const elementsGridContainer = document.querySelector('.elements__grid-container')//контейнер для вставки ли блока
+    elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
+
+}//функция вставить карточку 
+
+
+//слушатель событий
+
+function listenerFullScreenImage(elementImage, cardElement) {
     //фуллскрин картинки
     elementImage.addEventListener('click', function () {
         popupFullScreen.querySelector('.popup__fullscreen-image').src = elementImage.src;
         popupFullScreen.querySelector('.popup__caption').textContent = cardElement.querySelector('.element__caption-about').textContent;
         popupFullScreen.querySelector('.popup__fullscreen-image').alt = elementImage.alt
         openClosePopup(popupFullScreen)
-    })
 
-    //кнопка удалить
+    })
+}
+
+function deleteCardButtonListener(cardElement) {
     cardElement.querySelector('.element__delete-button').addEventListener('click', () =>
         cardDelete(cardElement))
+}//удаление карточки
+
+
+
+function likeButtonListener(cardElement) {
     //кнопка лайк 
     cardElement.querySelector('.element__button').addEventListener('click', () =>
         likeActive(cardElement.querySelector('.element__button'))
@@ -120,11 +148,9 @@ function addCardsOnPage(srcValue, titleValue) {
 
 }
 
-function insertCard(cardElement) {
-    const elementsGridContainer = document.querySelector('.elements__grid-container')//контейнер для вставки ли блока
-    elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
-    return
-}//функция вставить карточку 
+
+
+
 
 
 //3. Форма добавления карточки
@@ -155,7 +181,7 @@ let formNewPhoto = document.querySelector('#formNewPhoto')
 //функции-----------------------------------------------------------------------------------------------------------------------------------
 formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    addCardsOnPage(urlImageInput.value, nameImageInput.value)
+    insertCard(createCards(urlImageInput.value, nameImageInput.value))
     openClosePopup(popupAddNewPhoto)
 
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
