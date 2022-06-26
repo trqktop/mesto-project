@@ -50,6 +50,7 @@ function saveChange() {
 
 function openPopup(popupElement) {
     popupElement.classList.add('popup_opened')
+    enableValidation()
 }//функция открытия и закрытия по-папа
 
 function closePopup(popupElement) {
@@ -62,6 +63,7 @@ function closePopup(popupElement) {
 function closeHideErrorMessage(popupElement) {
     Array.from(popupElement.querySelectorAll('span')).forEach((item) =>
         item.textContent = '')
+        showSubmitButton(popupElement.querySelector('form'))
 }
 
 //2. Шесть карточек «из коробки»
@@ -278,4 +280,4 @@ function hideSubmitButton(currentForm) {
     currentForm.querySelector('button').disabled = true
 }
 
-enableValidation()
+
