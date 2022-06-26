@@ -89,11 +89,19 @@
   <!--попап редактирование -->
   <section class="popup" id="popupEditProfile">
     <div class="popup__container">
-      <button aria-label="close" class="popup__close-button" type="button"></button>
+      <button aria-label="close" class="popup__close-button" type="reset"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <form name="user-edit" action="#" class="popup__edit-form">
-        <input class="popup__input" value="" placeholder="Имя" type="text" id="profileNameInput" name="username">
-        <input class="popup__input" value="" type="text" placeholder="Профессия" id="profileJobInput" name="userabout">
+      <form name="user-edit" action="#" class="popup__edit-form" novalidate>
+        <div class="popup__error-fieldset">
+          <input class="popup__input" value="" placeholder="Имя" type="text" id="profileNameInput" name="username"
+            minlength="2" maxlength="40" required>
+          <span class="popup__input-error profileNameInput-error"></span>
+        </div>
+        <div class="popup__error-fieldset">
+          <input class="popup__input" value="" type="text" placeholder="Профессия" id="profileJobInput" name="userabout"
+            minlength="2" maxlength="200" required>
+          <span class="popup__input-error profileJobInput-error"></span>
+        </div>
         <button type="submit" name="submitButton" class="popup__submit-button"
           id="popupSubmitProfile">Сохранить</button>
       </form>
@@ -102,12 +110,19 @@
   <!--попап добавления фото места-->
   <section class="popup" id="popupMesto">
     <div class="popup__container">
-      <button aria-label="close" class="popup__close-button" id="mestoCloseButton" type="button"></button>
+      <button aria-label="close" class="popup__close-button" id="mestoCloseButton" type="reset"></button>
       <h3 class="popup__title">Новое место</h3>
-      <form name="user-edit" action="#" class="popup__edit-form" id="formNewPhoto">
-        <input class="popup__input" value="" placeholder="Название" type="text" id="nameImageInput" name="imagename">
-        <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput"
-          name="imageurl">
+      <form name="user-edit" action="#" class="popup__edit-form" id="formNewPhoto" novalidate>
+        <div class="popup__error-fieldset">
+          <input class="popup__input" value="" placeholder="Название" type="text" id="nameImageInput" minlength="2"
+            maxlength="30" name="imagename" required>
+          <span class="popup__input-error nameImageInput-error"></span>
+        </div>
+        <div class="popup__error-fieldset">
+          <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlImageInput"
+            name="imageurl" required>
+          <span class="popup__input-error urlImageInput-error"></span>
+        </div>
         <button type="submit" id="createMesto" class="popup__submit-button">Создать</button>
       </form>
     </div>
@@ -115,7 +130,7 @@
   <!--попап открытие картинки-->
   <section class="popup popup__fullscreen ">
     <figure class="popup__fullscreen-container">
-      <button aria-label="close" class="popup__close-button popup__image-button" type="button"></button>
+      <button aria-label="close" class="popup__close-button popup__image-button" type="reset"></button>
       <img alt="" src="./images/dombai-unsplash.jpg" class="popup__fullscreen-image">
       <figcaption class="popup__caption-container">
         <h3 class="popup__caption">Карачаево-Черкесия</h3>

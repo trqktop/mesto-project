@@ -23,18 +23,19 @@ const popupFormSubmitProfile = document.querySelector('.popup__edit-form')
 
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-closePopupProfileEdit.addEventListener('click', () => openClosePopup(popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
+closePopupProfileEdit.addEventListener('click', () => closePopup(popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
 openPopupProfileEdit.addEventListener('click', () => {
-    openClosePopup(popupProfileEdit);
+    openPopup(popupProfileEdit);
     profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+
 
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
 popupFormSubmitProfile.addEventListener('submit', (evt) => {
     evt.preventDefault();
     saveChange();
-    openClosePopup(popupProfileEdit);
+    closePopup(popupProfileEdit);
 })//слушатель событий сохранить изменения в профиль
 
 
@@ -46,10 +47,16 @@ function saveChange() {
 }//функция грузит из input в профиль значения
 
 
-function openClosePopup(popupElement) {
-    popupElement.classList.toggle('popup_opened')
+function openPopup(popupElement) {
+    popupElement.classList.add('popup_opened')
 }//функция открытия и закрытия по-папа
 
+function closePopup(popupElement) {
+    
+    profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+    profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+    popupElement.classList.remove('popup_opened')
+}
 
 
 
@@ -128,7 +135,7 @@ function listenerFullScreenImage(elementImage, cardElement) {
         popupFullScreen.querySelector('.popup__fullscreen-image').src = elementImage.src;
         popupFullScreen.querySelector('.popup__caption').textContent = cardElement.querySelector('.element__caption-about').textContent;
         popupFullScreen.querySelector('.popup__fullscreen-image').alt = elementImage.alt
-        openClosePopup(popupFullScreen)
+        openPopup(popupFullScreen)
 
     })
 }
@@ -163,10 +170,10 @@ const popupNewPhotoCloseButton = popupAddNewPhoto.querySelector('#mestoCloseButt
 
 //функции-----------------------------------------------------------------------------------------------------------------------------------
 
-popupNewPhotoCloseButton.addEventListener('click', () => openClosePopup(popupAddNewPhoto))
+popupNewPhotoCloseButton.addEventListener('click', () => closePopup(popupAddNewPhoto))
 
 
-profileAddCardButton.addEventListener('click', () => openClosePopup(popupAddNewPhoto))
+profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto))
 
 
 //4. Добавление карточки
@@ -182,7 +189,7 @@ let formNewPhoto = document.querySelector('#formNewPhoto')
 formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
     insertCard(createCards(urlImageInput.value, nameImageInput.value))
-    openClosePopup(popupAddNewPhoto)
+    closePopup(popupAddNewPhoto)
 
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 
@@ -208,4 +215,60 @@ const fullScreenCloseButton = popupFullScreen.querySelector('.popup__close-butto
 
 //функции
 
-fullScreenCloseButton.addEventListener('click', () => openClosePopup(popupFullScreen))
+fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen))
+
+
+
+// валидация
+//1. Валидация формы «Редактировать профиль»
+
+
+
+
+function enableValidation() {
+    const formList = Array.from(document.querySelectorAll('form'))
+    listenerForms(formList)
+}
+
+
+
+
+
+function listenerForms(formList) {
+    formList.forEach((form) =>
+        form.addEventListener('input', (evt) => {
+            checkInputValidity(evt.target, evt.currentTarget, evt.currentTarget.checkValidity())
+
+        }))
+}
+
+
+function checkInputValidity(currentInput, currentForm, formValidity) {
+    if (!formValidity) {
+        showInputError(currentInput)
+        hideSubmitButton(currentForm)
+    } else {
+        hideInputError(currentInput)
+        showSubmitButton(currentForm)
+    }
+}
+
+
+function showInputError(currentInput) {
+    document.querySelector(`.${currentInput.id}-error`).textContent = currentInput.validationMessage
+
+}
+
+function hideInputError(currentInput) {
+    document.querySelector(`.${currentInput.id}-error`).textContent = ''
+}
+
+function showSubmitButton(currentForm) {
+    currentForm.querySelector('button').classList.remove('popup__submit-button_disabled')
+}
+
+function hideSubmitButton(currentForm) {
+    currentForm.querySelector('button').classList.add('popup__submit-button_disabled')
+}
+
+enableValidation()
