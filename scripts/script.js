@@ -33,13 +33,13 @@ openPopupProfileEdit.addEventListener('click', () => {
 
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
-popupFormSubmitProfile.addEventListener('submit', (evt) => {
+popupFormSubmitProfile.addEventListener('submit', submitListener) //слушатель событий сохранить изменения в профиль
+
+function submitListener(evt) {
     evt.preventDefault();
     saveChange();
     closePopup(popupProfileEdit);
-})//слушатель событий сохранить изменения в профиль
-
-
+}
 //функции-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function saveChange() {
@@ -194,7 +194,7 @@ formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
     insertCard(createCards(urlImageInput.value, nameImageInput.value))
     closePopup(popupAddNewPhoto)
-    
+
 
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 
@@ -270,10 +270,12 @@ function hideInputError(currentInput) {
 
 function showSubmitButton(currentForm) {
     currentForm.querySelector('button').classList.remove('popup__submit-button_disabled')
+    currentForm.querySelector('button').disabled = false
 }
 
 function hideSubmitButton(currentForm) {
     currentForm.querySelector('button').classList.add('popup__submit-button_disabled')
+    currentForm.querySelector('button').disabled = true
 }
 
 enableValidation()
