@@ -23,12 +23,13 @@ const popupFormSubmitProfile = document.querySelector('.popup__edit-form')
 
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-closePopupProfileEdit.addEventListener('click', () => closePopup(popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
+closePopupProfileEdit.addEventListener('click', () => {
+    closePopup(popupProfileEdit)
+})//слушатель событий кнопки закрыть по-пап редактирования профиля
 openPopupProfileEdit.addEventListener('click', () => {
     openPopup(popupProfileEdit);
     profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-
 
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
@@ -52,13 +53,16 @@ function openPopup(popupElement) {
 }//функция открытия и закрытия по-папа
 
 function closePopup(popupElement) {
-    
     profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     popupElement.classList.remove('popup_opened')
+    closeHideErrorMessage(popupElement)
 }
 
-
+function closeHideErrorMessage(popupElement) {
+    Array.from(popupElement.querySelectorAll('span')).forEach((item) =>
+        item.textContent = '')
+}
 
 //2. Шесть карточек «из коробки»
 //переменные---------------------------------------------------------------------------------------------------------------------------------------
@@ -190,6 +194,7 @@ formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
     insertCard(createCards(urlImageInput.value, nameImageInput.value))
     closePopup(popupAddNewPhoto)
+    
 
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 
