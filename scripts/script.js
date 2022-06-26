@@ -50,7 +50,9 @@ function saveChange() {
 
 function openPopup(popupElement) {
     popupElement.classList.add('popup_opened')
+    clickOverlayClosePopupListener(popupElement)
     enableValidation()
+    keyClosePopupListener(popupElement)
 }//функция открытия и закрытия по-папа
 
 function closePopup(popupElement) {
@@ -63,7 +65,7 @@ function closePopup(popupElement) {
 function closeHideErrorMessage(popupElement) {
     Array.from(popupElement.querySelectorAll('span')).forEach((item) =>
         item.textContent = '')
-        showSubmitButton(popupElement.querySelector('form'))
+    showSubmitButton(popupElement.querySelector('form'))
 }
 
 //2. Шесть карточек «из коробки»
@@ -235,6 +237,7 @@ fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen
 function enableValidation() {
     const formList = Array.from(document.querySelectorAll('form'))
     listenerForms(formList)
+
 }
 
 
@@ -245,7 +248,7 @@ function listenerForms(formList) {
     formList.forEach((form) =>
         form.addEventListener('input', (evt) => {
             checkInputValidity(evt.target, evt.currentTarget, evt.currentTarget.checkValidity())
-
+            keyClosePopupListener(evt.currentTarget)
         }))
 }
 
@@ -281,3 +284,26 @@ function hideSubmitButton(currentForm) {
 }
 
 
+
+
+//3. Закрытие попапа кликом на оверлей
+function clickOverlayClosePopupListener(popupElement) {
+    document.addEventListener('click', (evt) => {
+        if(popupElement === evt.target){
+            closePopup(popupElement)
+        }
+        
+    })
+}
+
+
+
+//4. Закрытие попапа нажатием на Esc
+
+function keyClosePopupListener(formList) {
+    document.addEventListener('keydown', (evt) => {
+        if (evt.key === 'Escape') {
+            formList.classList.remove('popup_opened')
+        }
+    })
+}
