@@ -1,11 +1,15 @@
 import { popupFunctions } from "./components/modal.js";
 import { card, addNewCardOnPage } from "./components/card.js";
-import {formValidator} from "./components/validate.js"
+
+
 //1. Работа модальных окон
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 popupFunctions.data.closePopupProfileEdit.addEventListener('click', () => popupFunctions.render.closePopup(popupFunctions.data.popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
 popupFunctions.data.openPopupProfileEditButton.addEventListener('click', () => popupFunctions.render.openPopup(popupFunctions.data.popupProfileEdit))//слушатель событий кнопки открыть по-пап редактирования профиля
-popupFunctions.data.popupSubmitProfileForm.addEventListener('submit', popupFunctions.render.submitListener) //слушатель событий сохранить изменения в профиль
+popupFunctions.data.popupSubmitProfileForm.addEventListener('submit', (evt) => { 
+    evt.preventDefault()
+    popupFunctions.render.submitListener(); 
+}) //слушатель событий сохранить изменения в профиль
 //2. Шесть карточек «из коробки»
 //функции---------------------------------------------------------------------------------------------------------------------------------------
 card.data.initialCards.forEach(item => card.render.insertCard(card.render.createCards(item.link, item.name))
@@ -17,10 +21,33 @@ addNewCardOnPage.data.profileAddCardButton.addEventListener('click', () => popup
 //4. Добавление карточки
 card.data.formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    card.render.insertCard(card.render.createCards(card.data.urlImageInput.value, card.data.nameImageInput.value))
-    popupFunctions.render.closePopup(addNewCardOnPage.data.popupAddNewPhoto)
+        card.render.insertCard(card.render.createCards(card.data.urlImageInput.value, card.data.nameImageInput.value))
+        popupFunctions.render.closePopup(addNewCardOnPage.data.popupAddNewPhoto)
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 //5. Лайк карточки
 //6. Удаление карточки
 //7. Открытие попапа с картинкой
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -1,6 +1,5 @@
-export { popupFunctions }
-
-const popupFunctions = (() => {
+import { validator } from "./validate.js"
+export const popupFunctions = (() => {
     const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
     const popupSubmitProfileForm = document.querySelector('.popup__edit-form')
     const popupProfileEdit = document.querySelector('#popupEditProfile')//по-пап редактировать профиль 
@@ -19,6 +18,7 @@ const popupFunctions = (() => {
         },
         render: {
             openPopup: (popupElement) => {
+                validator()
                 profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
                 profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
                 popupElement.classList.add('popup_opened')
@@ -30,8 +30,7 @@ const popupFunctions = (() => {
                 profileUserJob.textContent = profileJobInput.value;
                 profileUserName.textContent = profileNameInput.value;
             },
-            submitListener: (evt) => {
-                evt.preventDefault();
+            submitListener: () => {
                 popupFunctions.render.saveChange();
                 popupFunctions.render.closePopup(popupProfileEdit);
             }
