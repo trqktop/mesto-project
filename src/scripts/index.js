@@ -29,25 +29,3 @@ card.data.formNewPhoto.addEventListener('submit', (evt) => {
 //7. Открытие попапа с картинкой
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
