@@ -31,7 +31,8 @@ card.data.formNewPhoto.addEventListener('submit', (evt) => {
 //закрытие попапа при клике на оверлей
 
 popupFunctions.data.popupArr.forEach((popupElem) => {
-    popupElem.addEventListener('click', () => {
+    popupElem.addEventListener('click', (evt) => {
+        if(evt.target === popupElem)
         popupFunctions.render.closePopup(popupElem)
     })
 
