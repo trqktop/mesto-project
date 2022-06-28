@@ -9,12 +9,17 @@ export const popupFunctions = (() => {
     const profileUserJob = profile.querySelector('.profile__user-about');//профиль профессия
     const profileNameInput = popupProfileEdit.querySelector('#profileNameInput');//input профиль имя
     const profileUserName = profile.querySelector('.profile__user-name');//профиль имя
+
+const popupArr = Array.from(document.querySelectorAll('.popup'))
+
+
     return {
         data: {
             popupProfileEdit,
             openPopupProfileEditButton,
             popupSubmitProfileForm,
-            closePopupProfileEdit
+            closePopupProfileEdit,
+            popupArr
         },
         render: {
             openPopup: (popupElement) => {
@@ -22,6 +27,7 @@ export const popupFunctions = (() => {
                 profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
                 profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
                 popupElement.classList.add('popup_opened')
+                
             },
             closePopup: (popupElement) => {
                 popupElement.classList.remove('popup_opened')
@@ -33,7 +39,8 @@ export const popupFunctions = (() => {
             submitListener: () => {
                 popupFunctions.render.saveChange();
                 popupFunctions.render.closePopup(popupProfileEdit);
-            }
+            },
+
         }
     }
 })()
