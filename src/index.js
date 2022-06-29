@@ -1,6 +1,6 @@
 import { popupFunctions } from "./components/modal.js";
 import { card, addNewCardOnPage } from "./components/card.js";
-
+import "./pages/index.css";
 
 //1. Работа модальных окон
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------

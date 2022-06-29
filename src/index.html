@@ -5,19 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Место</title>
-  <link rel="stylesheet" href="./pages/index.css">
 </head>
 
 <body class="page">
   <header class="header">
-    <img alt="Логотип Место" class="header__logo" src="./images/header-logo.svg">
+    <img alt="Логотип Место" class="header__logo" src="<%=require('./images/header-logo.svg')%>">
   </header>
   <main class="content">
     <section class="profile">
-      <img alt="Аватарка" src="./images/profile-avatar.jpg" class="profile__avatar">
+      <img alt="Аватарка" src="<%=require('./images/profile-avatar.jpg')%>" class="profile__avatar">
       <div class="profile__flex">
         <div class="profile__user-container">
-          <h1 class="profile__user-name">Кажется  я слегка </h1>
+          <h1 class="profile__user-name">Кажется я слегка </h1>
           <p class="profile__user-about">запутался в модальности,сори что нужно будет читать этот код</p>
         </div>
         <button aria-label="edit" type="button" class="profile__edit-button"></button>
@@ -103,7 +102,7 @@
           <span class="popup__input-error profileJobInput-error"></span>
         </div>
         <button type="submit" name="submitButton" class="popup__submit-button"
-          id="popupSubmitProfile" >Сохранить</button>
+          id="popupSubmitProfile">Сохранить</button>
       </form>
     </div>
   </section>
@@ -123,7 +122,8 @@
             name="imageurl" required>
           <span class="popup__input-error urlImageInput-error"></span>
         </div>
-        <button type="submit" id="createMesto" class="popup__submit-button popup__submit-button_disabled" disabled>Создать</button>
+        <button type="submit" id="createMesto" class="popup__submit-button popup__submit-button_disabled"
+          disabled>Создать</button>
       </form>
     </div>
   </section>
@@ -131,7 +131,7 @@
   <section class="popup popup__fullscreen ">
     <figure class="popup__fullscreen-container">
       <button aria-label="close" class="popup__close-button popup__image-button" type="reset"></button>
-      <img alt="" src="./images/dombai-unsplash.jpg" class="popup__fullscreen-image">
+      <img alt="" src="<%=require('./images/dombai-unsplash.jpg')%>" class="popup__fullscreen-image">
       <figcaption class="popup__caption-container">
         <h3 class="popup__caption">Карачаево-Черкесия</h3>
       </figcaption>
@@ -149,7 +149,7 @@
       </figure>
     </li>
   </template>
-  <script type="module" src="./scripts/index.js"></script>
+  <script type="module" src="./index.js"></script>
 
 </body>
 
