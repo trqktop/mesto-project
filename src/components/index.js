@@ -3,7 +3,7 @@
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
 
 //0.2 импорт переменных
-import { urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
+import { popupArr, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
 
 
 import { showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
@@ -52,25 +52,12 @@ formNewPhoto.addEventListener('submit', (evt) => {
 //7. Открытие попапа с картинкой - в модуле card.js
 
 
-
-
-/*
 //закрытие попапа при клике на оверлей
 
-popupFunctions.data.popupArr.forEach((popupElem) => {
-    popupElem.addEventListener('click', (evt) => {
-        if (evt.target === popupElem)
-            popupFunctions.render.closePopup(popupElem)
-    })
-
-    document.addEventListener(('keydown'), (evt) => {
-        if (evt.key === 'Escape') {
-            popupFunctions.render.closePopup(popupElem)
-        }
-    })//закрытие попапа при нажатие на ескейп
-}
-)
 
 
 
-*/
+
+
+
+
