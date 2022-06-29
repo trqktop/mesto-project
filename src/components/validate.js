@@ -1,4 +1,4 @@
-
+/*
 export const validator = () => (function () {
     enableValidation()
     function enableValidation() {
@@ -58,3 +58,4 @@ export const validator = () => (function () {
 })()
 
 
+*/
