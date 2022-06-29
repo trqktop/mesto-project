@@ -1,4 +1,4 @@
-import { validator } from "./validate.js"
+
 import { popupArr } from "./constants.js"
 
 
@@ -11,7 +11,7 @@ function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNa
 
 
 function openPopup(popupElement) {
-    /*validator()*/
+
     popupElement.classList.add('popup_opened')
     ListenersEventClosePopup(popupArr)
 

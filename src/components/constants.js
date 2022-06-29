@@ -7,7 +7,6 @@ const profileJobInput = popupProfileEdit.querySelector('#profileJobInput')//inpu
 const profileUserJob = profile.querySelector('.profile__user-about');//профиль профессия
 const profileNameInput = popupProfileEdit.querySelector('#profileNameInput');//input профиль имя
 const profileUserName = profile.querySelector('.profile__user-name');//профиль имя
-
 const popupArr = Array.from(document.querySelectorAll('.popup'))
 
 
