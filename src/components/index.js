@@ -3,13 +3,18 @@
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
 
 //0.2 импорт переменных
-import { urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
+import { formArr, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
 
 
-import { showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
+import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
 
 
 import "../pages/index.css";//0.3 импорт для вебпака 
+
+import { enableValidation } from "./validate.js"
+
+enableValidation(formArr)
+
 
 //1. Работа модальных окон
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -36,7 +41,11 @@ initialCards.forEach(item => insertCard(elementsGridContainer, createCards(item.
 
 //3. Форма добавления карточки
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-popupNewPhotoCloseButton.addEventListener('click', () => closePopup(popupAddNewPhoto))
+popupNewPhotoCloseButton.addEventListener('click', () => {
+    closePopup(popupAddNewPhoto);
+    clearInputsValue(popupAddNewPhoto);
+})
+
 profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto))
 
 
@@ -46,13 +55,20 @@ formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
     insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi))
     closePopup(popupAddNewPhoto)
+    clearInputsValue(popupAddNewPhoto);
 })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 //5. Лайк карточки - в модуле card.js
 //6. Удаление карточки - в модуле card.js
 //7. Открытие попапа с картинкой - в модуле card.js
 
 
-//закрытие попапа при клике на оверлей
+
+
+
+
+
+
+
 
 
 

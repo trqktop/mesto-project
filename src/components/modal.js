@@ -1,6 +1,6 @@
 
 import { popupArr } from "./constants.js"
-
+import { disableSubmitButton } from "./validate.js"
 
 
 function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
@@ -23,6 +23,16 @@ function saveChange(profileJobInput, profileUserJob, profileNameInput, profileUs
     profileUserJob.textContent = profileJobInput.value;
     profileUserName.textContent = profileNameInput.value;
 }
+
+
+function clearInputsValue(popupAddNewPhoto) {
+    popupAddNewPhoto.querySelectorAll('input').forEach((inputElement) =>
+        inputElement.value = ''
+
+    )
+    disableSubmitButton(popupAddNewPhoto.querySelector('.popup__submit-button'))
+}
+
 function submitListener(popupElement) {
     closePopup(popupElement);
 }
@@ -51,4 +61,4 @@ function removeEventListener(listenerObject, evt, handler) {
     listenerObject.removeEventListener(evt, handler)
 }
 
-export { openPopup, closePopup, saveChange, submitListener, showInputValueAfterOpenPopup }
+export { clearInputsValue, openPopup, closePopup, saveChange, submitListener, showInputValueAfterOpenPopup }

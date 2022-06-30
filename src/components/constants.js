@@ -7,7 +7,11 @@ const profileJobInput = popupProfileEdit.querySelector('#profileJobInput')//inpu
 const profileUserJob = profile.querySelector('.profile__user-about');//профиль профессия
 const profileNameInput = popupProfileEdit.querySelector('#profileNameInput');//input профиль имя
 const profileUserName = profile.querySelector('.profile__user-name');//профиль имя
+
+
 const popupArr = Array.from(document.querySelectorAll('.popup'))
+const formArr = Array.from(document.querySelectorAll('form'))
+
 
 
 const profileAddCardButton = document.querySelector('.profile__add-button')
@@ -57,4 +61,4 @@ const userTemplateLi = userTemplate.querySelector('li');//берем конте�
 
 
 
-export { popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export { formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

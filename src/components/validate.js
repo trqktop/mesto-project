@@ -1,12 +1,5 @@
-/*
-import { errorMessage } from "./constants.js"
+export { enableValidation, disableSubmitButton }
 
-
-
-const errorMessage = document.querySelector(`.${inputElement.id}-error`)
-
-const inputList = Array.from(formElement.querySelectorAll('.popup__input'))
-const errorMessage = document.querySelector(`.${inputElement.id}-error`)
 
 
 
@@ -14,12 +7,13 @@ function enableValidation(formArr) {
     formArr.forEach((formElement) => {
         setEventListeners(formElement)
     });
+
 }
+
+
 function setEventListeners(formElement) {
-    formElement.forEach((inputElement) => {
-        inputElement.addEventListener('input', function () {
-            hasValidInput(inputElement, formElement)
-        });
+    formElement.addEventListener('input', function (evt) {
+        hasValidInput(formElement, evt.target)
     });
 }
 
@@ -27,36 +21,40 @@ function checkValidation(formElement) {
     return formElement.checkValidity()
 }
 
-function hasValidInput(inputElement, formElement) {
+function hasValidInput(formElement, currentInput) {
+    const currentErrorMessage = findErrorMessage(currentInput)
+    const submitButton = formElement.querySelector('.popup__submit-button')
     if (checkValidation(formElement)) {
-        hideErrorMessage(inputElement)
-        activeSubmitButton(formElement)
+        hideErrorMessage(currentErrorMessage)
+        activeSubmitButton(submitButton)
 
     } else {
-        showErrorMessage(inputElement)
-        disableSubmitButton(formElement)
+        showErrorMessage(currentInput, currentErrorMessage)
+        disableSubmitButton(submitButton)
     }
+
+}
+function findErrorMessage(currentInput) {
+    return document.querySelector(`.${currentInput.id}-error`)
 }
 
-function showErrorMessage(inputElement) {
-    errorMessage.textContent = inputElement.validationMessage
+function showErrorMessage(currentInput, currentErrorMessage) {
+    currentErrorMessage.textContent = currentInput.validationMessage
 }
 
-function hideErrorMessage() {
-    errorMessage.textContent = ''
+function hideErrorMessage(currentErrorMessage) {
+    currentErrorMessage.textContent = '';
 }
 
-function disableSubmitButton(formElement) {
-    const submitButton = formElement.querySelector('.popup__submit-button')
+
+function disableSubmitButton(submitButton) {
     submitButton.classList.add('popup__submit-button_disabled')
     submitButton.disabled = true;
 }
 
-function activeSubmitButton(formElement) {
-    const submitButton = formElement.querySelector('.popup__submit-button')
+
+function activeSubmitButton(submitButton) {
     submitButton.classList.remove('popup__submit-button_disabled')
     submitButton.disabled = false;
 }
 
-
-*/

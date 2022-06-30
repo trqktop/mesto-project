@@ -11,7 +11,6 @@ function createCards(srcValue, titleValue, userTemplateLi) {
 
     likeButtonListener(cardElement)
     deleteCardButtonListener(cardElement)
-
     listenerFullScreenImage(elementImage, cardElement)
     listenerCloseFullScreenImage()
     return cardElement
