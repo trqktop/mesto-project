@@ -3,7 +3,7 @@
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
 
 //0.2 импорт переменных
-import { formArr, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
+import { enableValidationConstants, formArr, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
 
 
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
@@ -13,7 +13,16 @@ import "../pages/index.css";//0.3 импорт для вебпака
 
 import { enableValidation } from "./validate.js"
 
-enableValidation(formArr)
+
+
+enableValidation(formArr, enableValidationConstants.popupSubmitButton, enableValidationConstants.popupSubmitButtonDisabled)
+
+
+
+
+
+
+
 
 
 //1. Работа модальных окон
@@ -25,6 +34,7 @@ openPopupProfileEditButton.addEventListener('click', () => {
     openPopup(popupProfileEdit);
     showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
 })
+
 
 popupSubmitProfileForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
@@ -44,6 +54,8 @@ initialCards.forEach(item => insertCard(elementsGridContainer, createCards(item.
 popupNewPhotoCloseButton.addEventListener('click', () => {
     closePopup(popupAddNewPhoto);
     clearInputsValue(popupAddNewPhoto);
+
+
 })
 
 profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto))
@@ -60,6 +72,8 @@ formNewPhoto.addEventListener('submit', (evt) => {
 //5. Лайк карточки - в модуле card.js
 //6. Удаление карточки - в модуле card.js
 //7. Открытие попапа с картинкой - в модуле card.js
+
+
 
 
 

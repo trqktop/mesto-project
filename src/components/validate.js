@@ -1,19 +1,19 @@
-export { enableValidation, disableSubmitButton }
+export { enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
 
 
 
 
-function enableValidation(formArr) {
+function enableValidation(formArr, currentSubmitButton, popupSubmitButtonToggleStyle) {
     formArr.forEach((formElement) => {
-        setEventListeners(formElement)
+        setEventListeners(formElement, currentSubmitButton, popupSubmitButtonToggleStyle)
     });
 
 }
 
 
-function setEventListeners(formElement) {
+function setEventListeners(formElement, currentSubmitButton, popupSubmitButtonToggleStyle) {
     formElement.addEventListener('input', function (evt) {
-        hasValidInput(formElement, evt.target)
+        hasValidInput(formElement, evt.target, currentSubmitButton, popupSubmitButtonToggleStyle)
     });
 }
 
@@ -21,21 +21,21 @@ function checkValidation(formElement) {
     return formElement.checkValidity()
 }
 
-function hasValidInput(formElement, currentInput) {
-    const currentErrorMessage = findErrorMessage(currentInput)
-    const submitButton = formElement.querySelector('.popup__submit-button')
+function hasValidInput(formElement, currentInput, currentSubmitButton, popupSubmitButtonToggleStyle) {
+    const currentErrorMessage = findErrorMessage(currentInput, formElement)
+    const submitButton = formElement.querySelector(currentSubmitButton)
     if (checkValidation(formElement)) {
         hideErrorMessage(currentErrorMessage)
-        activeSubmitButton(submitButton)
+        activeSubmitButton(submitButton, popupSubmitButtonToggleStyle)
 
     } else {
         showErrorMessage(currentInput, currentErrorMessage)
-        disableSubmitButton(submitButton)
+        disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
     }
 
 }
-function findErrorMessage(currentInput) {
-    return document.querySelector(`.${currentInput.id}-error`)
+function findErrorMessage(currentInput, formElement) {
+    return formElement.querySelector(`.${currentInput.id}-error`)
 }
 
 function showErrorMessage(currentInput, currentErrorMessage) {
@@ -46,15 +46,14 @@ function hideErrorMessage(currentErrorMessage) {
     currentErrorMessage.textContent = '';
 }
 
-
-function disableSubmitButton(submitButton) {
-    submitButton.classList.add('popup__submit-button_disabled')
+function disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
+    submitButton.classList.add(popupSubmitButtonToggleStyle)
     submitButton.disabled = true;
 }
 
 
-function activeSubmitButton(submitButton) {
-    submitButton.classList.remove('popup__submit-button_disabled')
+function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
+    submitButton.classList.remove(popupSubmitButtonToggleStyle)
     submitButton.disabled = false;
 }
 

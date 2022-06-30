@@ -12,7 +12,7 @@ const profileUserName = profile.querySelector('.profile__user-name');//проф�
 const popupArr = Array.from(document.querySelectorAll('.popup'))
 const formArr = Array.from(document.querySelectorAll('form'))
 
-
+const errorList = Array.from(document.querySelectorAll('.error'))
 
 const profileAddCardButton = document.querySelector('.profile__add-button')
 const popupAddNewPhoto = document.querySelector('#popupMesto')
@@ -57,8 +57,11 @@ const initialCards = [
 const userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
 const userTemplateLi = userTemplate.querySelector('li');//берем контейнер для копирования 
 
+const enableValidationConstants = {
+    popupSubmitButton: '.popup__submit-button',
+    popupSubmitButtonDisabled: 'popup__submit-button_disabled',
+
+}
 
 
-
-
-export { formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export { errorList, enableValidationConstants, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

@@ -1,5 +1,5 @@
 
-import { popupArr } from "./constants.js"
+import { errorList, popupArr } from "./constants.js"
 import { disableSubmitButton } from "./validate.js"
 
 
@@ -11,14 +11,24 @@ function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNa
 
 
 function openPopup(popupElement) {
-
     popupElement.classList.add('popup_opened')
     ListenersEventClosePopup(popupArr)
 
 }
+
+
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened')
+    errorList.forEach((item) => {
+        item.textContent = ''
+    })//обнуляю при закрытия попапа массив ошибок 
+
 }
+
+
+
+
+
 function saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
     profileUserJob.textContent = profileJobInput.value;
     profileUserName.textContent = profileNameInput.value;
@@ -30,7 +40,7 @@ function clearInputsValue(popupAddNewPhoto) {
         inputElement.value = ''
 
     )
-    disableSubmitButton(popupAddNewPhoto.querySelector('.popup__submit-button'))
+    disableSubmitButton(popupAddNewPhoto.querySelector('.popup__submit-button'), 'popup__submit-button_disabled')
 }
 
 function submitListener(popupElement) {
@@ -60,5 +70,14 @@ function ListenersEventClosePopup(popupArr) {
 function removeEventListener(listenerObject, evt, handler) {
     listenerObject.removeEventListener(evt, handler)
 }
+
+
+
+
+
+
+
+
+
 
 export { clearInputsValue, openPopup, closePopup, saveChange, submitListener, showInputValueAfterOpenPopup }
