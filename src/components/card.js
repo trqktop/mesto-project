@@ -1,4 +1,4 @@
-import { fullScreenImageAlt, fullScreenImageDescription, fullScreenImageSrc, popupFullScreen, fullScreenCloseButton } from './constants.js'
+import { fullScreenImage, fullScreenImageDescription, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
 
 
@@ -48,9 +48,9 @@ function cardDelete(cardElement) {
 
 function listenerFullScreenImage(elementImage, cardElement) {
     elementImage.addEventListener('click', function () {
-        fullScreenImageSrc.src = elementImage.src;
+        fullScreenImage.src = elementImage.src;
         fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
-        fullScreenImageAlt.alt = elementImage.alt
+        fullScreenImage.alt = elementImage.alt
         openPopup(popupFullScreen)
     })
 }

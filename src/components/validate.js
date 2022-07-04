@@ -1,4 +1,4 @@
-export { enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
+export { resetError, enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
 
 
 // включение валидации вызовом enableValidation
@@ -8,16 +8,15 @@ export { enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessa
 
 
 function enableValidation(config) {
-    const popupSubmitButtonToggleStyle = config.inactiveButtonClass;
     const formArr = Array.from(document.querySelectorAll(config.formSelector))
     formArr.forEach((formElement) => {
-        setEventListeners(config, formElement, popupSubmitButtonToggleStyle)
+        setEventListeners(config, formElement)
     });
 }
 
 
-function setEventListeners(config, formElement, popupSubmitButtonToggleStyle) {
-
+function setEventListeners(config, formElement) {
+    const popupSubmitButtonToggleStyle = config.inactiveButtonClass;
     formElement.addEventListener('input', function (evt) {
         hasValidForm(config, formElement, evt.target, popupSubmitButtonToggleStyle)
     });
@@ -41,10 +40,8 @@ function hasValidForm(config, formElement, currentInput, popupSubmitButtonToggle
 function hasValidInput(currentInput, currentErrorMessage) {
     if (checkValidation(currentInput)) {
         hideErrorMessage(currentErrorMessage, currentInput)
-        removeInputBorderStyleError(currentInput)
     }
     else {
-        addInputBorderStyleError(currentInput)
         showErrorMessage(currentErrorMessage, currentInput)
     }
 }
@@ -55,24 +52,18 @@ function findErrorMessage(currentInput, formElement) {
 }
 
 function showErrorMessage(currentErrorMessage, currentInput) {
+    currentInput.classList.add('popup__input_error-style')
     currentErrorMessage.textContent = currentInput.validationMessage
 
 }
 
 function hideErrorMessage(currentErrorMessage, currentInput) {
-    currentErrorMessage.textContent = '';
-
-}
-
-
-function addInputBorderStyleError(currentInput) {
-    currentInput.classList.add('popup__input_error-style')
-}
-
-
-function removeInputBorderStyleError(currentInput) {
     currentInput.classList.remove('popup__input_error-style')
+    currentErrorMessage.textContent = '';
 }
+
+
+
 
 
 
@@ -86,4 +77,15 @@ function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
     submitButton.classList.remove(popupSubmitButtonToggleStyle)
     submitButton.disabled = false;
 }
+
+
+
+function resetError(formElement, config) {
+    const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+    // очищаем ошибки валидации
+    inputList.forEach(inputElement => hideErrorMessage(findErrorMessage(inputElement, formElement), inputElement));
+    // актуализируем состояние кнопки сабмита
+    /*toggleButtonState(formElement, inputList, config); */
+}
+
 

@@ -10,7 +10,7 @@ import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, 
 
 import "../pages/index.css";//0.3 импорт для вебпака 
 
-import { enableValidation } from './validate.js'
+import { enableValidation, resetError } from './validate.js'
 
 
 
@@ -31,7 +31,10 @@ enableValidation(validatorConfig)
 
 //1. Работа модальных окон
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-closePopupProfileEdit.addEventListener('click', () => closePopup(popupProfileEdit))//слушатель событий кнопки закрыть по-пап редактирования профиля
+closePopupProfileEdit.addEventListener('click', () => {
+    closePopup(popupProfileEdit)
+    resetError(popupProfileEdit, validatorConfig)
+})//слушатель событий кнопки закрыть по-пап редактирования профиля
 
 //слушатель событий кнопки открыть по-пап редактирования профиля
 openPopupProfileEditButton.addEventListener('click', () => {
@@ -58,7 +61,7 @@ initialCards.forEach(item => insertCard(elementsGridContainer, createCards(item.
 popupNewPhotoCloseButton.addEventListener('click', () => {
     closePopup(popupAddNewPhoto);
     clearInputsValue(popupAddNewPhoto);
-
+    resetError(popupAddNewPhoto, validatorConfig)
 
 })
 

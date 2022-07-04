@@ -60,9 +60,9 @@ const userTemplateLi = userTemplate.querySelector('li');//берем конте�
 
 
 
-const fullScreenImageSrc = popupFullScreen.querySelector('.popup__fullscreen-image')//ссылка на фулскрин картинку
+const fullScreenImage = popupFullScreen.querySelector('.popup__fullscreen-image')//ссылка на фулскрин картинку
 const fullScreenImageDescription = popupFullScreen.querySelector('.popup__caption')//заголовок картинки
-const fullScreenImageAlt = popupFullScreen.querySelector('.popup__fullscreen-image')//альт картинки
+
 
 
 
@@ -75,4 +75,4 @@ const validatorConfig = ({
     errorClass: '.popup__input-error'
 })
 
-export { validatorConfig, fullScreenImageAlt, fullScreenImageDescription, fullScreenImageSrc, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export { validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
