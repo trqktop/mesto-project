@@ -1,19 +1,25 @@
 export { enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
 
 
+// включение валидации вызовом enableValidation
+// все настройки передаются при вызове
 
 
-function enableValidation(formArr, currentSubmitButton, popupSubmitButtonToggleStyle) {
+
+
+function enableValidation(config) {
+    const popupSubmitButtonToggleStyle = config.inactiveButtonClass;
+    const formArr = Array.from(document.querySelectorAll(config.formSelector))
     formArr.forEach((formElement) => {
-        setEventListeners(formElement, currentSubmitButton, popupSubmitButtonToggleStyle)
+        setEventListeners(config, formElement, popupSubmitButtonToggleStyle)
     });
-
 }
 
 
-function setEventListeners(formElement, currentSubmitButton, popupSubmitButtonToggleStyle) {
+function setEventListeners(config, formElement, popupSubmitButtonToggleStyle) {
+
     formElement.addEventListener('input', function (evt) {
-        hasValidInput(formElement, evt.target, currentSubmitButton, popupSubmitButtonToggleStyle)
+        hasValidForm(config, formElement, evt.target, popupSubmitButtonToggleStyle)
     });
 }
 
@@ -21,30 +27,54 @@ function checkValidation(formElement) {
     return formElement.checkValidity()
 }
 
-function hasValidInput(formElement, currentInput, currentSubmitButton, popupSubmitButtonToggleStyle) {
+function hasValidForm(config, formElement, currentInput, popupSubmitButtonToggleStyle) {
     const currentErrorMessage = findErrorMessage(currentInput, formElement)
-    const submitButton = formElement.querySelector(currentSubmitButton)
+    const submitButton = formElement.querySelector(config.submitButtonSelector)
     if (checkValidation(formElement)) {
-        hideErrorMessage(currentErrorMessage)
         activeSubmitButton(submitButton, popupSubmitButtonToggleStyle)
-
     } else {
-        showErrorMessage(currentInput, currentErrorMessage)
         disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
     }
-
+    hasValidInput(currentInput, currentErrorMessage)
 }
+
+function hasValidInput(currentInput, currentErrorMessage) {
+    if (checkValidation(currentInput)) {
+        hideErrorMessage(currentErrorMessage, currentInput)
+        removeInputBorderStyleError(currentInput)
+    }
+    else {
+        addInputBorderStyleError(currentInput)
+        showErrorMessage(currentErrorMessage, currentInput)
+    }
+}
+
+
 function findErrorMessage(currentInput, formElement) {
     return formElement.querySelector(`.${currentInput.id}-error`)
 }
 
-function showErrorMessage(currentInput, currentErrorMessage) {
+function showErrorMessage(currentErrorMessage, currentInput) {
     currentErrorMessage.textContent = currentInput.validationMessage
+
 }
 
-function hideErrorMessage(currentErrorMessage) {
+function hideErrorMessage(currentErrorMessage, currentInput) {
     currentErrorMessage.textContent = '';
+
 }
+
+
+function addInputBorderStyleError(currentInput) {
+    currentInput.classList.add('popup__input_error-style')
+}
+
+
+function removeInputBorderStyleError(currentInput) {
+    currentInput.classList.remove('popup__input_error-style')
+}
+
+
 
 function disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
     submitButton.classList.add(popupSubmitButtonToggleStyle)

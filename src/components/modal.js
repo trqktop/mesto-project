@@ -1,6 +1,7 @@
 
-import { errorList, popupArr } from "./constants.js"
+import { popupArr } from "./constants.js"
 import { disableSubmitButton } from "./validate.js"
+
 
 
 function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
@@ -19,13 +20,8 @@ function openPopup(popupElement) {
 
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened')
-    errorList.forEach((item) => {
-        item.textContent = ''
-    })//обнуляю при закрытия попапа массив ошибок 
 
 }
-
-
 
 
 

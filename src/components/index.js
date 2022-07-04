@@ -3,19 +3,23 @@
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
 
 //0.2 импорт переменных
-import { enableValidationConstants, formArr, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from './constants.js';
 
-
+import { validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
 
 
 import "../pages/index.css";//0.3 импорт для вебпака 
 
-import { enableValidation } from "./validate.js"
+import { enableValidation } from './validate.js'
 
 
 
-enableValidation(formArr, enableValidationConstants.popupSubmitButton, enableValidationConstants.popupSubmitButtonDisabled)
+
+
+
+enableValidation(validatorConfig)
+
+
 
 
 

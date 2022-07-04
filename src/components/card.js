@@ -1,5 +1,10 @@
-import { popupFullScreen, fullScreenCloseButton } from './constants.js'
+import { fullScreenImageAlt, fullScreenImageDescription, fullScreenImageSrc, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
+
+
+
+
+
 
 function createCards(srcValue, titleValue, userTemplateLi) {
     const cardElement = userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную
@@ -41,13 +46,11 @@ function cardDelete(cardElement) {
 
 
 
-
 function listenerFullScreenImage(elementImage, cardElement) {
     elementImage.addEventListener('click', function () {
-
-        popupFullScreen.querySelector('.popup__fullscreen-image').src = elementImage.src;
-        popupFullScreen.querySelector('.popup__caption').textContent = cardElement.querySelector('.element__caption-about').textContent;
-        popupFullScreen.querySelector('.popup__fullscreen-image').alt = elementImage.alt
+        fullScreenImageSrc.src = elementImage.src;
+        fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
+        fullScreenImageAlt.alt = elementImage.alt
         openPopup(popupFullScreen)
     })
 }
