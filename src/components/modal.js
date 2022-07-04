@@ -1,26 +1,25 @@
 
-import { popupArr } from "./constants.js"
-import { disableSubmitButton } from "./validate.js"
+import { addNewPhotoSubmitButton, popupArr, validatorConfig } from "./constants.js"
+import { disableSubmitButton, resetError } from "./validate.js"
 
 
 
 function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
     profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-
 }
 
 
 function openPopup(popupElement) {
     popupElement.classList.add('popup_opened')
-    ListenersEventClosePopup(popupArr)
+    listenersEventClosePopup(popupArr)
 
 }
 
 
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened')
-
+    resetError(popupElement, validatorConfig)
 }
 
 
@@ -36,36 +35,51 @@ function clearInputsValue(popupAddNewPhoto) {
         inputElement.value = ''
 
     )
-    disableSubmitButton(popupAddNewPhoto.querySelector('.popup__submit-button'), 'popup__submit-button_disabled')
+    disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 }
 
 function submitListener(popupElement) {
     closePopup(popupElement);
 }
 
-function ListenersEventClosePopup(popupArr) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function listenersEventClosePopup(popupArr) {
+
+    document.addEventListener('keydown', function closePopupOnEscape(event) {
+        if (event.key === 'Escape') {
+            closePopup(popupElement)
+            console.log('tut oshibka')
+        }
+    }, { once: true })
+
+
     popupArr.forEach((popupElem) => {
         popupElem.addEventListener('mousedown', function closePopupOnClick(evt) {
             if (evt.target === popupElem)
                 closePopup(popupElem)
-            removeEventListener(popupElem, 'mousedown', closePopupOnClick)
+            //  removeEventListener(popupElem, 'mousedown', closePopupOnClick)
+        }, { once: true })
+    })
 
-        })
-        document.addEventListener('keydown', function closePopupOnEscape(evt) {
-            if (evt.key === 'Escape') {
-                closePopup(popupElem)
-                removeEventListener(document, 'keydown', closePopupOnEscape)
-
-            }
-        })//закрытие попапа при нажатие на ескейп
-
-    }
-    )
 }
 
-function removeEventListener(listenerObject, evt, handler) {
-    listenerObject.removeEventListener(evt, handler)
-}
+//function removeEventListener(listenerItem, evt, handler) {
+//    listenerItem.removeEventListener(evt, handler)
+//}
 
 
 

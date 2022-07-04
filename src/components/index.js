@@ -4,7 +4,7 @@ import { insertCard, createCards } from "./card.js";//0.1 импорт функ�
 
 //0.2 импорт переменных
 
-import { validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
+import { popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
 
 
@@ -13,20 +13,7 @@ import "../pages/index.css";//0.3 импорт для вебпака
 import { enableValidation, resetError } from './validate.js'
 
 
-
-
-
-
 enableValidation(validatorConfig)
-
-
-
-
-
-
-
-
-
 
 
 //1. Работа модальных окон
@@ -83,6 +70,7 @@ formNewPhoto.addEventListener('submit', (evt) => {
 
 
 
+//закрытие попапа при нажатие на ескейп
 
 
 

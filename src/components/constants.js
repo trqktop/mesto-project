@@ -57,13 +57,13 @@ const initialCards = [
 const userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
 const userTemplateLi = userTemplate.querySelector('li');//берем контейнер для копирования 
 
-
+const inputArr = Array.from(popupAddNewPhoto.querySelectorAll('input'))
 
 
 const fullScreenImage = popupFullScreen.querySelector('.popup__fullscreen-image')//ссылка на фулскрин картинку
 const fullScreenImageDescription = popupFullScreen.querySelector('.popup__caption')//заголовок картинки
 
-
+const addNewPhotoSubmitButton = popupAddNewPhoto.querySelector('.popup__submit-button')
 
 
 const validatorConfig = ({
@@ -75,4 +75,4 @@ const validatorConfig = ({
     errorClass: '.popup__input-error'
 })
 
-export { validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

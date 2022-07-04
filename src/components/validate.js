@@ -5,8 +5,6 @@ export { resetError, enableValidation, disableSubmitButton, findErrorMessage, hi
 // все настройки передаются при вызове
 
 
-
-
 function enableValidation(config) {
     const formArr = Array.from(document.querySelectorAll(config.formSelector))
     formArr.forEach((formElement) => {
@@ -63,21 +61,15 @@ function hideErrorMessage(currentErrorMessage, currentInput) {
 }
 
 
-
-
-
-
 function disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
     submitButton.classList.add(popupSubmitButtonToggleStyle)
     submitButton.disabled = true;
 }
 
-
 function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
     submitButton.classList.remove(popupSubmitButtonToggleStyle)
     submitButton.disabled = false;
 }
-
 
 
 function resetError(formElement, config) {
