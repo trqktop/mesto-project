@@ -68,21 +68,18 @@ formNewPhoto.addEventListener('submit', (evt) => {
 //7. Открытие попапа с картинкой - в модуле card.js
 
 
+document.addEventListener('keydown', function handleKeydown(evt) {
+    if (evt.key === 'Escape') {
+        popupArr.forEach((popupElement) => {
+            closePopup(popupElement)
+        })
+    }
+})//закрытие попапа при нажатие на ескейп
 
-
-//закрытие попапа при нажатие на ескейп
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+document.addEventListener('click', function handleClick(evt) {
+    if (evt.target.classList[0] === 'popup') {
+        popupArr.forEach((popupElement) => {
+            closePopup(popupElement)
+        })
+    }
+})//закрытие попапа при клике на  оверлей

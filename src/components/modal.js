@@ -12,7 +12,6 @@ function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNa
 
 function openPopup(popupElement) {
     popupElement.classList.add('popup_opened')
-    listenersEventClosePopup(popupArr)
 
 }
 
@@ -47,39 +46,6 @@ function submitListener(popupElement) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-function listenersEventClosePopup(popupArr) {
-
-    document.addEventListener('keydown', function closePopupOnEscape(event) {
-        if (event.key === 'Escape') {
-            closePopup(popupElement)
-            console.log('tut oshibka')
-        }
-    }, { once: true })
-
-
-    popupArr.forEach((popupElem) => {
-        popupElem.addEventListener('mousedown', function closePopupOnClick(evt) {
-            if (evt.target === popupElem)
-                closePopup(popupElem)
-            //  removeEventListener(popupElem, 'mousedown', closePopupOnClick)
-        }, { once: true })
-    })
-
-}
-
-//function removeEventListener(listenerItem, evt, handler) {
-//    listenerItem.removeEventListener(evt, handler)
-//}
 
 
 

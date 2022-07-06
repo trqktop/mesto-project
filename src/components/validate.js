@@ -74,10 +74,7 @@ function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
 
 function resetError(formElement, config) {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
-    // очищаем ошибки валидации
     inputList.forEach(inputElement => hideErrorMessage(findErrorMessage(inputElement, formElement), inputElement));
-    // актуализируем состояние кнопки сабмита
-    /*toggleButtonState(formElement, inputList, config); */
 }
 
 
