@@ -72,7 +72,8 @@ const validatorConfig = ({
     submitButtonSelector: '.popup__submit-button',
     inactiveButtonClass: 'popup__submit-button_disabled',
     inputErrorClass: '.popup__input_error-style',
-    errorClass: '.popup__input-error'
+    errorClass: '.popup__input-error',
+    openedPopup: 'popup_opened'
 })
 
 export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

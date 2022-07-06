@@ -17,7 +17,6 @@ function createCards(srcValue, titleValue, userTemplateLi) {
     likeButtonListener(cardElement)
     deleteCardButtonListener(cardElement)
     listenerFullScreenImage(elementImage, cardElement)
-    listenerCloseFullScreenImage()
     return cardElement
 }
 
@@ -53,11 +52,6 @@ function listenerFullScreenImage(elementImage, cardElement) {
         fullScreenImage.alt = elementImage.alt
         openPopup(popupFullScreen)
     })
-}
-
-function listenerCloseFullScreenImage() {
-    fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen))
-
 }
 
 

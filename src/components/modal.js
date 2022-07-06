@@ -10,15 +10,17 @@ function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNa
 }
 
 
-function openPopup(popupElement) {
+function openPopup(popupElement) {//Функция открытия попапа
     popupElement.classList.add('popup_opened')
-
+    document.addEventListener("keydown", closePopupEsc)//(c)'добавлять обработчик события в функции открытия попапов'
+    document.addEventListener('click', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
 }
 
 
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened')
-    resetError(popupElement, validatorConfig)
+    document.removeEventListener("keydown", closePopupEsc)// (c)'удалять его при закрытии попапов.'
+    document.removeEventListener('click', closePopupOverlay)// (c)'удалять его при закрытии попапов.'
 }
 
 
@@ -37,22 +39,29 @@ function clearInputsValue(popupAddNewPhoto) {
     disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 }
 
+
 function submitListener(popupElement) {
     closePopup(popupElement);
 }
 
 
+function closePopupEsc(evt) {
+    const openedPopup = document.querySelector('.popup_opened')
+    if (evt.key === 'Escape') {
+        closePopup(openedPopup)
+        resetError(openedPopup, validatorConfig)
+        clearInputsValue(openedPopup)
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
+function closePopupOverlay(evt) {
+    const openedPopup = document.querySelector('.popup_opened')
+    if (evt.target === openedPopup) {
+        closePopup(openedPopup)
+        resetError(openedPopup, validatorConfig)
+        clearInputsValue(openedPopup)
+    }
+}
 
 
 

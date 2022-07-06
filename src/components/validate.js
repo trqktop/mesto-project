@@ -32,15 +32,15 @@ function hasValidForm(config, formElement, currentInput, popupSubmitButtonToggle
     } else {
         disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
     }
-    hasValidInput(currentInput, currentErrorMessage)
+    hasValidInput(currentInput, currentErrorMessage, config)
 }
 
-function hasValidInput(currentInput, currentErrorMessage) {
+function hasValidInput(currentInput, currentErrorMessage, config) {
     if (checkValidation(currentInput)) {
-        hideErrorMessage(currentErrorMessage, currentInput)
+        hideErrorMessage(currentErrorMessage, currentInput, config)
     }
     else {
-        showErrorMessage(currentErrorMessage, currentInput)
+        showErrorMessage(currentErrorMessage, currentInput, config)
     }
 }
 
@@ -49,14 +49,14 @@ function findErrorMessage(currentInput, formElement) {
     return formElement.querySelector(`.${currentInput.id}-error`)
 }
 
-function showErrorMessage(currentErrorMessage, currentInput) {
-    currentInput.classList.add('popup__input_error-style')
+function showErrorMessage(currentErrorMessage, currentInput, config) {
+    currentInput.classList.add(config.inputErrorClass)
     currentErrorMessage.textContent = currentInput.validationMessage
 
 }
 
-function hideErrorMessage(currentErrorMessage, currentInput) {
-    currentInput.classList.remove('popup__input_error-style')
+function hideErrorMessage(currentErrorMessage, currentInput, config) {
+    currentInput.classList.remove(config.inputErrorClass)
     currentErrorMessage.textContent = '';
 }
 
@@ -74,7 +74,6 @@ function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
 
 function resetError(formElement, config) {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
-    inputList.forEach(inputElement => hideErrorMessage(findErrorMessage(inputElement, formElement), inputElement));
+    inputList.forEach(inputElement => hideErrorMessage(findErrorMessage(inputElement, formElement), inputElement, config));
 }
-
 
