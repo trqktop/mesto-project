@@ -48,8 +48,8 @@ popupNewPhotoCloseButton.addEventListener('click', () => {
     closePopup(popupAddNewPhoto);
     clearInputsValue(popupAddNewPhoto);
     resetError(popupAddNewPhoto, validatorConfig)
-
 })
+
 
 profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto))
 

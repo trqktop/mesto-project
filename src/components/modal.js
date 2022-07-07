@@ -46,20 +46,16 @@ function submitListener(popupElement) {
 
 
 function closePopupEsc(evt) {
-    const openedPopup = document.querySelector('.popup_opened')
     if (evt.key === 'Escape') {
+        const openedPopup = document.querySelector('.popup_opened')
         closePopup(openedPopup)
-        resetError(openedPopup, validatorConfig)
-        clearInputsValue(openedPopup)
     }
 }
 
 function closePopupOverlay(evt) {
-    const openedPopup = document.querySelector('.popup_opened')
-    if (evt.target === openedPopup) {
+    if (Array.from(evt.target.classList).includes('popup')) {
+        const openedPopup = document.querySelector('.popup_opened')
         closePopup(openedPopup)
-        resetError(openedPopup, validatorConfig)
-        clearInputsValue(openedPopup)
     }
 }
 
