@@ -55,4 +55,10 @@ function listenerFullScreenImage(elementImage, cardElement) {
 }
 
 
+
+
+
+
+
+
 export { insertCard, createCards }

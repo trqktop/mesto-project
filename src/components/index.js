@@ -38,8 +38,8 @@ popupSubmitProfileForm.addEventListener('submit', (evt) => {
 
 //2. Шесть карточек «из коробки»
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-initialCards.forEach(item => insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi))
-)//перебираем массив и вызываем функцию к каждому элементу массива 
+//initialCards.forEach(item => insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi)))
+//перебираем массив и вызываем функцию к каждому элементу массива 
 
 
 //3. Форма добавления карточки
@@ -71,3 +71,62 @@ formNewPhoto.addEventListener('submit', (evt) => {
 fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen))//закрытие попапа фуллскрин 
 
 
+
+//3. Загрузка информации о пользователе с сервера
+const profileAvatar = document.querySelector('.profile__avatar')
+function renderUserProfile(dataJson) {
+    profileUserName.textContent = dataJson.name
+    profileUserJob.textContent = dataJson.about
+    profileAvatar.src = dataJson.avatar
+}
+
+fetch('https://nomoreparties.co/v1/plus-cohort-13/users/me', {
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560'
+    }
+})
+    .then(res => res.json())
+    .then((data) => {
+        renderUserProfile(data)
+    })
+
+//  4. Загрузка карточек с сервера
+
+function renderCard(item) {
+    insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi))
+}
+fetch('https://nomoreparties.co/v1/plus-cohort-13/cards', {
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560'
+    }
+})
+    .then(res => res.json())
+    .then(data => data.forEach((item) => renderCard(item)))
+
+
+
+//5. Редактирование профиля
+/*
+fetch('https://nomoreparties.co/v1/plus-cohort-13/users/me', {
+    method: 'PATCH',
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        name: 'Кусто',
+        about: 'Плывун :c'
+    })
+})
+    .then(res => res.json())
+    .then(data => renderUserProfileInfo(data))
+
+
+function renderUserProfileInfo(data) {
+    document.querySelector('form').addEventListener('submit', () => {
+        data.name = profileUserName.textContent
+        data.about = profileUserJob.textContent
+        console.log(data)
+    })
+}
+*/
