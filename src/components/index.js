@@ -1,16 +1,19 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+import "../pages/index.css";//0.3 импорт для вебпака 
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-
+import { pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
 //0.2 импорт переменных
 
 import { popupFullScreen, fullScreenCloseButton, popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
 
 
-import "../pages/index.css";//0.3 импорт для вебпака 
+
 
 import { enableValidation, resetError } from './validate.js'
+
+
+
 
 enableValidation(validatorConfig)
 
@@ -28,11 +31,11 @@ openPopupProfileEditButton.addEventListener('click', () => {
     showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
 })
 
-
 popupSubmitProfileForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
     submitListener(popupProfileEdit);
     saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+    pushProfileData(profileUserName, profileUserJob)//5. Редактирование профиля
 })//слушатель событий сохранить изменения в профиль
 
 
@@ -59,6 +62,7 @@ profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto)
 formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
     insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi))
+    pushNewCard(nameImageInput.value, urlImageInput.value)
     closePopup(popupAddNewPhoto)
     clearInputsValue(popupAddNewPhoto);
     resetError(popupAddNewPhoto, validatorConfig)
@@ -72,61 +76,81 @@ fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen
 
 
 
+
+
+
+
+
+
+
 //3. Загрузка информации о пользователе с сервера
-const profileAvatar = document.querySelector('.profile__avatar')
-function renderUserProfile(dataJson) {
-    profileUserName.textContent = dataJson.name
-    profileUserJob.textContent = dataJson.about
-    profileAvatar.src = dataJson.avatar
-}
-
-fetch('https://nomoreparties.co/v1/plus-cohort-13/users/me', {
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560'
-    }
-})
-    .then(res => res.json())
-    .then((data) => {
-        renderUserProfile(data)
+getUserProfileInfo()
+    .then(res => {
+        profileUserName.textContent = res.name
+        profileUserJob.textContent = res.about
     })
+    .catch(err => console.log(err))
 
-//  4. Загрузка карточек с сервера
 
-function renderCard(item) {
-    insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi))
-}
-fetch('https://nomoreparties.co/v1/plus-cohort-13/cards', {
+
+
+//4. Загрузка карточек с сервера
+
+getInitialCards()
+    .then(data => {
+        data.forEach(item => insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi)))
+    })
+    .catch(err => console.log(err))
+
+
+/*const config = {
+    baseUrl: 'https://nomoreparties.co/v1/cohort-42',
     headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560'
+        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
+        'Content-Type': 'application/json'
     }
-})
-    .then(res => res.json())
-    .then(data => data.forEach((item) => renderCard(item)))
+}
+
+export const getInitialCards = () => {
+    return fetch(`${config.baseUrl}/cards`, {
+        config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            // если ошибка, отклоняем промис
+            return Promise.reject(`Ошибка: ${res.status}`);
+        });
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+import { getInitialCards } from './api.js'
+
+getInitialCards()
+    .then((result) => {
+        // обрабатываем результат
+    })
+    .catch((err) => {
+        console.log(err); // выводим ошибку в консоль
+    });
+
+
+*/
 
 
 
-//5. Редактирование профиля
-/*
-fetch('https://nomoreparties.co/v1/plus-cohort-13/users/me', {
-    method: 'PATCH',
+const config = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
     headers: {
         authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
         'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-        name: 'Кусто',
-        about: 'Плывун :c'
-    })
-})
-    .then(res => res.json())
-    .then(data => renderUserProfileInfo(data))
-
-
-function renderUserProfileInfo(data) {
-    document.querySelector('form').addEventListener('submit', () => {
-        data.name = profileUserName.textContent
-        data.about = profileUserJob.textContent
-        console.log(data)
+        name: 'Marie Skłodowska Curie',
+        about: 'Physicist and Chemist'
     })
 }
-*/
+
+//7. Отображение количества лайков карточки

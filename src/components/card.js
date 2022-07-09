@@ -12,8 +12,6 @@ function createCards(srcValue, titleValue, userTemplateLi) {
     elementImage.setAttribute('src', srcValue) //установил аттрибут ссылки на картинку и задал источник
     elementImage.setAttribute('alt', titleValue)
     cardElement.querySelector('.element__caption-about').textContent = titleValue;// установил текст контент из источника
-
-
     likeButtonListener(cardElement)
     deleteCardButtonListener(cardElement)
     listenerFullScreenImage(elementImage, cardElement)
