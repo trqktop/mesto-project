@@ -1,6 +1,7 @@
+
 import { fullScreenImage, fullScreenImageDescription, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
-
+import { likeId, renderLikeCount} from './api.js'
 
 
 
@@ -18,6 +19,9 @@ function createCards(srcValue, titleValue, userTemplateLi) {
     return cardElement
 }
 
+
+
+
 function insertCard(elementsGridContainer, cardElement) {
     elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
 }
@@ -29,6 +33,8 @@ function likeButtonListener(cardElement) {
 
 function likeActive(item) {
     item.classList.toggle('element__button_active')
+    likeId(item)
+    renderLikeCount()
 }
 
 
@@ -40,6 +46,33 @@ function deleteCardButtonListener(cardElement) {
 function cardDelete(cardElement) {
     cardElement.remove()
 }
+
+
+
+
+
+
+const config = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        name: 'Marie Skłodowska Curie',
+        about: 'Physicist and Chemist'
+    })
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

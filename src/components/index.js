@@ -1,7 +1,7 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-import { pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
+import { profileInfoId, checkOwnCard, renderLikeCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
 //0.2 импорт переменных
 
 import { popupFullScreen, fullScreenCloseButton, popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
@@ -16,6 +16,9 @@ import { enableValidation, resetError } from './validate.js'
 
 
 enableValidation(validatorConfig)
+profileInfoId()
+    .then(profile => profile)
+    .then(profile => checkOwnCard(profile))
 
 
 //1. Работа модальных окон
@@ -57,6 +60,10 @@ popupNewPhotoCloseButton.addEventListener('click', () => {
 profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto))
 
 
+
+
+
+
 //4. Добавление карточки
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 formNewPhoto.addEventListener('submit', (evt) => {
@@ -74,15 +81,6 @@ formNewPhoto.addEventListener('submit', (evt) => {
 
 fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen))//закрытие попапа фуллскрин 
 
-
-
-
-
-
-
-
-
-
 //3. Загрузка информации о пользователе с сервера
 getUserProfileInfo()
     .then(res => {
@@ -96,12 +94,21 @@ getUserProfileInfo()
 
 //4. Загрузка карточек с сервера
 
+
+
+
+
 getInitialCards()
     .then(data => {
-        data.forEach(item => insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi)))
+        data.forEach(item => {
+            insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi))
+        })
     })
     .catch(err => console.log(err))
 
+
+
+//7. Отображение количества лайков карточки
 
 /*const config = {
     baseUrl: 'https://nomoreparties.co/v1/cohort-42',
@@ -139,18 +146,37 @@ getInitialCards()
 
 */
 
+//лайки с сервера
 
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        name: 'Marie Skłodowska Curie',
-        about: 'Physicist and Chemist'
+renderLikeCount()
+    .then(data => {
+        data.reverse().forEach((item, index) => {
+            initLikesCoutArr(index, item)
+        })
     })
+
+
+
+
+export const initLikesCoutArr = (index, item) => {
+    const likeCountArr = Array.from(document.querySelectorAll('.element__like-count'))
+    return likeCountArr[index].textContent = item.likes.length
 }
 
-//7. Отображение количества лайков карточки
+
+//10. Обновление аватара пользователя
+
+const sectionProfile = document.querySelector('.profile')
+
+const avatarProfile = document.querySelector('.profile__avatar')
+avatarProfile.addEventListener('mouseover', (evt) => {
+    avatarProfile.style.opacity = ".1"
+})
+
+avatarProfile.addEventListener('mouseout', (evt) => {
+    avatarProfile.style.opacity = "1"
+})
+
+
+
