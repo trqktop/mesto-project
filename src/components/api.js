@@ -5,7 +5,13 @@ const config = {
         authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
         'Content-Type': 'application/json'
     }
-}
+}//конфиг
+
+
+
+
+
+
 
 export const getUserProfileInfo = () => {
     return fetch(`${config.baseUrl}/users/me`, {
@@ -17,7 +23,7 @@ export const getUserProfileInfo = () => {
             }
             return Promise.reject(`Ошибка: ${res.status}`)
         })
-}
+}//3. Загрузка информации о пользователе с сервера
 
 
 export const getInitialCards = () => {
@@ -30,14 +36,14 @@ export const getInitialCards = () => {
             }
             return Promise.reject(`Ошибка: ${res.status}`)
         })
-}
+}//загрузка карточек с сервера
 
 
 
 
 
 export const pushProfileData = (userName, userJob) => {
-    fetch(`${config.baseUrl}/users/me`, {
+    return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
@@ -54,10 +60,9 @@ export const pushProfileData = (userName, userJob) => {
         .then(res => {
             res.name = userName.textContent
             res.about = userJob.textContent
-            console.log(res)
         })
         .catch(err => console.log(err))
-}
+}//5. Редактирование профиля на сервере
 
 
 export const pushNewCard = (nameValue, linkValue) => {
@@ -76,113 +81,69 @@ export const pushNewCard = (nameValue, linkValue) => {
             return Promise.reject(`Ошибка: ${res.status}`)
         })
         .catch(err => console.log(err))
-}
+}//загрузка созданной карточки на сервер
 
-
-export const renderLikeCount = () => {
+export const setLikesCount = () => {
     return fetch(`${config.baseUrl}/cards`, {
         headers: config.headers
     })
-        .then(res => res.json())
-}
-
-
-
-
-export const profileInfoId = () => {
-    return fetch(`${config.baseUrl}/users/me`, {
-        headers: config.headers
-    })
-        .then(res => res.json())
-}
-
-
-
-
-export const checkOwnCard = (profile) => {
-    return fetch(`${config.baseUrl}/cards`, {
-        headers: config.headers
-    })
-        .then(res => res.json())
-        .then(data => {
-            const elementsArray = Array.from(document.querySelectorAll('.element'))
-            data.reverse().forEach((item, index) => {
-                if (item.owner._id !== profile._id) {
-                    elementsArray[index].querySelector('.element__delete-button').remove()
-                }
-                else {
-                    const deleteButton = elementsArray[index].querySelector('.element__delete-button')
-                    deleteListener(deleteButton, item._id)
-                }
-            })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
         })
 }
 
+export const userId = () => {
+    return fetch(`${config.baseUrl}/users/me`, {
+        headers: config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
+        .then(res => res._id)
+}
 
 
-function deleteListener(button, id) {
-    button.addEventListener('click', (evt) => {
-        if (evt.target) {
-            deleteCardFromServer(id)
+export const initLikes = (serverItems) => {
+    const arrLikeCount = Array.from(document.querySelectorAll('.element__like-count'))
+    renderLikes(arrLikeCount, serverItems)
+}
+
+const renderLikes = (arrHtmlElements, arrServerElements) => {
+    arrServerElements.reverse().forEach((item, index) => {
+        arrHtmlElements[index].textContent = item.likes.length
+    })
+}
+
+
+export const checkCards = () => {
+    return fetch(`${config.baseUrl}/cards`, {
+        headers: config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
+}
+
+export const checkCardOwn = (array, userID) => {
+    const deleteArrayButton = document.querySelectorAll('.element__delete-button')
+    array.forEach((item, index) => {
+        if (item.owner._id === userID) {
+            setTrashIcon(index, deleteArrayButton, item)
         }
     })
 }
 
-function deleteCardFromServer(id) {
-    return fetch(`${config.baseUrl}/cards/${id}`, {
-        method: "DELETE",
-        headers: config.headers
-    })
-        .then(res => res.json())
-        .then(res => console.log(res))
+
+export const setTrashIcon = (index, arr, item) => {
+    arr[index].style.display = "block"
 }
-
-
-
-export const likeId = (item) => {
-    const likeArray = Array.from(document.querySelectorAll('.element__button'))
-    fetch(`${config.baseUrl}/cards`, {
-        headers: config.headers
-    })
-        .then(res => res.json())
-        .then(res => findActiveLikeIndex(res, likeArray, item))
-}
-
-
-function findActiveLikeIndex(res, likeArray, item) {
-    const activeIdLike = (res.reverse()[likeArray.indexOf(item)])
-    if (item.classList.contains('element__button_active')) {
-        deleteLikeActive(activeIdLike)
-        addLikeCount(activeIdLike, item)
-    } else if (!item.classList.contains('element__button_active')) {
-        putLikeActive(activeIdLike)
-        addLikeCount(activeIdLike, item)
-    }
-}
-
-
-function deleteLikeActive(card) {
-    fetch(`${config.baseUrl}/cards/likes/${card._id}`, {
-        method: 'DELETE',
-        headers: config.headers
-    })
-        .then(res => res.json())
-}
-
-
-
-function putLikeActive(card) {
-    fetch(`${config.baseUrl}/cards/likes/${card._id}`, {
-        method: 'PUT',
-        headers: config.headers
-    })
-        .then(res => res.json())
-
-}
-
-function addLikeCount(card, item) {
-    item.parentNode.querySelector('span').textContent = card.likes.length
-}
-
-
 

@@ -14,6 +14,7 @@ const formArr = Array.from(document.querySelectorAll('form'))
 
 const errorList = Array.from(document.querySelectorAll('.error'))
 
+
 const profileAddCardButton = document.querySelector('.profile__add-button')
 const popupAddNewPhoto = document.querySelector('#popupMesto')
 const popupNewPhotoCloseButton = popupAddNewPhoto.querySelector('#mestoCloseButton')
@@ -75,5 +76,20 @@ const validatorConfig = ({
     errorClass: '.popup__input-error',
     openedPopup: 'popup_opened'
 })
+
+
+
+const config = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
+        'Content-Type': 'application/json'
+    }
+}//конфиг
+
+
+
+
+
 
 export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

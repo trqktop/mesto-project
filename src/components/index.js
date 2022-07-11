@@ -1,7 +1,7 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
 import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-import { profileInfoId, checkOwnCard, renderLikeCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
+import { checkCardOwn, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
 //0.2 импорт переменных
 
 import { popupFullScreen, fullScreenCloseButton, popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
@@ -13,12 +13,10 @@ import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, 
 import { enableValidation, resetError } from './validate.js'
 
 
-
-
 enableValidation(validatorConfig)
-profileInfoId()
-    .then(profile => profile)
-    .then(profile => checkOwnCard(profile))
+
+
+
 
 
 //1. Работа модальных окон
@@ -101,7 +99,7 @@ getUserProfileInfo()
 getInitialCards()
     .then(data => {
         data.forEach(item => {
-            insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi))
+            insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi, item))
         })
     })
     .catch(err => console.log(err))
@@ -146,37 +144,30 @@ getInitialCards()
 
 */
 
-//лайки с сервера
+//8. Удаление карточки
 
 
-renderLikeCount()
-    .then(data => {
-        data.reverse().forEach((item, index) => {
-            initLikesCoutArr(index, item)
-        })
+
+
+
+setLikesCount()
+    .then(serverItems => {
+        initLikes(serverItems)
     })
 
 
 
 
-export const initLikesCoutArr = (index, item) => {
-    const likeCountArr = Array.from(document.querySelectorAll('.element__like-count'))
-    return likeCountArr[index].textContent = item.likes.length
-}
+//8. Удаление карточки
 
 
-//10. Обновление аватара пользователя
+userId()
+    .then(userid => {
+        checkCards()
+            .then(res => res.reverse())
+            .then(res => checkCardOwn(res, userid))
+    })
 
-const sectionProfile = document.querySelector('.profile')
-
-const avatarProfile = document.querySelector('.profile__avatar')
-avatarProfile.addEventListener('mouseover', (evt) => {
-    avatarProfile.style.opacity = ".1"
-})
-
-avatarProfile.addEventListener('mouseout', (evt) => {
-    avatarProfile.style.opacity = "1"
-})
 
 
 

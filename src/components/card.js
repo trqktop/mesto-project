@@ -1,8 +1,6 @@
 
 import { fullScreenImage, fullScreenImageDescription, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
-import { likeId, renderLikeCount} from './api.js'
-
 
 
 
@@ -22,6 +20,10 @@ function createCards(srcValue, titleValue, userTemplateLi) {
 
 
 
+
+
+
+
 function insertCard(elementsGridContainer, cardElement) {
     elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
 }
@@ -33,8 +35,6 @@ function likeButtonListener(cardElement) {
 
 function likeActive(item) {
     item.classList.toggle('element__button_active')
-    likeId(item)
-    renderLikeCount()
 }
 
 
@@ -45,7 +45,13 @@ function deleteCardButtonListener(cardElement) {
 
 function cardDelete(cardElement) {
     cardElement.remove()
+    deleteCardFromServer()
 }
+
+
+
+
+
 
 
 
@@ -67,15 +73,6 @@ const config = {
 
 
 
-
-
-
-
-
-
-
-
-
 function listenerFullScreenImage(elementImage, cardElement) {
     elementImage.addEventListener('click', function () {
         fullScreenImage.src = elementImage.src;
@@ -84,10 +81,6 @@ function listenerFullScreenImage(elementImage, cardElement) {
         openPopup(popupFullScreen)
     })
 }
-
-
-
-
 
 
 
