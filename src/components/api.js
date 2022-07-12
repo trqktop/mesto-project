@@ -137,13 +137,33 @@ export const checkCardOwn = (array, userID) => {
     const deleteArrayButton = document.querySelectorAll('.element__delete-button')
     array.forEach((item, index) => {
         if (item.owner._id === userID) {
-            setTrashIcon(index, deleteArrayButton, item)
+            setTrashIcon(index, deleteArrayButton)
+            deleteFromServerListener(deleteArrayButton, index, item)
         }
     })
 }
 
 
-export const setTrashIcon = (index, arr, item) => {
+export const setTrashIcon = (index, arr) => {
     arr[index].style.display = "block"
 }
 
+function deleteFromServerListener(detelButton, index, cardsFromServer) {
+    detelButton[index].addEventListener('click', () => { requestToDeleteFromTheServer(cardsFromServer._id) })
+}
+
+
+export const requestToDeleteFromTheServer = (cardId) => {
+    return fetch(`${config.baseUrl}/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
+        .then(res => res._id)
+        .catch(err => console.log(err))
+}

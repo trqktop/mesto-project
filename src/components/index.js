@@ -1,6 +1,6 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
-import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
+import { cardDelete, insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
 import { checkCardOwn, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
 //0.2 импорт переменных
 
@@ -167,6 +167,7 @@ userId()
             .then(res => res.reverse())
             .then(res => checkCardOwn(res, userid))
     })
+
 
 
 

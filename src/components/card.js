@@ -1,7 +1,7 @@
 
 import { fullScreenImage, fullScreenImageDescription, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
-
+import { checkCards } from "./api.js"
 
 
 
@@ -39,14 +39,16 @@ function likeActive(item) {
 
 
 function deleteCardButtonListener(cardElement) {
-    cardElement.querySelector('.element__delete-button').addEventListener('click', () =>
-        cardDelete(cardElement))
+    cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
+        cardDelete(cardElement)
+    })
 }
 
 function cardDelete(cardElement) {
     cardElement.remove()
-    deleteCardFromServer()
 }
+
+
 
 
 
@@ -85,4 +87,4 @@ function listenerFullScreenImage(elementImage, cardElement) {
 
 
 
-export { insertCard, createCards }
+export { cardDelete, insertCard, createCards }
