@@ -13,6 +13,7 @@
   </header>
   <main class="content">
     <section class="profile">
+      <div class="profile__avatar_edit"></div>
         <img alt="Аватарка" src="<%=require('./images/profile-avatar.jpg')%>" class="profile__avatar">
       <div class="profile__flex">
         <div class="profile__user-container">
@@ -136,6 +137,22 @@
         <h3 class="popup__caption">Карачаево-Черкесия</h3>
       </figcaption>
     </figure>
+  </section>
+  <!--попап сменить аватарку-->
+  <section class="popup" id="avatar">
+    <div class="popup__container">
+      <button aria-label="close" class="popup__close-button" id="" type="reset"></button>
+      <h3 class="popup__title">Обновить аватар</h3>
+      <form name="user-edit" action="#" class="popup__edit-form" id="" novalidate>
+        <div class="popup__error-fieldset">
+          <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlNewAvatar"
+            name="imageurl" required>
+          <span class="popup__input-error urlNewAvatar-error error"></span>
+        </div>
+        <button type="submit" id="" class="popup__submit-button popup__submit-button_disabled"
+          disabled>Сохранить</button>
+      </form>
+    </div>
   </section>
   <template class="template">
     <li>

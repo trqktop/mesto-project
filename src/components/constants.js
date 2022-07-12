@@ -53,18 +53,21 @@ const initialCards = [
     }
 ];//массив карточек
 
-
-
+export const popupAvatarUrlInput = document.querySelector('#urlNewAvatar')
+export const userAvatar = document.querySelector('.profile__avatar')
 const userTemplate = document.querySelector('.template').content;//ищем на страницу template с его контентом
 const userTemplateLi = userTemplate.querySelector('li');//берем контейнер для копирования 
 
 const inputArr = Array.from(popupAddNewPhoto.querySelectorAll('input'))
-
+export const avatarEditPen = document.querySelector('.profile__avatar_edit')
 
 const fullScreenImage = popupFullScreen.querySelector('.popup__fullscreen-image')//ссылка на фулскрин картинку
 const fullScreenImageDescription = popupFullScreen.querySelector('.popup__caption')//заголовок картинки
 
 const addNewPhotoSubmitButton = popupAddNewPhoto.querySelector('.popup__submit-button')
+export const popupAvatar = document.querySelector('#avatar')
+export const popupAvatarCloseButton = popupAvatar.querySelector('.popup__close-button')
+export const popupAvatarForm = popupAvatar.querySelector('form')
 
 
 const validatorConfig = ({

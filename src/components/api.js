@@ -107,20 +107,6 @@ export const userId = () => {
         })
         .then(res => res._id)
 }
-
-
-export const initLikes = (serverItems) => {
-    const arrLikeCount = Array.from(document.querySelectorAll('.element__like-count'))
-    renderLikes(arrLikeCount, serverItems)
-}
-
-const renderLikes = (arrHtmlElements, arrServerElements) => {
-    arrServerElements.reverse().forEach((item, index) => {
-        arrHtmlElements[index].textContent = item.likes.length
-    })
-}
-
-
 export const checkCards = () => {
     return fetch(`${config.baseUrl}/cards`, {
         headers: config.headers
@@ -132,6 +118,12 @@ export const checkCards = () => {
             return Promise.reject(`Ошибка: ${res.status}`)
         })
 }
+
+
+
+
+
+
 
 export const checkCardOwn = (array, userID) => {
     const deleteArrayButton = document.querySelectorAll('.element__delete-button')
@@ -166,4 +158,92 @@ export const requestToDeleteFromTheServer = (cardId) => {
         })
         .then(res => res._id)
         .catch(err => console.log(err))
+}
+
+
+export const putOnServerLike = (cardId) => {
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
+        .catch(err => console.log(err))
+}
+
+
+
+export const deleteFromServerLike = (cardId) => {
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: config.headers
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
+        .catch(err => console.log(err))
+}
+
+
+export const checkLikeToggle = (serverItems) => {
+    const likesArr = Array.from(document.querySelectorAll('.element__button'))
+    let statusTracker = true;
+    likesArr.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            if (statusTracker) {
+                updateLikeCount()
+                putOnServerLike(serverItems[index]._id)
+                return statusTracker = false;
+            } else {
+                updateLikeCount()
+                deleteFromServerLike(serverItems[index]._id)
+                return statusTracker = true;
+            }
+        })
+    })
+}
+
+
+export const updateLikeCount = () => {
+    setLikesCount()
+        .then(serverItems => serverItems)
+        .then(serverItems =>
+            initLikes(serverItems)
+        )
+}
+
+export const initLikes = (serverItems) => {
+    const arrLikeCount = Array.from(document.querySelectorAll('.element__like-count'))
+    renderLikes(arrLikeCount, serverItems)
+}
+
+const renderLikes = (arrHtmlElements, arrServerElements) => {
+    arrServerElements.reverse().forEach((item, index) => {
+        arrHtmlElements[index].textContent = item.likes.length
+    })
+}
+
+
+
+export const patchProfileAvatar = (avatarSrc) => {
+    return fetch(`${config.baseUrl}/users/me/avatar `, {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+            avatar: avatarSrc,
+        })
+    })
+        .then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+            return Promise.reject(`Ошибка: ${res.status}`)
+        })
 }

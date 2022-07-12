@@ -38,6 +38,15 @@ function likeActive(item) {
 }
 
 
+
+
+
+
+
+
+
+
+
 function deleteCardButtonListener(cardElement) {
     cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
         cardDelete(cardElement)
@@ -47,16 +56,6 @@ function deleteCardButtonListener(cardElement) {
 function cardDelete(cardElement) {
     cardElement.remove()
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

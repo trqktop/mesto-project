@@ -1,10 +1,13 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
 import { cardDelete, insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-import { checkCardOwn, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
+import { patchProfileAvatar, updateLikeCount, checkLikeToggle, deleteFromServerLike, putOnServerLike, checkCardOwn, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
 //0.2 импорт переменных
 
-import { popupFullScreen, fullScreenCloseButton, popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit } from "./constants.js"
+import {
+    popupFullScreen, fullScreenCloseButton, popupArr, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit, avatarEditPen, userAvatar,
+    popupAvatar, popupAvatarCloseButton, popupAvatarForm, popupAvatarUrlInput
+} from "./constants.js"
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, submitListener } from './modal.js'//0.2 импорт Работа модальных окон
 
 
@@ -144,17 +147,19 @@ getInitialCards()
 
 */
 
-//8. Удаление карточки
-
 
 
 
 
 setLikesCount()
+    .then(serverItems => serverItems)
     .then(serverItems => {
         initLikes(serverItems)
+        return serverItems
     })
-
+    .then(serverItems => {
+        checkLikeToggle(serverItems)
+    })
 
 
 
@@ -170,5 +175,49 @@ userId()
 
 
 
+//10. Обновление аватара пользователя
+
+
+
+
+userAvatar.addEventListener('mouseover', () => {
+    showPen()
+})
+
+userAvatar.addEventListener('mouseout', () => {
+    hidePen()
+})
+
+
+
+
+
+export const showPen = () => {
+    avatarEditPen.style.display = "block"
+}
+
+
+export const hidePen = () => {
+    avatarEditPen.style.display = "none"
+}
+
+
+userAvatar.addEventListener('click', () => {
+    openPopup(popupAvatar)
+})
+
+
+popupAvatarCloseButton.addEventListener('click', () => {
+    closePopup(popupAvatar)
+})
+
+
+
+popupAvatarForm.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+    userAvatar.src = popupAvatarUrlInput.value
+    closePopup(popupAvatar)
+    patchProfileAvatar(popupAvatarUrlInput.value)
+})
 
 
