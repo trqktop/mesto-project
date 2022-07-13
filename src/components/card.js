@@ -1,7 +1,7 @@
 
 import { fullScreenImage, fullScreenImageDescription, popupFullScreen, fullScreenCloseButton } from './constants.js'
 import { openPopup, closePopup } from './modal.js'
-import { checkCards } from "./api.js"
+import { putLikeOnServer, deleteLikeFromServer, addOrRemoveLikeApi, checkCards, requestToDeleteFromTheServer, likeStatus } from "./api.js"
 
 
 
@@ -23,21 +23,23 @@ function createCards(srcValue, titleValue, userTemplateLi) {
 
 
 
-
 function insertCard(elementsGridContainer, cardElement) {
     elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
 }
 
 function likeButtonListener(cardElement) {
-    cardElement.querySelector('.element__button').addEventListener('click', () => likeActive(cardElement.querySelector('.element__button'))
-    )
+    cardElement.querySelector('.element__button').addEventListener('click', () => {
+        likeActive(cardElement.querySelector('.element__button'))
+    })
 }
 
 function likeActive(item) {
-    item.classList.toggle('element__button_active')
+    if (!item.classList.contains('element__button_active')) {
+        return item.classList.add('element__button_active')
+    } else {
+        return item.classList.remove('element__button_active')
+    }
 }
-
-
 
 
 
@@ -59,17 +61,6 @@ function cardDelete(cardElement) {
 
 
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        name: 'Marie Skłodowska Curie',
-        about: 'Physicist and Chemist'
-    })
-}
 
 
 
@@ -85,5 +76,43 @@ function listenerFullScreenImage(elementImage, cardElement) {
 
 
 
+export const checkCardOwn = (array, userID) => {
+    const deleteArrayButton = document.querySelectorAll('.element__delete-button')
+    array.forEach((item, index) => {
+        if (item.owner._id !== userID) {
+            setTrashIcon(index, deleteArrayButton)
+        }
+        deleteFromServerListener(deleteArrayButton, index, item)
+    })
+}
+
+function deleteFromServerListener(detelButton, index, cardsFromServer) {
+    detelButton[index].addEventListener('click', () => { requestToDeleteFromTheServer(cardsFromServer._id) })
+}
+
+
+export const setTrashIcon = (index, arr) => {
+    arr[index].style.display = "none"
+}
+
+
+export const initLikeCount = (serverArr) => {
+    const likeCount = Array.from(document.querySelectorAll('.element__like-count'))
+    renderLikeCount(likeCount, serverArr)
+}
+
+
+export const renderLikeCount = (likeCount, serverArr) => {
+    likeCount.reverse().forEach((likeCountElement, index) => {
+        likeCountElement.textContent = serverArr[index].likes.length
+    })
+}
+export const plusLikeCount = (likeItem) => {
+    return likeItem.closest('figcaption').querySelector('span').textContent = parseInt(likeItem.closest('figcaption').querySelector('span').textContent) + 1
+
+}
+export const minusLikeCount = (likeItem) => {
+    return likeItem.closest('figcaption').querySelector('span').textContent = parseInt(likeItem.closest('figcaption').querySelector('span').textContent) - 1
+}
 
 export { cardDelete, insertCard, createCards }

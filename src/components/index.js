@@ -1,7 +1,10 @@
 //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
-import { cardDelete, insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-import { patchProfileAvatar, updateLikeCount, checkLikeToggle, deleteFromServerLike, putOnServerLike, checkCardOwn, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards } from "./api.js"
+import {
+    initLikeCount, renderLikeCount, checkCardOwn, cardDelete, insertCard, createCards
+    , minusLikeCount, plusLikeCount
+} from "./card.js";//0.1 импорт функций работы с карточками
+import { putLikeOnServer, deleteLikeFromServer, patchProfileAvatar, checkLikeToggle, deleteFromServerLike, putOnServerLike, userId, checkCards, initLikes, setLikesCount, pushNewCard, pushProfileData, getUserProfileInfo, getInitialCards, checkResponse, likeStatus, setProfileAvatar } from "./api.js"
 //0.2 импорт переменных
 
 import {
@@ -37,10 +40,14 @@ openPopupProfileEditButton.addEventListener('click', () => {
 
 popupSubmitProfileForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
+    evt.target.querySelector('.popup__submit-button').textContent = 'Сохранение...'
     submitListener(popupProfileEdit);
     saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
     pushProfileData(profileUserName, profileUserJob)//5. Редактирование профиля
+        .catch((err) => console.log(err))
+        .finally(res => { evt.target.querySelector('.popup__submit-button').textContent = 'Сохранить' })
 })//слушатель событий сохранить изменения в профиль
+
 
 
 //2. Шесть карточек «из коробки»
@@ -64,13 +71,14 @@ profileAddCardButton.addEventListener('click', () => openPopup(popupAddNewPhoto)
 
 
 
-
 //4. Добавление карточки
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 formNewPhoto.addEventListener('submit', (evt) => {
     evt.preventDefault()
+    evt.target.querySelector('.popup__submit-button').textContent = 'Сохранение...'
     insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi))
     pushNewCard(nameImageInput.value, urlImageInput.value)
+        .finally(res => { evt.target.querySelector('.popup__submit-button').textContent = 'Сохранить' })
     closePopup(popupAddNewPhoto)
     clearInputsValue(popupAddNewPhoto);
     resetError(popupAddNewPhoto, validatorConfig)
@@ -91,91 +99,83 @@ getUserProfileInfo()
     .catch(err => console.log(err))
 
 
-
-
 //4. Загрузка карточек с сервера
 
 
 
-
-
 getInitialCards()
+    .then(data => data.reverse())
     .then(data => {
         data.forEach(item => {
             insertCard(elementsGridContainer, createCards(item.link, item.name, userTemplateLi, item))
         })
+        return data
+    })
+    .then(serverArr => { initLikeCount(serverArr) })
+    .then(res => {
+        userId()
+            .then(userid => {
+                checkCards()
+                    .then(data => data)
+                    .then(data => {
+                        checkCardOwn(data, userid)
+                        checkLikeOwn(data, userid)
+                    })
+            })
+    })
+    .then(res => {
+        return checkCards()
+            .then(data => {
+                const arrayLikes = Array.from(document.querySelectorAll('.element__button'))
+                arrayLikes.forEach((likeItem, index, arr) => {
+                    likeItem.addEventListener('click', (evt) => {
+                        if (evt.target.classList.contains('element__button_active')) {
+                            plusLikeCount(likeItem, data)
+                            putLikeOnServer((data[arr.indexOf(likeItem)])._id)
+                        }
+                        else {
+                            minusLikeCount(likeItem)
+                            deleteLikeFromServer((data[arr.indexOf(likeItem)])._id)
+                        }
+                    })
+                })
+            })
+            .then(data => initLikeCount(data))
     })
     .catch(err => console.log(err))
 
 
 
-//7. Отображение количества лайков карточки
 
-/*const config = {
-    baseUrl: 'https://nomoreparties.co/v1/cohort-42',
-    headers: {
-        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
-        'Content-Type': 'application/json'
-    }
-}
 
-export const getInitialCards = () => {
-    return fetch(`${config.baseUrl}/cards`, {
-        config.headers
-    })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const checkLikeOwn = (data, userid) => {
+    const likesArr = Array.from(document.querySelectorAll('.element__button'))
+    data.forEach((item, index) => {
+        item.likes.forEach(like => {
+            if (like._id === userid) {
+                likesArr[index].classList.add('element__button_active')
             }
-            // если ошибка, отклоняем промис
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        })
+    })
 }
 
-
--------------------------------------------------------------------------------------------------------------------------------------------------
-import { getInitialCards } from './api.js'
-
-getInitialCards()
-    .then((result) => {
-        // обрабатываем результат
-    })
-    .catch((err) => {
-        console.log(err); // выводим ошибку в консоль
-    });
-
-
-*/
-
-
-
-
-
-setLikesCount()
-    .then(serverItems => serverItems)
-    .then(serverItems => {
-        initLikes(serverItems)
-        return serverItems
-    })
-    .then(serverItems => {
-        checkLikeToggle(serverItems)
-    })
-
-
-
-//8. Удаление карточки
-
-
-userId()
-    .then(userid => {
-        checkCards()
-            .then(res => res.reverse())
-            .then(res => checkCardOwn(res, userid))
-    })
-
-
-
-//10. Обновление аватара пользователя
 
 
 
@@ -216,8 +216,15 @@ popupAvatarCloseButton.addEventListener('click', () => {
 popupAvatarForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
     userAvatar.src = popupAvatarUrlInput.value
-    closePopup(popupAvatar)
-    patchProfileAvatar(popupAvatarUrlInput.value)
+    evt.target.querySelector('.popup__submit-button').textContent = 'Сохранение...'
+    patchProfileAvatar(popupAvatarUrlInput.value, evt)
+        .then(res => { closePopup(popupAvatar) })
+        .finally(res => { evt.target.querySelector('.popup__submit-button').textContent = 'Сохранить' })
 })
 
 
+
+setProfileAvatar()
+    .then(res => {
+        userAvatar.src = res.avatar
+    })
