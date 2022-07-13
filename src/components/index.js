@@ -139,12 +139,11 @@ getInitialCards()
                         }
                     })
                 })
+                return data
             })
             .then(data => initLikeCount(data))
     })
     .catch(err => console.log(err))
-
-
 
 
 
