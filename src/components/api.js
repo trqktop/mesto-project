@@ -60,21 +60,21 @@ export const pushNewCard = (nameValue, linkValue) => {
 }//загрузка созданной карточки на сервер
 
 
-export const userId = () => {
+export const getUserId = () => {
     return fetch(`${config.baseUrl}/users/me`, {
         headers: config.headers
     })
         .then(res => checkResponse(res))
-        .then(res => res._id)
 }
 
 
-export const checkCards = () => {
+export const getCards = () => {
     return fetch(`${config.baseUrl}/cards`, {
         headers: config.headers
     })
         .then(res => checkResponse(res))
 }
+
 
 
 
@@ -92,7 +92,6 @@ export const requestToDeleteFromTheServer = (cardId) => {
         headers: config.headers
     })
         .then(res => checkResponse(res))
-        .then(res => res._id)
 }
 
 

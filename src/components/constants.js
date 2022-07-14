@@ -1,6 +1,10 @@
 const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
 const popupSubmitProfileForm = document.querySelector('.popup__edit-form')
 const popupProfileEdit = document.querySelector('#popupEditProfile')//по-пап редактировать профиль 
+export const submitButtonEditProfile = popupProfileEdit.querySelector('.popup__submit-button')
+
+
+
 const closePopupProfileEdit = popupProfileEdit.querySelector('.popup__close-button')
 const profile = document.querySelector('.profile')//секция профиль
 const profileJobInput = popupProfileEdit.querySelector('#profileJobInput')//input профиль профессия
@@ -68,6 +72,12 @@ const addNewPhotoSubmitButton = popupAddNewPhoto.querySelector('.popup__submit-b
 export const popupAvatar = document.querySelector('#avatar')
 export const popupAvatarCloseButton = popupAvatar.querySelector('.popup__close-button')
 export const popupAvatarForm = popupAvatar.querySelector('form')
+
+
+
+
+
+
 
 
 const validatorConfig = ({

@@ -13,14 +13,14 @@ function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNa
 function openPopup(popupElement) {//Функция открытия попапа
     popupElement.classList.add('popup_opened')
     document.addEventListener("keydown", closePopupEsc)//(c)'добавлять обработчик события в функции открытия попапов'
-    document.addEventListener('click', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
+    document.addEventListener('mousedown', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
 }
 
 
 function closePopup(popupElement) {
     popupElement.classList.remove('popup_opened')
     document.removeEventListener("keydown", closePopupEsc)// (c)'удалять его при закрытии попапов.'
-    document.removeEventListener('click', closePopupOverlay)// (c)'удалять его при закрытии попапов.'
+    document.removeEventListener('mousedown', closePopupOverlay)// (c)'удалять его при закрытии попапов.'
 }
 
 
@@ -32,17 +32,12 @@ function saveChange(profileJobInput, profileUserJob, profileNameInput, profileUs
 
 
 function clearInputsValue(popupAddNewPhoto) {
-    popupAddNewPhoto.querySelectorAll('input').forEach((inputElement) =>
-        inputElement.value = ''
-
-    )
+    popupAddNewPhoto.querySelector('form').reset()
     disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 }
 
 
-function submitListener(popupElement) {
-    closePopup(popupElement);
-}
+
 
 
 function closePopupEsc(evt) {
@@ -53,20 +48,22 @@ function closePopupEsc(evt) {
 }
 
 function closePopupOverlay(evt) {
-    if (Array.from(evt.target.classList).includes('popup')) {
-        const openedPopup = document.querySelector('.popup_opened')
-        closePopup(openedPopup)
-    }
+    if (evt.target.classList.contains('popup'))
+        closePopup(evt.target)
 }
 
 
 
 
 
+export const toggleSubmitButtonTextContent = (submitButtonEditProfile, value) => {
+    submitButtonEditProfile.textContent = value
+}//меняю текст контент кнопок субмит 
 
 
 
 
 
 
-export { clearInputsValue, openPopup, closePopup, saveChange, submitListener, showInputValueAfterOpenPopup }
+
+export { clearInputsValue, openPopup, closePopup, saveChange, showInputValueAfterOpenPopup }
