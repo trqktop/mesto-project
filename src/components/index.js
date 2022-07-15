@@ -55,7 +55,8 @@ formNewPhoto.addEventListener('submit', (evt) => {
     toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
     pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер 
         .then(newCard => {
-            insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard))
+            console.log(newCard)
+            insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
             return newCard
         })//Вставляем карточку на страницу
         .then(newCard => {

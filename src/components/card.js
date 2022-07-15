@@ -71,6 +71,7 @@ function listenerFullScreenImage(elementImage, cardElement) {
 
 export const checkCardOwn = (cardFromServer, userId, cardElement) => {
     //const deleteArrayButton = document.querySelectorAll('.element__delete-button')
+    console.log(cardFromServer.owner._id, userId)
     if (cardFromServer.owner._id !== userId) {
         removeTrashIcon(cardElement)
     }
