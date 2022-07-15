@@ -14,7 +14,7 @@
   <main class="content">
     <section class="profile">
       <div class="profile__avatar_edit"></div>
-        <img alt="Аватарка" src="<%=require('./images/profile-avatar.jpg')%>" class="profile__avatar">
+      <img alt="Аватарка" src="<%=require('./images/profile-avatar.jpg')%>" class="profile__avatar">
       <div class="profile__flex">
         <div class="profile__user-container">
           <h1 class="profile__user-name"></h1>
@@ -161,8 +161,10 @@
         <img class="element__image">
         <figcaption class="element__caption-container">
           <h3 class="element__caption-about"></h3>
-          <span class="element__like-count">0</span>
-          <button aria-label="like" type="button" class="element__button"></button>
+          <div class="element__like-container">
+            <button aria-label="like" type="button" class="element__button"></button>
+            <span class="element__like-count">0</span>
+          </div>
         </figcaption>
       </figure>
     </li>
