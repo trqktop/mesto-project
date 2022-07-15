@@ -39,8 +39,8 @@ export const pushProfileData = (userName, userJob) => {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-            name: userName.textContent,
-            about: userJob.textContent
+            name: userName.value,
+            about: userJob.value
         })
     })
         .then(res => checkResponse(res))
@@ -103,7 +103,7 @@ export const requestToDeleteFromTheServer = (cardId) => {
 
 
 
-export const patchProfileAvatar = (avatarSrc ,evt ) => {
+export const patchProfileAvatar = (avatarSrc) => {
     return fetch(`${config.baseUrl}/users/me/avatar `, {
         method: 'PATCH',
         headers: config.headers,
@@ -111,6 +111,7 @@ export const patchProfileAvatar = (avatarSrc ,evt ) => {
             avatar: avatarSrc,
         })
     })
+        .then(res => checkResponse(res))
 }
 
 

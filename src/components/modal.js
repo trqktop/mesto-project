@@ -4,6 +4,12 @@ import { disableSubmitButton, resetError } from "./validate.js"
 
 
 
+
+
+
+
+
+
 function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
     profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
     profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
@@ -14,6 +20,8 @@ function openPopup(popupElement) {//Функция открытия попапа
     popupElement.classList.add('popup_opened')
     document.addEventListener("keydown", closePopupEsc)//(c)'добавлять обработчик события в функции открытия попапов'
     document.addEventListener('mousedown', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
+
+    resetError(popupElement, validatorConfig)
 }
 
 

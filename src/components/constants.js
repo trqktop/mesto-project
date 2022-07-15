@@ -1,8 +1,11 @@
-const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
+export const closeButtons = document.querySelectorAll('.popup__close-button');
+export const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
+
+
+
 const popupSubmitProfileForm = document.querySelector('.popup__edit-form')
 const popupProfileEdit = document.querySelector('#popupEditProfile')//по-пап редактировать профиль 
 export const submitButtonEditProfile = popupProfileEdit.querySelector('.popup__submit-button')
-
 
 
 const closePopupProfileEdit = popupProfileEdit.querySelector('.popup__close-button')
@@ -69,7 +72,7 @@ const fullScreenImage = popupFullScreen.querySelector('.popup__fullscreen-image'
 const fullScreenImageDescription = popupFullScreen.querySelector('.popup__caption')//заголовок картинки
 
 const addNewPhotoSubmitButton = popupAddNewPhoto.querySelector('.popup__submit-button')
-export const popupAvatar = document.querySelector('#avatar')
+export const popupAvatar = document.querySelector('#popupAvatar')
 export const popupAvatarCloseButton = popupAvatar.querySelector('.popup__close-button')
 export const popupAvatarForm = popupAvatar.querySelector('form')
 
@@ -92,17 +95,10 @@ const validatorConfig = ({
 
 
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
-        'Content-Type': 'application/json'
-    }
-}//конфиг
 
 
 
 
 
 
-export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
