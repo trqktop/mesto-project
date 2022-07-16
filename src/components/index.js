@@ -46,8 +46,6 @@ profileAddCardButton.addEventListener('click', () => {
     clearInputsValue(popupAddNewPhoto)
 })
 
-fullScreenCloseButton.addEventListener('click', () => closePopup(popupFullScreen))//закрытие попапа фуллскрин 
-
 //4. Добавление карточки
 //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 formNewPhoto.addEventListener('submit', (evt) => {
@@ -55,7 +53,6 @@ formNewPhoto.addEventListener('submit', (evt) => {
     toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
     pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер 
         .then(newCard => {
-            console.log(newCard)
             insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
             return newCard
         })//Вставляем карточку на страницу
@@ -121,14 +118,15 @@ userAvatar.addEventListener('click', () => {
 
 popupAvatarForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    evt.target.querySelector('.popup__submit-button').textContent = 'Сохранение...'
+    const submitButton = evt.submitter
+    submitButton.textContent = 'Сохранение...'
     patchProfileAvatar(popupAvatarUrlInput.value)
         .then(res => {
             userAvatar.src = res.avatar
             closePopup(popupAvatar)
         })
         .catch(err => console.log(err))
-        .finally(res => evt.target.querySelector('.popup__submit-button').textContent = 'Сохранить')
+        .finally(res => submitButton.textContent = 'Сохранить')
 })
 
 

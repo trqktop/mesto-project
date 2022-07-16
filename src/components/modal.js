@@ -20,7 +20,7 @@ function openPopup(popupElement) {//Функция открытия попапа
     popupElement.classList.add('popup_opened')
     document.addEventListener("keydown", closePopupEsc)//(c)'добавлять обработчик события в функции открытия попапов'
     document.addEventListener('mousedown', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
-
+    clearInputsValue(popupElement)
     resetError(popupElement, validatorConfig)
 }
 
