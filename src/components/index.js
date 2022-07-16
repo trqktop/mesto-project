@@ -8,7 +8,7 @@ import {
     popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons
 } from "./constants.js"
 import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, toggleSubmitButtonTextContent } from './modal.js'//0.2 импорт Работа модальных окон
-import { enableValidation } from './validate.js'
+import { resetError, enableValidation } from './validate.js'
 let userId;
 enableValidation(validatorConfig);//включил валидацию
 
@@ -24,8 +24,8 @@ closeButtons.forEach((button) => {
 openPopupProfileEditButton.addEventListener('click', () => {
     openPopup(popupProfileEdit);
     showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+    resetError(popupProfileEdit, validatorConfig)
 })//слушатель событий кнопки открыть по-пап редактирования профиля
-
 
 
 
@@ -41,9 +41,13 @@ popupSubmitProfileForm.addEventListener('submit', (evt) => {
 })//слушатель событий сохранить изменения в профиль
 
 
+
+
+
 profileAddCardButton.addEventListener('click', () => {
     openPopup(popupAddNewPhoto)
     clearInputsValue(popupAddNewPhoto)
+    resetError(popupAddNewPhoto, validatorConfig)
 })
 
 //4. Добавление карточки
@@ -113,6 +117,8 @@ export const hidePen = () => {
 
 userAvatar.addEventListener('click', () => {
     openPopup(popupAvatar)
+    clearInputsValue(popupAvatar)
+    resetError(popupAvatar, validatorConfig)
 })
 
 
