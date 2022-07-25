@@ -1,27 +1,21 @@
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
-        'Content-Type': 'application/json'
-    }
-}//конфиг
+
+//конфиг
 //-------------------------------------------------------------------------------------------------------------------------------------------- 
-const api = new Api({
-    baseUrl: 'https://nomoreparties.co/v1/cohort-42',
-    headers: {
-        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
-        'Content-Type': 'application/json'
-    }
-});
+//const api = new Api({
+//    baseUrl: 'https://nomoreparties.co/v1/cohort-42',
+//    headers: {
+//        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
+//        'Content-Type': 'application/json'
+//    }
+//});
 
 export class Api {
-    constructor(options) {
-        this.profileNameInput = options.profileNameInput;
-        this.profileJobInput = options.profileJobInput
+    constructor(options) {//в опции передаются только юрл и хедер
         this.baseUrl = options.baseUrl
         this.headers = options.headers
     }
+
     getInitialCards() {
         return fetch(`${this.baseUrl}/cards`, {
             headers: this.headers
@@ -30,45 +24,45 @@ export class Api {
     }//загрузка карточек с сервера
 
     getUserProfileInfo() {
-        return fetch(`${config.baseUrl}/users/me`, {
-            headers: config.headers
+        return fetch(`${this.baseUrl}/users/me`, {
+            headers: this.headers
         })
             .then(res => checkResponse(res))
 
     }//3. Загрузка информации о пользователе с сервера
 
 
-    pushProfileData(userName, userJob) {
-        return fetch(`${config.baseUrl}/users/me`, {
+    pushProfileData(userName, userJob) {//эти данные передаются напрямую в метод
+        return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',
-            headers: config.headers,
+            headers: this.headers,
             body: JSON.stringify({
                 name: userName.value,
                 about: userJob.value
             })
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }//5. Редактирование профиля на сервере
 
 
-    pushNewCard(nameValue, linkValue) {
-        return fetch(`${config.baseUrl}/cards`, {
+    pushNewCard(nameValue, linkValue) {//эти данные передаются напрямую в метод
+        return fetch(`${this.baseUrl}/cards`, {
             method: 'POST',
-            headers: config.headers,
+            headers: this.headers,
             body: JSON.stringify({
                 name: nameValue,
                 link: linkValue
             })
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }//загрузка созданной карточки на сервер
 
 
     getUserId() {
-        return fetch(`${config.baseUrl}/users/me`, {
-            headers: config.headers
+        return fetch(`${this.baseUrl}/users/me`, {
+            headers: this.headers
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }
 
 
@@ -79,64 +73,64 @@ export class Api {
     //            .then(res => checkResponse(res))
     //    }
 
-    requestToDeleteFromTheServer(cardId) {
-        return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    requestToDeleteFromTheServer(cardId) {//эти данные передаются напрямую в метод
+        return fetch(`${this.baseUrl}/cards/${cardId}`, {
             method: 'DELETE',
-            headers: config.headers
+            headers: this.headers
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }
 
-    patchProfileAvatar(avatarSrc) {
-        return fetch(`${config.baseUrl}/users/me/avatar `, {
+    patchProfileAvatar(avatarSrc) {//эти данные передаются напрямую в метод
+        return fetch(`${this.baseUrl}/users/me/avatar `, {
             method: 'PATCH',
-            headers: config.headers,
+            headers: this.headers,
             body: JSON.stringify({
-                avatar: avatarSrc,
+                avatar: this.avatarSrc,
             })
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }
 
 
     addOrRemoveLikeApi() {
-        return fetch(`${config.baseUrl}/cards`, {
-            headers: config.headers,
+        return fetch(`${this.baseUrl}/cards`, {
+            headers: this.headers,
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }
 
 
-    putLikeOnServer(cardId) {
-        return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    putLikeOnServer() {
+        return fetch(`${config.baseUrl}/cards/likes/${this.cardId}`, {
             method: 'PUT',
-            headers: config.headers,
+            headers: this.headers,
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }//добавить карточку на сервер
 
-    deleteLikeFromServer(cardId) {
-        return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    deleteLikeFromServer() {
+        return fetch(`${this.baseUrl}/cards/likes/${this.cardId}`, {
             method: 'DELETE',
-            headers: config.headers,
+            headers: this.headers,
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }//добавить карточку на сервер
 
 
     likeStatus() {
-        return fetch(`${config.baseUrl}/cards`, {
-            headers: config.headers,
+        return fetch(`${this.baseUrl}/cards`, {
+            headers: this.headers,
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }//добавить карточку на сервер
 
 
     setProfileAvatar() {
-        return fetch(`${config.baseUrl}/users/me`, {
-            headers: config.headers,
+        return fetch(`${this.baseUrl}/users/me`, {
+            headers: this.headers,
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
     }
 
 

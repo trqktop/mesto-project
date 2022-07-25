@@ -1,7 +1,7 @@
 
-import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
-import { openPopup } from './modal.js'
-import { putLikeOnServer, deleteLikeFromServer, requestToDeleteFromTheServer } from "./api.js"
+//import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
+//import { openPopup } from './modal.js'
+//import { putLikeOnServer, deleteLikeFromServer, requestToDeleteFromTheServer } from "./api.js"
 
 //-----
 // export class Card {
@@ -19,7 +19,7 @@ export class Card {
         this._userTemplateLi = userTemplateLi;
         this._cardFromServer = cardFromServer;
         this._userId = userId;
-        this._cardElement = createCards()
+        this._cardElement = this.createCards()
     }
     createCards() {
         const cardElement = this._userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную     
@@ -34,7 +34,7 @@ export class Card {
         this.renderActiveLikes(this._userId, this._cardFromServer, cardElement)
         return cardElement
     }
-    
+
     insertCard() {
         elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
     }
@@ -69,7 +69,7 @@ export class Card {
 
     deleteCardButtonListener(cardElement, cardFromServer) {
         cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
-            requestToDeleteFromTheServer(cardFromServer._id)
+            this.requestToDeleteFromTheServer(cardFromServer._id)
                 .then(res => cardElement.remove())
                 .catch(err => console.log(err))
         })

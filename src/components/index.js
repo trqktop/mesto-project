@@ -1,5 +1,5 @@
 // //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-// import "../pages/index.css";//0.3 импорт для вебпака 
+import "../pages/index.css";//0.3 импорт для вебпака 
 import { Card } from "./card.js";//0.1 импорт функций работы с карточками
 import { Api } from "./api.js"
 
@@ -13,14 +13,25 @@ import {
 // import { resetError, enableValidation } from './validate.js'
 // let userId;
 // // //enableValidation(validatorConfig);//включил валидацию
-const api = new Api()
-console.log(api)
 
 
-// closeButtons.forEach((button) => {
-//     const popup = button.closest('.popup');
-//     button.addEventListener('click', () => closePopup(popup));
-// });//закрытие всех попапов слушатель
+const config = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
+        'Content-Type': 'application/json'
+    }
+}
+
+
+
+
+
+
+closeButtons.forEach((button) => {
+    const popup = button.closest('.popup');
+    button.addEventListener('click', () => closePopup(popup));
+});//закрытие всех попапов слушатель
 
 // openPopupProfileEditButton.addEventListener('click', () => {
 //     openPopup(popupProfileEdit);
@@ -85,70 +96,60 @@ console.log(api)
 
 
 
-Promise.all([api.getUserId(), api.getInitialCards()])
+
+const api = new Api(config)//вызвал конструктор . передал конфиг и записал в константу
+
+
+
+Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
     .then(([userData, cards]) => {
-        // const { name, about, avtar, _id, cohort } = userData//деструктуризация
-        userId = userData._id
-        userAvatar.src = userData.avatar
-        profileUserName.textContent = userData.name
-        profileUserJob.textContent = userData.about
-        cards.reverse().forEach((card, index) => {
+        const { name, about, avatar, _id: userId, cohort } = userData//деконструировал объект  userData в константы
+        userAvatar.src = avatar
+        profileUserName.textContent = name
+        profileUserJob.textContent = about
+        /*cards.reverse().forEach((card, index) => {
             const cardElement = createCards(card.link, card.name, userTemplateLi, card, userId)
             insertCard(elementsGridContainer, cardElement, card)
-        })
+        })*/
     })
     .catch(err => {
         console.log(err)
     })
 
 
-// userAvatar.addEventListener('mouseover', () => {
-//     showPen()
-// })
+userAvatar.addEventListener('mouseover', () => {
+    showPen()
+})
 
-// userAvatar.addEventListener('mouseout', () => {
-//     hidePen()
-// })
+userAvatar.addEventListener('mouseout', () => {
+    hidePen()
+})
 
-// export const showPen = () => {
-//     avatarEditPen.style.display = "block"
-// }
+export const showPen = () => {
+    avatarEditPen.style.display = "block"
+}
 
-// export const hidePen = () => {
-//     avatarEditPen.style.display = "none"
-// }
+export const hidePen = () => {
+    avatarEditPen.style.display = "none"
+}
 
-// userAvatar.addEventListener('click', () => {
-//     openPopup(popupAvatar)
-//     clearInputsValue(popupAvatar)
-//     resetError(popupAvatar, validatorConfig)
-// })
-
-
-// popupAvatarForm.addEventListener('submit', (evt) => {
-//     evt.preventDefault()
-//     const submitButton = evt.submitter
-//     submitButton.textContent = 'Сохранение...'
-//     patchProfileAvatar(popupAvatarUrlInput.value)
-//         .then(res => {
-//             userAvatar.src = res.avatar
-//             closePopup(popupAvatar)
-//         })
-//         .catch(err => console.log(err))
-//         .finally(res => submitButton.textContent = 'Сохранить')
-// })
+userAvatar.addEventListener('click', () => {
+    openPopup(popupAvatar)
+    clearInputsValue(popupAvatar)
+    resetError(popupAvatar, validatorConfig)
+})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+popupAvatarForm.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+    const submitButton = evt.submitter
+    submitButton.textContent = 'Сохранение...'
+    api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
+        .then(res => {
+            userAvatar.src = res.avatar
+            closePopup(popupAvatar)
+        })
+        .catch(err => console.log(err))
+        .finally(res => submitButton.textContent = 'Сохранить')
+})
 
