@@ -10,13 +10,16 @@ import {
     popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options
 } from "./constants.js"
 // import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, toggleSubmitButtonTextContent } from './modal.js'//0.2 импорт Работа модальных окон
-// import { resetError, enableValidation } from './validate.js'
+import { FormValidator } from './validate.js'
 // let userId;
+
+
+const formValidator = new FormValidator(validatorConfig)
+formValidator.enableValidation()
+console.log(formValidator)
+
+
 // // //enableValidation(validatorConfig);//включил валидацию
-
-
-
-
 
 
 

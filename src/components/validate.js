@@ -1,79 +1,88 @@
-export { resetError, enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
+//export { resetError, enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
 
 
 // включение валидации вызовом enableValidation
 // все настройки передаются при вызове
 
-
-function enableValidation(config) {
-    const formArr = Array.from(document.querySelectorAll(config.formSelector))
-    formArr.forEach((formElement) => {
-        setEventListeners(config, formElement)
-    });
-}
-
-
-function setEventListeners(config, formElement) {
-    const popupSubmitButtonToggleStyle = config.inactiveButtonClass;
-    formElement.addEventListener('input', function (evt) {
-        hasValidForm(config, formElement, evt.target, popupSubmitButtonToggleStyle)
-    });
-}
-
-function checkValidation(formElement) {
-    return formElement.checkValidity()
-}
-
-function hasValidForm(config, formElement, currentInput, popupSubmitButtonToggleStyle) {
-    const currentErrorMessage = findErrorMessage(currentInput, formElement)
-    const submitButton = formElement.querySelector(config.submitButtonSelector)
-    if (checkValidation(formElement)) {
-        activeSubmitButton(submitButton, popupSubmitButtonToggleStyle)
-    } else {
-        disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
+export class FormValidator {
+    constructor(config) {
+        this.formSelector = config.formSelector
+        this.inactiveButtonClass = config.inactiveButtonClass
+        this.submitButtonSelector = config.submitButtonSelector
+        this.inputErrorClass = config.inputErrorClass
+        this.inputSelector = config.inputSelector
     }
-    hasValidInput(currentInput, currentErrorMessage, config)
-}
-
-function hasValidInput(currentInput, currentErrorMessage, config) {
-    if (checkValidation(currentInput)) {
-        hideErrorMessage(currentErrorMessage, currentInput, config)
+    enableValidation() {
+        const formArr = Array.from(document.querySelectorAll(this.formSelector))
+        formArr.forEach((formElement) => {
+            this._setEventListeners(formElement)
+        });
     }
-    else {
-        showErrorMessage(currentErrorMessage, currentInput, config)
+
+    _setEventListeners(formElement) {
+        const popupSubmitButtonToggleStyle = this.inactiveButtonClass;
+        formElement.addEventListener('input', function (evt) {
+            this._hasValidForm(formElement, evt.target, popupSubmitButtonToggleStyle)
+        });
     }
+
+    _checkValidation(formElement) {
+        return formElement.checkValidity()
+    }
+
+    _hasValidForm(formElement, currentInput, popupSubmitButtonToggleStyle) {
+        const currentErrorMessage = this._findErrorMessage(currentInput, formElement)
+        const submitButton = formElement.querySelector(this.submitButtonSelector)
+        if (this._checkValidation(formElement)) {
+            this._activeSubmitButton(submitButton, popupSubmitButtonToggleStyle)
+        } else {
+            this._disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
+        }
+        this._hasValidInput(currentInput, currentErrorMessage)
+    }
+
+    _hasValidInput(currentInput, currentErrorMessage) {
+        if (this._checkValidation(currentInput)) {
+            this._hideErrorMessage(currentErrorMessage, currentInput)
+        }
+        else {
+            this._showErrorMessage(currentErrorMessage, currentInput)
+        }
+    }
+
+
+    _findErrorMessage(currentInput, formElement) {
+        return formElement.querySelector(`.${currentInput.id}-error`)
+    }
+
+    _showErrorMessage(currentErrorMessage, currentInput) {
+        currentInput.classList.add(this.inputErrorClass)
+        currentErrorMessage.textContent = currentInput.validationMessage
+
+    }
+
+    _hideErrorMessage(currentErrorMessage, currentInput) {
+        currentInput.classList.remove(this.inputErrorClass)
+        currentErrorMessage.textContent = '';
+    }
+
+
+    _disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
+        submitButton.classList.add(popupSubmitButtonToggleStyle)
+        submitButton.disabled = true;
+    }
+
+    _activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
+        submitButton.classList.remove(popupSubmitButtonToggleStyle)
+        submitButton.disabled = false;
+    }
+
+
+    _resetError(formElement) {
+        const inputList = Array.from(formElement.querySelectorAll(this.inputSelector));
+        inputList.forEach(inputElement => this._hideErrorMessage(this._findErrorMessage(inputElement, formElement), inputElement));
+    }
+
 }
 
-
-function findErrorMessage(currentInput, formElement) {
-    return formElement.querySelector(`.${currentInput.id}-error`)
-}
-
-function showErrorMessage(currentErrorMessage, currentInput, config) {
-    currentInput.classList.add(config.inputErrorClass)
-    currentErrorMessage.textContent = currentInput.validationMessage
-
-}
-
-function hideErrorMessage(currentErrorMessage, currentInput, config) {
-    currentInput.classList.remove(config.inputErrorClass)
-    currentErrorMessage.textContent = '';
-}
-
-
-function disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
-    submitButton.classList.add(popupSubmitButtonToggleStyle)
-    submitButton.disabled = true;
-}
-
-function activeSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
-    submitButton.classList.remove(popupSubmitButtonToggleStyle)
-    submitButton.disabled = false;
-}
-
-
-function resetError(formElement, config) {
-    const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
-    inputList.forEach(inputElement => hideErrorMessage(findErrorMessage(inputElement, formElement), inputElement, config));
-}
 
