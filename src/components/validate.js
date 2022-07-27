@@ -78,7 +78,7 @@ export class FormValidator {
     }
 
 
-    _resetError(formElement) {
+    resetError(formElement) {
         const inputList = Array.from(formElement.querySelectorAll(this.inputSelector));
         inputList.forEach(inputElement => this._hideErrorMessage(this._findErrorMessage(inputElement, formElement), inputElement));
     }

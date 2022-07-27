@@ -11,17 +11,17 @@ import { options } from './constants.js'
 //         this.elementImage = cardElement.querySelector('.element__image')
 //     }
 
-//----
+
 const api = new Api(options)
 export class Card {
-    constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId, elementsGridContainer) {
+    constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId) {
+
         this._titleValue = titleValue;
         this._srcValue = srcValue;
         //this._cardSelector = cardSelector;
         this._userTemplateLi = userTemplateLi;
         this._cardFromServer = cardFromServer;
         this._userId = userId;
-        this._elementsGridContainer = elementsGridContainer
         this._cardElement = this.createCards()
     }
     createCards() {
@@ -35,14 +35,12 @@ export class Card {
         this._likeButtonListener(cardElement, this._cardFromServer)
         this._checkCardOwn(this._cardFromServer, this._userId, cardElement)
         this._renderActiveLikes(this._userId, this._cardFromServer, cardElement)
-        this._insertCard()
-
         return cardElement
     }
 
-    _insertCard() {
-        this._elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
-    }
+    //  _insertCard() {
+    //      this._elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
+    //  }
 
 
     _likeButtonListener(cardElement, cardFromServer) {

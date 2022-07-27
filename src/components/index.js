@@ -2,6 +2,8 @@
 import "../pages/index.css";//0.3 импорт для вебпака 
 import { Card } from "./card.js";//0.1 импорт функций работы с карточками
 import { Api } from "./api.js"
+import { Section } from "./section.js"
+
 
 
 // //0.2 импорт переменных
@@ -9,54 +11,54 @@ import {
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
     popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options
 } from "./constants.js"
-// import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, toggleSubmitButtonTextContent } from './modal.js'//0.2 импорт Работа модальных окон
+import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
 // let userId;
 
 
 const formValidator = new FormValidator(validatorConfig)
 formValidator.enableValidation()
-console.log(formValidator)
-
-
-// // //enableValidation(validatorConfig);//включил валидацию
 
 
 
-
-closeButtons.forEach((button) => {
-    const popup = button.closest('.popup');
-    button.addEventListener('click', () => closePopup(popup));
-});//закрытие всех попапов слушатель
-
-// openPopupProfileEditButton.addEventListener('click', () => {
-//     openPopup(popupProfileEdit);
-//     showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-//     resetError(popupProfileEdit, validatorConfig)
-// })//слушатель событий кнопки открыть по-пап редактирования профиля
+//enableValidation(validatorConfig);//включил валидацию
 
 
 
 
-// popupSubmitProfileForm.addEventListener('submit', (evt) => {
-//     evt.preventDefault()
-//     toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
-//     pushProfileData({ profileNameInput, profileJobInput })//5. Редактирование профиля
-//         .then(res => saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
-//         .then(res => closePopup(popupProfileEdit))//закрываю попап
-//         .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
-//         .finally(res => toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
-// })//слушатель событий сохранить изменения в профиль
+const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
 
 
 
 
 
-// profileAddCardButton.addEventListener('click', () => {
-//     openPopup(popupAddNewPhoto)
-//     clearInputsValue(popupAddNewPhoto)
-//     resetError(popupAddNewPhoto, validatorConfig)
-// })
+const popup = new Popup(popupProfileEdit)
+popup.closePopupButtonListener(closeButtons)
+
+openPopupProfileEditButton.addEventListener('click', () => {
+    popup.openPopup();
+    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+    formValidator.resetError(popupElement, validatorConfig)
+})//слушатель событий кнопки открыть по-пап редактирования профиля
+
+
+
+
+
+popupSubmitProfileForm.addEventListener('submit', (evt) => {
+    evt.preventDefault()
+    popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
+    api.pushProfileData({ profileNameInput, profileJobInput })//5. Редактирование профиля
+        .then(res => popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
+        .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
+        .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
+        .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
+})//слушатель событий сохранить изменения в профиль
+
+
+
+
+
 
 //     // //4. Добавление карточки
 //     // //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -93,8 +95,6 @@ closeButtons.forEach((button) => {
 
 
 
-const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
-
 
 
 Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
@@ -103,10 +103,20 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         userAvatar.src = avatar
         profileUserName.textContent = name
         profileUserJob.textContent = about
-        cards.reverse().forEach((card, index) => {
-            const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
-            cardElement.createCards()
-        })
+        //    cards.reverse().forEach((card, index) => {
+        //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
+        //        cardElement.createCards()
+        //    })
+
+        const section = new Section({
+            cards,
+            renderer: (card) => {
+                const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId).createCards()
+                section.addItem(cardElement)
+            }
+        }, elementsGridContainer)
+        section.renderer()
+
     })
     .catch(err => {
         console.log(err)
