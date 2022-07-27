@@ -7,7 +7,7 @@ import { Api } from "./api.js"
 // //0.2 импорт переменных
 import {
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
-    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons
+    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options
 } from "./constants.js"
 // import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, toggleSubmitButtonTextContent } from './modal.js'//0.2 импорт Работа модальных окон
 // import { resetError, enableValidation } from './validate.js'
@@ -15,13 +15,6 @@ import {
 // // //enableValidation(validatorConfig);//включил валидацию
 
 
-const config = {
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
-    headers: {
-        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
-        'Content-Type': 'application/json'
-    }
-}//перенести в константы
 
 
 
@@ -97,7 +90,7 @@ closeButtons.forEach((button) => {
 
 
 
-const api = new Api(config)//вызвал конструктор . передал конфиг и записал в константу
+const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
 
 
 
@@ -109,7 +102,7 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         profileUserJob.textContent = about
         cards.reverse().forEach((card, index) => {
             const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
-            cardElement.insertCard()
+            cardElement.createCards()
         })
     })
     .catch(err => {

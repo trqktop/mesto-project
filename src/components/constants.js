@@ -96,9 +96,16 @@ const validatorConfig = ({
 
 
 
+const options = {
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-13',
+    headers: {
+        authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
+        'Content-Type': 'application/json'
+    }
+}//перенести в константы
 
 
 
 
 
-export { addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }
+export {options, addNewPhotoSubmitButton, inputArr, validatorConfig, fullScreenImage, fullScreenImageDescription, errorList, formArr, popupArr, fullScreenCloseButton, popupFullScreen, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplate, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, popupNewPhotoCloseButton, profileAddCardButton, initialCards, formNewPhoto, closePopupProfileEdit }

@@ -1,4 +1,4 @@
-
+//import {options} from './constants.js'
 
 //конфиг
 //-------------------------------------------------------------------------------------------------------------------------------------------- 
@@ -67,8 +67,8 @@ export class Api {
 
 
     getCard() {
-        return fetch(`${config.baseUrl}/cards`, {
-            headers: config.headers
+        return fetch(`${this.baseUrl}/cards`, {
+            headers: this.headers
         })
             .then(res => checkResponse(res))
     }
@@ -101,16 +101,16 @@ export class Api {
     }
 
 
-    putLikeOnServer() {
-        return fetch(`${config.baseUrl}/cards/likes/${this.cardId}`, {
+    putLikeOnServer(cardId) {
+        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
             method: 'PUT',
             headers: this.headers,
         })
             .then(res => this.checkResponse(res))
     }//добавить карточку на сервер
 
-    deleteLikeFromServer() {
-        return fetch(`${this.baseUrl}/cards/likes/${this.cardId}`, {
+    deleteLikeFromServer(cardId) {
+        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
             method: 'DELETE',
             headers: this.headers,
         })

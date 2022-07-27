@@ -1,16 +1,18 @@
 
-//import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
+import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
 //import { openPopup } from './modal.js'
-//import { putLikeOnServer, deleteLikeFromServer, requestToDeleteFromTheServer } from "./api.js"
+import { Api } from './api.js'
+import { options } from './constants.js'
 
 //-----
 // export class Card {
-//     constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId) {
+//     constructor(, titleValue, userTemplateLi, cardFromServer, userId) {
 //         this.cardElement = userTemplateLi.cloneNode(true)
 //         this.elementImage = cardElement.querySelector('.element__image')
 //     }
 
 //----
+const api = new Api(options)
 export class Card {
     constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId, elementsGridContainer) {
         this._titleValue = titleValue;
@@ -28,47 +30,49 @@ export class Card {
         elementImage.setAttribute('src', this._srcValue) //установил аттрибут ссылки на картинку и задал источник
         elementImage.setAttribute('alt', this._titleValue)
         cardElement.querySelector('.element__caption-about').textContent = this._titleValue;// установил текст контент из источника
-        this.listenerFullScreenImage(elementImage, cardElement)
-        this.renderLikeCount(this._cardFromServer, cardElement)
-        this.likeButtonListener(cardElement, this._cardFromServer)
-        this.checkCardOwn(this._cardFromServer, this._userId, cardElement)
-        this.renderActiveLikes(this._userId, this._cardFromServer, cardElement)
+        this._listenerFullScreenImage(elementImage, cardElement)
+        this._renderLikeCount(this._cardFromServer, cardElement)
+        this._likeButtonListener(cardElement, this._cardFromServer)
+        this._checkCardOwn(this._cardFromServer, this._userId, cardElement)
+        this._renderActiveLikes(this._userId, this._cardFromServer, cardElement)
+        this._insertCard()
+
         return cardElement
     }
 
-    insertCard() {
+    _insertCard() {
         this._elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
     }
 
 
-    likeButtonListener(cardElement, cardFromServer) {
+    _likeButtonListener(cardElement, cardFromServer) {
         const like = cardElement.querySelector('.element__button')
         like.addEventListener('click', () => {
-            likeActive(like, cardFromServer, cardElement)
+            this._likeActive(like, cardFromServer, cardElement)
         })
     }
 
-    likeActive(like, cardFromServer, cardElement) {
+    _likeActive(like, cardFromServer, cardElement) {
         if (!like.classList.contains('element__button_active')) {
-            putLikeOnServer(cardFromServer._id)
-                .then(newCard => renderLikeCount(newCard, cardElement))
+            api.putLikeOnServer(cardFromServer._id)
+                .then(newCard => this._renderLikeCount(newCard, cardElement))
                 .then(res => like.classList.add('element__button_active'))
                 .catch(err => console.log(err))
         }
         else {
-            deleteLikeFromServer(cardFromServer._id)
-                .then(newCard => renderLikeCount(newCard, cardElement))
+            api.deleteLikeFromServer(cardFromServer._id)
+                .then(newCard => this._renderLikeCount(newCard, cardElement))
                 .then(res => like.classList.remove('element__button_active'))
                 .catch(err => console.log(err))
         }
     }
 
-    renderLikeCount(cardFromServer, cardElement) {
+    _renderLikeCount(cardFromServer, cardElement) {
         cardElement.querySelector('.element__like-count').textContent = cardFromServer.likes.length
     }
 
 
-    deleteCardButtonListener(cardElement, cardFromServer) {
+    _deleteCardButtonListener(cardElement, cardFromServer) {
         cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
             this.requestToDeleteFromTheServer(cardFromServer._id)
                 .then(res => cardElement.remove())
@@ -76,29 +80,29 @@ export class Card {
         })
     }
 
+    // В ПОПАПАХ 
+    _listenerFullScreenImage(elementImage, cardElement) {// В ПОПАПАХ 
+        elementImage.addEventListener('click', () => {// В ПОПАПАХ 
 
-    listenerFullScreenImage(elementImage, cardElement) {
-        elementImage.addEventListener('click', function () {
             fullScreenImage.src = elementImage.src;
             fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
             fullScreenImage.alt = elementImage.alt
-            openPopup(popupFullScreen)
+            openPopup(popupFullScreen)// В ПОПАПАХ 
         })
-    }
+    } // В ПОПАПАХ 
 
 
-    checkCardOwn(cardFromServer, userId, cardElement) {
-        //const deleteArrayButton = document.querySelectorAll('.element__delete-button')
+    _checkCardOwn(cardFromServer, userId, cardElement) {// В ПОПАПАХ 
         if (cardFromServer.owner._id !== userId) {
-            this.removeTrashIcon(cardElement)
+            this._removeTrashIcon(cardElement)// В ПОПАПАХ 
         }
         else {
-            this.deleteCardButtonListener(cardElement, cardFromServer)
-        }
+            this._deleteCardButtonListener(cardElement, cardFromServer)// В ПОПАПАХ 
+        }// В ПОПАПАХ 
     }
 
 
-    renderActiveLikes(userId, card, cardElement) {
+    _renderActiveLikes(userId, card, cardElement) {
         const like = cardElement.querySelector('.element__button')
         card.likes.forEach(owner => {
             if (owner._id === userId) {
@@ -110,10 +114,10 @@ export class Card {
         })
     }
 
-    removeTrashIcon(cardElement) {
-        cardElement.querySelector('.element__delete-button').style.display = "none"
+    _removeTrashIcon(cardElement) {// В ПОПАПАХ 
+        cardElement.querySelector('.element__delete-button').style.display = "none"// В ПОПАПАХ 
     }
-}
+}// В ПОПАПАХ 
 
 
 
