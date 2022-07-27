@@ -66,12 +66,12 @@ export class Api {
     }
 
 
-    //    getCard() {
-    //        return fetch(`${config.baseUrl}/cards`, {
-    //            headers: config.headers
-    //        })
-    //            .then(res => checkResponse(res))
-    //    }
+    getCard() {
+        return fetch(`${config.baseUrl}/cards`, {
+            headers: config.headers
+        })
+            .then(res => checkResponse(res))
+    }
 
     requestToDeleteFromTheServer(cardId) {//эти данные передаются напрямую в метод
         return fetch(`${this.baseUrl}/cards/${cardId}`, {

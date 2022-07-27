@@ -21,7 +21,7 @@ const config = {
         authorization: 'ea0e92d7-6e32-47de-8e34-53809a54f560',
         'Content-Type': 'application/json'
     }
-}
+}//перенести в константы
 
 
 
@@ -107,10 +107,10 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         userAvatar.src = avatar
         profileUserName.textContent = name
         profileUserJob.textContent = about
-        /*cards.reverse().forEach((card, index) => {
-            const cardElement = createCards(card.link, card.name, userTemplateLi, card, userId)
-            insertCard(elementsGridContainer, cardElement, card)
-        })*/
+        cards.reverse().forEach((card, index) => {
+            const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
+            cardElement.insertCard()
+        })
     })
     .catch(err => {
         console.log(err)

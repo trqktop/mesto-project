@@ -12,18 +12,19 @@
 
 //----
 export class Card {
-    constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId) {
+    constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId, elementsGridContainer) {
         this._titleValue = titleValue;
         this._srcValue = srcValue;
-        this._cardSelector = cardSelector;
+        //this._cardSelector = cardSelector;
         this._userTemplateLi = userTemplateLi;
         this._cardFromServer = cardFromServer;
         this._userId = userId;
+        this._elementsGridContainer = elementsGridContainer
         this._cardElement = this.createCards()
     }
     createCards() {
         const cardElement = this._userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную     
-        const elementImage = this._cardElement.querySelector('.element__image')
+        const elementImage = cardElement.querySelector('.element__image')
         elementImage.setAttribute('src', this._srcValue) //установил аттрибут ссылки на картинку и задал источник
         elementImage.setAttribute('alt', this._titleValue)
         cardElement.querySelector('.element__caption-about').textContent = this._titleValue;// установил текст контент из источника
@@ -36,7 +37,7 @@ export class Card {
     }
 
     insertCard() {
-        elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
+        this._elementsGridContainer.prepend(this._cardElement);//вставил копированную карточку в контейнер 
     }
 
 
@@ -89,10 +90,10 @@ export class Card {
     checkCardOwn(cardFromServer, userId, cardElement) {
         //const deleteArrayButton = document.querySelectorAll('.element__delete-button')
         if (cardFromServer.owner._id !== userId) {
-            removeTrashIcon(cardElement)
+            this.removeTrashIcon(cardElement)
         }
         else {
-            deleteCardButtonListener(cardElement, cardFromServer)
+            this.deleteCardButtonListener(cardElement, cardFromServer)
         }
     }
 
