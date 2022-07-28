@@ -4,6 +4,8 @@ import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './
 import { Api } from './api.js'
 import { options } from './constants.js'
 
+
+
 //-----
 // export class Card {
 //     constructor(, titleValue, userTemplateLi, cardFromServer, userId) {
@@ -81,6 +83,7 @@ export class Card {
     // В ПОПАПАХ 
     _listenerFullScreenImage(elementImage, cardElement) {// В ПОПАПАХ 
         elementImage.addEventListener('click', () => {// В ПОПАПАХ 
+
 
             fullScreenImage.src = elementImage.src;
             fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
