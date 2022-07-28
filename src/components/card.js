@@ -32,7 +32,7 @@ export class Card {
         elementImage.setAttribute('src', this._srcValue) //установил аттрибут ссылки на картинку и задал источник
         elementImage.setAttribute('alt', this._titleValue)
         cardElement.querySelector('.element__caption-about').textContent = this._titleValue;// установил текст контент из источника
-        this._listenerFullScreenImage(elementImage, cardElement)
+        //this._listenerFullScreenImage(elementImage, cardElement)
         this._renderLikeCount(this._cardFromServer, cardElement)
         this._likeButtonListener(cardElement, this._cardFromServer)
         this._checkCardOwn(this._cardFromServer, this._userId, cardElement)
@@ -81,17 +81,7 @@ export class Card {
     }
 
     // В ПОПАПАХ 
-    _listenerFullScreenImage(elementImage, cardElement) {// В ПОПАПАХ 
-        elementImage.addEventListener('click', () => {// В ПОПАПАХ 
-
-
-            fullScreenImage.src = elementImage.src;
-            fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
-            fullScreenImage.alt = elementImage.alt
-            openPopup(popupFullScreen)// В ПОПАПАХ 
-        })
-    } // В ПОПАПАХ 
-
+    
 
     _checkCardOwn(cardFromServer, userId, cardElement) {// В ПОПАПАХ 
         if (cardFromServer.owner._id !== userId) {

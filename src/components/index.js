@@ -3,7 +3,7 @@ import "../pages/index.css";//0.3 импорт для вебпака
 import { Card } from "./card.js";//0.1 импорт функций работы с карточками
 import { Api } from "./api.js"
 import { Section } from "./section.js"
-
+import { PopupWithImage } from "./PopupWithImage.js"
 
 
 
@@ -13,7 +13,7 @@ import { Section } from "./section.js"
 // //0.2 импорт переменных
 import {
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
-    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options
+    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options, fullScreenImage,fullScreenImageDescription
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
@@ -31,9 +31,11 @@ popup.setEventListeners(closeButtons)
 //enableValidation(validatorConfig);//включил валидацию
 
 
-
-
-
+//PopupWithImage._listenerFullScreenImage() {// В ПОПАПАХ 
+//    card.elementImage.addEventListener('click', () => {
+//
+//    })
+//}
 
 openPopupProfileEditButton.addEventListener('click', (evt) => {
     popup.openPopup(evt);
@@ -99,7 +101,7 @@ formNewPhoto.addEventListener('submit', (evt) => {
 
 
 
-
+const popupWithImage = new PopupWithImage(popupFullScreen)
 
 Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
     .then(([userData, cards]) => {
@@ -111,12 +113,16 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
         //        cardElement.createCards()
         //    })
+        
+
 
         const section = new Section({
             cards,
             renderer: (card) => {
                 const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId).createCards()
                 section.addItem(cardElement)
+                popupWithImage.openPopup(cardElement, fullScreenImageDescription)
+                
             }
         }, elementsGridContainer)
         section.renderer()

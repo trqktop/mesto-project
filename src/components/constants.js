@@ -76,13 +76,6 @@ export const popupAvatar = document.querySelector('#popupAvatar')
 export const popupAvatarCloseButton = popupAvatar.querySelector('.popup__close-button')
 export const popupAvatarForm = popupAvatar.querySelector('form')
 
-
-
-
-
-
-
-
 const validatorConfig = ({
     formSelector: 'form',
     inputSelector: '.popup__input',
