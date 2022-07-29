@@ -4,16 +4,14 @@ import { Card } from "./card.js";//0.1 импорт функций работы 
 import { Api } from "./api.js"
 import { Section } from "./section.js"
 import { PopupWithImage } from "./PopupWithImage.js"
-
-
-
+import { PopupWithForm } from './PopupWithForm.js'
 
 
 
 // //0.2 импорт переменных
 import {
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
-    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options, fullScreenImage,fullScreenImageDescription
+    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
@@ -37,6 +35,28 @@ popup.setEventListeners(closeButtons)
 //    })
 //}
 
+
+
+const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
+    popupSubmitProfileForm.addEventListener('submit', (evt) => {
+        evt.preventDefault()
+        //  popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
+        api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
+            // .then(res => popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
+            .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
+            .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
+        //    .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
+    })//слушатель событий сохранить изменения в профиль
+})
+
+popupWithFormProfile.listener()
+
+
+
+
+
+
+
 openPopupProfileEditButton.addEventListener('click', (evt) => {
     popup.openPopup(evt);
     // popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
@@ -52,15 +72,8 @@ profileAddCardButton.addEventListener('click', () => {
 })
 
 
-popupSubmitProfileForm.addEventListener('submit', (evt) => {
-    evt.preventDefault()
-    popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
-    api.pushProfileData({ profileNameInput, profileJobInput })//5. Редактирование профиля
-        .then(res => popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
-        .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
-        .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
-        .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
-})//слушатель событий сохранить изменения в профиль
+
+
 
 
 
@@ -98,9 +111,6 @@ formNewPhoto.addEventListener('submit', (evt) => {
 // constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId)
 // // //getInitialCards()
 
-
-
-
 const popupWithImage = new PopupWithImage(popupFullScreen)
 
 Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
@@ -113,16 +123,14 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
         //        cardElement.createCards()
         //    })
-        
-
-
         const section = new Section({
             cards,
             renderer: (card) => {
                 const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId).createCards()
                 section.addItem(cardElement)
-                popupWithImage.openPopup(cardElement, fullScreenImageDescription)
-                
+                cardElement.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
+                    popupWithImage.open(card)//создал слушатель клика по карточке PopupWithImage
+                })//создал слушатель клика по карточке PopupWithImage
             }
         }, elementsGridContainer)
         section.renderer()

@@ -1,10 +1,10 @@
 
-import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
+//import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
 //import { openPopup } from './modal.js'
 import { Api } from './api.js'
 import { options } from './constants.js'
 
-
+const api = new Api(options)
 
 //-----
 // export class Card {
@@ -13,19 +13,16 @@ import { options } from './constants.js'
 //         this.elementImage = cardElement.querySelector('.element__image')
 //     }
 
-
-const api = new Api(options)
 export class Card {
     constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId) {
-
         this._titleValue = titleValue;
         this._srcValue = srcValue;
         //this._cardSelector = cardSelector;
         this._userTemplateLi = userTemplateLi;
         this._cardFromServer = cardFromServer;
         this._userId = userId;
-        this._cardElement = this.createCards()
     }
+
     createCards() {
         const cardElement = this._userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную     
         const elementImage = cardElement.querySelector('.element__image')
@@ -81,7 +78,7 @@ export class Card {
     }
 
     // В ПОПАПАХ 
-    
+
 
     _checkCardOwn(cardFromServer, userId, cardElement) {// В ПОПАПАХ 
         if (cardFromServer.owner._id !== userId) {
