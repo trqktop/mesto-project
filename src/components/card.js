@@ -21,8 +21,11 @@ export class Card {
         this._userTemplateLi = userTemplateLi;
         this._cardFromServer = cardFromServer;
         this._userId = userId;
+       // this.handleCardClick()
     }
-
+  // getTemplate() {
+  //     this._userTemplateLi
+  // }
     createCards() {
         const cardElement = this._userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную     
         const elementImage = cardElement.querySelector('.element__image')
@@ -43,7 +46,7 @@ export class Card {
 
 
     _likeButtonListener(cardElement, cardFromServer) {
-        const like = cardElement.querySelector('.element__button')
+        const like = cardElement.querySelector('.element__button')//like
         like.addEventListener('click', () => {
             this._likeActive(like, cardFromServer, cardElement)
         })
@@ -53,7 +56,7 @@ export class Card {
         if (!like.classList.contains('element__button_active')) {
             api.putLikeOnServer(cardFromServer._id)
                 .then(newCard => this._renderLikeCount(newCard, cardElement))
-                .then(res => like.classList.add('element__button_active'))
+                .then(res => like.classList.add('element__button_active'))//like
                 .catch(err => console.log(err))
         }
         else {

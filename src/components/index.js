@@ -5,13 +5,17 @@ import { Api } from "./api.js"
 import { Section } from "./section.js"
 import { PopupWithImage } from "./PopupWithImage.js"
 import { PopupWithForm } from './PopupWithForm.js'
+import { UserInfo } from './userInfo.js'
 
 
 
 // //0.2 импорт переменных
 import {
-    popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
-    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons, options, fullScreenImage, fullScreenImageDescription
+    popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto,
+    userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName,
+    popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen,
+    userAvatar, popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile,
+    closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
@@ -43,6 +47,8 @@ const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
         //  popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
             // .then(res => popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
+            .then(newData => userInfo.setUserInfo(newData))
+            .then(res => userInfo.updateUserInfo())
             .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
         //    .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
@@ -112,13 +118,18 @@ formNewPhoto.addEventListener('submit', (evt) => {
 // // //getInitialCards()
 
 const popupWithImage = new PopupWithImage(popupFullScreen)
+const userInfo = new UserInfo(profileUserName, profileUserJob)
+
 
 Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
     .then(([userData, cards]) => {
         const { name, about, avatar, _id: userId, cohort } = userData//деконструировал объект  userData в константы
         userAvatar.src = avatar
-        profileUserName.textContent = name
-        profileUserJob.textContent = about
+        //profileUserName.textContent = name
+        //profileUserJob.textContent = about
+        userInfo.getUserInfo({ name, about })
+        
+        userInfo.updateUserInfo(profileUserName, profileUserJob)
         //    cards.reverse().forEach((card, index) => {
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
         //        cardElement.createCards()
