@@ -5,27 +5,27 @@
 // все настройки передаются при вызове
 
 export class FormValidator {
-    constructor(config) {
+    constructor(config, currentElementValidate) {//принимает вторым параметром элемент той формы, которая валидируется; currentElementValidate = form
         this.formSelector = config.formSelector
         this.inactiveButtonClass = config.inactiveButtonClass
         this.submitButtonSelector = config.submitButtonSelector
         this.inputErrorClass = config.inputErrorClass
         this.inputSelector = config.inputSelector
+        this.currentElementValidate = currentElementValidate
     }
     enableValidation() {
-        const formArr = Array.from(document.querySelectorAll(this.formSelector))
-        formArr.forEach((formElement) => {
-            this._setEventListeners(formElement)
-        });
+        //   const formArr = Array.from(document.querySelectorAll(this.formSelector))
+        //   formArr.forEach((formElement) => {
+        this._setEventListeners()
+        //    });
     }
 
-    _setEventListeners(formElement) {
-        const popupSubmitButtonToggleStyle = this.inactiveButtonClass;
-        formElement.addEventListener('input', function (evt) {
-            this._hasValidForm(formElement, evt.target, popupSubmitButtonToggleStyle)
+    _setEventListeners() {
+        this.currentElementValidate.addEventListener('input', (evt) => {
+            this._hasValidForm(this.currentElementValidate, evt.target, this.inactiveButtonClass)
         });
     }
-
+    //checkValidity 
     _checkValidation(formElement) {
         return formElement.checkValidity()
     }

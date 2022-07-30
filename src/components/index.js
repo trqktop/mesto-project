@@ -6,9 +6,6 @@ import { Section } from "./section.js"
 import { PopupWithImage } from "./PopupWithImage.js"
 import { PopupWithForm } from './PopupWithForm.js'
 import { UserInfo } from './userInfo.js'
-
-
-
 // //0.2 импорт переменных
 import {
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto,
@@ -21,10 +18,9 @@ import { Popup } from './modal.js'//0.2 импорт Работа модальн
 import { FormValidator } from './validate.js'
 // let userId;
 
-
-const formValidator = new FormValidator(validatorConfig)
-formValidator.enableValidation()
 const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
+
+
 
 const popup = new Popup(popupProfileEdit)
 popup.setEventListeners(closeButtons)
@@ -66,17 +62,29 @@ popupWithFormProfile.listener()
 openPopupProfileEditButton.addEventListener('click', (evt) => {
     popup.openPopup(evt);
     // popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-    formValidator.resetError(popupProfileEdit, validatorConfig)
+    // formValidator.resetError(popupProfileEdit, validatorConfig)
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
 
-profileAddCardButton.addEventListener('click', () => {
 
-    popup.openPopup(popupAddNewPhoto)
+const popupNewCard = new Popup(popupAddNewPhoto)
+const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
+
+
+profileAddCardButton.addEventListener('click', () => {
+    popupNewCard.openPopup()
+    validPopupAddCard.enableValidation()
     // popup.clearInputsValue(popupAddNewPhoto)
-    formValidator.resetError(popupAddNewPhoto, validatorConfig)
+    // formValidator.resetError(popupAddNewPhoto, validatorConfig)
 })
 
+const popupAva = new Popup(popupAvatar)
+
+userAvatar.addEventListener('click', () => {
+    popupAva.openPopup()
+    popupAva.clearInputsValue(popupAvatar)
+    //resetError(popupAvatar, validatorConfig)
+})
 
 
 
@@ -88,22 +96,24 @@ profileAddCardButton.addEventListener('click', () => {
 
 // //4. Добавление карточки
 // //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-formNewPhoto.addEventListener('submit', (evt) => {
-    evt.preventDefault()//отменяем дефолтный субмит
-    toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
-    pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
-        .then(newCard => {
-            insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
-            return newCard
-        })//Вставляем карточку на страницу
-        .then(newCard => {
-            closePopup(popupAddNewPhoto)
-        })//закрываем попап
-        .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
-        .finally(res => toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
-})//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов
+const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
+    formNewPhoto.addEventListener('submit', (evt) => {
+        evt.preventDefault()//отменяем дефолтный субмит
+        //toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
+        api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
+            .then(newCard => {
+                section.insertCard(elementsGridContainer, card.createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
+                return newCard
+            })//Вставляем карточку на страницу
+            .then(newCard => {
+                closePopup(popupAddNewPhoto)
+            })//закрываем попап
+            .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
+            //.finally(res => toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
+    })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов
 
-
+})
+popupFormNewPhoto.listener()
 
 // //const elements = document.forms.myForm.elements;
 
@@ -128,7 +138,7 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
         userInfo.getUserInfo({ name, about })
-        
+
         userInfo.updateUserInfo(profileUserName, profileUserJob)
         //    cards.reverse().forEach((card, index) => {
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
@@ -138,8 +148,9 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
             cards,
             renderer: (card) => {
                 const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId).createCards()
+                const elementImage = cardElement.querySelector('.element__image')
                 section.addItem(cardElement)
-                cardElement.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
+                elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
                     popupWithImage.open(card)//создал слушатель клика по карточке PopupWithImage
                 })//создал слушатель клика по карточке PopupWithImage
             }
@@ -168,11 +179,7 @@ export const hidePen = () => {
     avatarEditPen.style.display = "none"
 }
 
-userAvatar.addEventListener('click', () => {
-    popup.openPopup(popupAvatar)
-    clearInputsValue(popupAvatar)
-    resetError(popupAvatar, validatorConfig)
-})
+
 
 
 popupAvatarForm.addEventListener('submit', (evt) => {

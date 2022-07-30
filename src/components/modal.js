@@ -3,8 +3,8 @@ import { addNewPhotoSubmitButton, popupArr, validatorConfig } from "./constants.
 //import { disableSubmitButton } from "./validate.js"
 
 import { FormValidator } from './validate.js';
+//const valid = new FormValidator(validatorConfig)
 
-const valid = new FormValidator(validatorConfig)
 
 export class Popup {
     constructor(selector) {
@@ -17,6 +17,7 @@ export class Popup {
     //  }
 
     openPopup() {//Функция открытия попапа
+        
         this.popupElement.classList.add('popup_opened')
         document.addEventListener("keydown", (evt) => { this._closePopupEsc(evt) }, { once: true })//(c)'добавлять обработчик события в функции открытия попапов'
         document.addEventListener('mousedown', (evt) => { this._closePopupOverlay(evt) }, { once: true })//(c)'добавлять обработчик события в функции открытия попапов' и { once: true } - удаляет
@@ -24,9 +25,9 @@ export class Popup {
 
     closePopup() {
         this.popupElement.classList.remove('popup_opened')
-        // document.removeEventListener("keydown", this._closePopupEsc)// (c)'удалять его при закрытии попапов.'
-        //document.removeEventListener('mousedown', this._closePopupOverlay) // (c)'удалять его при закрытии попапов.'
-    }
+       // document.removeEventListener("keydown", this._closePopupEsc)// (c)'удалять его при закрытии попапов.'
+       // document.removeEventListener('mousedown', this._closePopupOverlay) // (c)'удалять его при закрытии попапов.'
+    }//
 
     //  _saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
     //      profileUserJob.textContent = profileJobInput.value;
@@ -49,19 +50,24 @@ export class Popup {
             this.closePopup()
         }
     }
-    //
-    //  _toggleSubmitButtonTextContent(submitButtonEditProfile, value) {
-    //      submitButtonEditProfile.textContent = value
-    //  }//меняю текст контент кнопок субмит 
-    //
-    //
-    //
-    setEventListeners(closeButtons) {
+    
+//_toggleSubmitButtonTextContent(submitButtonEditProfile, value) {
+//    submitButtonEditProfile.textContent = value
+//}//меняю текст контент кнопок субмит 
+    
+   
+   
+   setEventListeners(closeButtons) {
         closeButtons.forEach((button) => {
             const popup = button.closest('.popup');
-            button.addEventListener('click', () => this.closePopup(popup));
+            button.addEventListener('click', () => {
+                this.popupElement = popup
+                this.closePopup()
+            });
         });//закрытие всех попапов слушатель
     }
+
+
 }
 
 

@@ -1,4 +1,5 @@
 export const closeButtons = document.querySelectorAll('.popup__close-button');
+export const popups = document.querySelectorAll('.popup');
 export const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
 
 
@@ -85,8 +86,6 @@ const validatorConfig = ({
     errorClass: '.popup__input-error',
     openedPopup: 'popup_opened'
 })
-
-
 
 
 const options = {
