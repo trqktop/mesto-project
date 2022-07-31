@@ -11,6 +11,9 @@ export class Section {
             this._renderer(card)
         })
     }
+    rendererOneElement() {
+        this._renderer(this.cards)
+    }
     addItem(card) {
         this.selector.prepend(card);
     }

@@ -8,6 +8,7 @@ export class PopupWithForm extends Popup {
     }
     listener() {
         this.handler()
+
     }
     _getInputValues() {
         //тут работаем с даннымыи всех полей формы.                

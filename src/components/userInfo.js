@@ -1,5 +1,3 @@
-
-
 export class UserInfo {
   constructor(profileUserName, profileUserJob) {
     this._job = '',

@@ -16,14 +16,9 @@ import {
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
-// let userId;
+let userId;
 
 const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
-
-
-
-const popup = new Popup(popupProfileEdit)
-popup.setEventListeners(closeButtons)
 
 
 //enableValidation(validatorConfig);//включил валидацию
@@ -40,14 +35,17 @@ popup.setEventListeners(closeButtons)
 const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
     popupSubmitProfileForm.addEventListener('submit', (evt) => {
         evt.preventDefault()
-        //  popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
+        popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
-            // .then(res => popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
+            .then(res => {
+                popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+                return res
+            })
             .then(newData => userInfo.setUserInfo(newData))
             .then(res => userInfo.updateUserInfo())
             .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
-        //    .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
+            .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
     })//слушатель событий сохранить изменения в профиль
 })
 
@@ -57,63 +55,80 @@ popupWithFormProfile.listener()
 
 
 
-
+const popup = new Popup(popupProfileEdit)
+popup.setEventListeners(closeButtons)
+const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProfileForm)
+validPopupProfileEdit.enableValidation()
 
 openPopupProfileEditButton.addEventListener('click', (evt) => {
     popup.openPopup(evt);
-    // popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-    // formValidator.resetError(popupProfileEdit, validatorConfig)
+    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+    validPopupProfileEdit.resetError(popupSubmitProfileForm)
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
 
 
 const popupNewCard = new Popup(popupAddNewPhoto)
 const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
-
+validPopupAddCard.enableValidation()
 
 profileAddCardButton.addEventListener('click', () => {
     popupNewCard.openPopup()
     validPopupAddCard.enableValidation()
-    // popup.clearInputsValue(popupAddNewPhoto)
-    // formValidator.resetError(popupAddNewPhoto, validatorConfig)
+    popupNewCard.clearInputsValue(popupAddNewPhoto)
+    validPopupAddCard.resetError(formNewPhoto)
 })
 
 const popupAva = new Popup(popupAvatar)
 
+const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
+validPopupUserAvatar.enableValidation()
+
 userAvatar.addEventListener('click', () => {
     popupAva.openPopup()
     popupAva.clearInputsValue(popupAvatar)
-    //resetError(popupAvatar, validatorConfig)
+    validPopupUserAvatar.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
+    validPopupUserAvatar.resetError(popupAvatar, validatorConfig)
 })
-
-
-
-
-
-
-
 
 
 // //4. Добавление карточки
 // //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
     formNewPhoto.addEventListener('submit', (evt) => {
         evt.preventDefault()//отменяем дефолтный субмит
-        //toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
+        popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
         api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
+            .then(cardFromServer => {
+                const section = new Section({
+                    cards: cardFromServer,
+                    renderer: (cardFromServer) => {
+                        const cardElement = new Card(cardFromServer.link, cardFromServer.name, userTemplateLi, cardFromServer, userId).createCards()
+                        const elementImage = cardElement.querySelector('.element__image')
+                        section.addItem(cardElement)
+                        elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
+                            popupWithImage.open(cardFromServer)//создал слушатель клика по карточке PopupWithImage
+                        })//создал слушатель клика по карточке PopupWithImage
+                    }
+                }, elementsGridContainer)
+                section.rendererOneElement()
+            })
             .then(newCard => {
-                section.insertCard(elementsGridContainer, card.createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
-                return newCard
-            })//Вставляем карточку на страницу
-            .then(newCard => {
-                closePopup(popupAddNewPhoto)
+                popupNewCard.closePopup()
             })//закрываем попап
             .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
-            //.finally(res => toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
+            .finally(res => popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
     })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов
 
 })
+
 popupFormNewPhoto.listener()
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
 // //const elements = document.forms.myForm.elements;
 
@@ -138,7 +153,6 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
         userInfo.getUserInfo({ name, about })
-
         userInfo.updateUserInfo(profileUserName, profileUserJob)
         //    cards.reverse().forEach((card, index) => {
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
@@ -178,8 +192,6 @@ export const showPen = () => {
 export const hidePen = () => {
     avatarEditPen.style.display = "none"
 }
-
-
 
 
 popupAvatarForm.addEventListener('submit', (evt) => {

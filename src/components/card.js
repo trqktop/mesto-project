@@ -37,6 +37,7 @@ export class Card {
         this._likeButtonListener(cardElement, this._cardFromServer)
         this._checkCardOwn(this._cardFromServer, this._userId, cardElement)
         this._renderActiveLikes(this._userId, this._cardFromServer, cardElement)
+
         return cardElement
     }
 
@@ -74,7 +75,7 @@ export class Card {
 
     _deleteCardButtonListener(cardElement, cardFromServer) {
         cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
-            this.requestToDeleteFromTheServer(cardFromServer._id)
+            api.requestToDeleteFromTheServer(cardFromServer._id)
                 .then(res => cardElement.remove())
                 .catch(err => console.log(err))
         })

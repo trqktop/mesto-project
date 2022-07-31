@@ -36,7 +36,7 @@ export class FormValidator {
         if (this._checkValidation(formElement)) {
             this._activeSubmitButton(submitButton, popupSubmitButtonToggleStyle)
         } else {
-            this._disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
+            this.disableSubmitButton(submitButton, popupSubmitButtonToggleStyle)
         }
         this._hasValidInput(currentInput, currentErrorMessage)
     }
@@ -67,7 +67,7 @@ export class FormValidator {
     }
 
 
-    _disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
+    disableSubmitButton(submitButton, popupSubmitButtonToggleStyle) {
         submitButton.classList.add(popupSubmitButtonToggleStyle)
         submitButton.disabled = true;
     }
