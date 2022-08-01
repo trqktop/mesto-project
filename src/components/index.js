@@ -8,6 +8,8 @@ import { PopupWithForm } from './PopupWithForm.js'
 import { UserInfo } from './userInfo.js'
 // //0.2 импорт переменных
 import {
+    templateSelector,
+    userTemplate,
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto,
     userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName,
     popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen,
@@ -16,9 +18,14 @@ import {
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
+import { CardNew } from './newCard.js'
 let userId;
 
 const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
+api.getUserId()
+    .then(data => userId = data._id)
+
+
 
 
 //enableValidation(validatorConfig);//включил валидацию
@@ -38,6 +45,7 @@ const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
         popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
             .then(res => {
+
                 popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
                 return res
             })
@@ -60,8 +68,8 @@ popup.setEventListeners(closeButtons)
 const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProfileForm)
 validPopupProfileEdit.enableValidation()
 
-openPopupProfileEditButton.addEventListener('click', (evt) => {
-    popup.openPopup(evt);
+openPopupProfileEditButton.addEventListener('click', () => {
+    popup.openPopup();
     popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
     validPopupProfileEdit.resetError(popupSubmitProfileForm)
 })//слушатель событий кнопки открыть по-пап редактирования профиля
@@ -69,6 +77,7 @@ openPopupProfileEditButton.addEventListener('click', (evt) => {
 
 
 const popupNewCard = new Popup(popupAddNewPhoto)
+popupNewCard.setEventListeners(closeButtons)
 const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
 validPopupAddCard.enableValidation()
 
@@ -80,7 +89,7 @@ profileAddCardButton.addEventListener('click', () => {
 })
 
 const popupAva = new Popup(popupAvatar)
-
+popupAva.setEventListeners(closeButtons)
 const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
 validPopupUserAvatar.enableValidation()
 
@@ -103,6 +112,8 @@ const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
         popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
         api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
             .then(cardFromServer => {
+                const newCard = new CardNew(cardFromServer, userId, templateSelector)
+                console.log(cardFromServer)
                 const section = new Section({
                     cards: cardFromServer,
                     renderer: (cardFromServer) => {
