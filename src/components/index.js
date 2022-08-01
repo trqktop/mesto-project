@@ -18,7 +18,7 @@ import {
 } from "./constants.js"
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './validate.js'
-import { CardNew } from './newCard.js'
+
 let userId;
 
 const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
@@ -44,23 +44,24 @@ const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
         evt.preventDefault()
         popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
-            .then(res => {
-
+            .then(newData => {
                 popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-                return res
+                return newData
             })
             .then(newData => userInfo.setUserInfo(newData))
-            .then(res => userInfo.updateUserInfo())
-            .then(res => popup.closePopup(popupProfileEdit))//закрываю попап
+            .then(newData => userInfo.updateUserInfo())
+            .then(newData => popup.closePopup(popupProfileEdit))//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
             .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
     })//слушатель событий сохранить изменения в профиль
 })
 
+
+
+
+
+
 popupWithFormProfile.listener()
-
-
-
 
 
 const popup = new Popup(popupProfileEdit)
@@ -73,7 +74,6 @@ openPopupProfileEditButton.addEventListener('click', () => {
     popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
     validPopupProfileEdit.resetError(popupSubmitProfileForm)
 })//слушатель событий кнопки открыть по-пап редактирования профиля
-
 
 
 const popupNewCard = new Popup(popupAddNewPhoto)
@@ -97,7 +97,7 @@ userAvatar.addEventListener('click', () => {
     popupAva.openPopup()
     popupAva.clearInputsValue(popupAvatar)
     validPopupUserAvatar.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
-    validPopupUserAvatar.resetError(popupAvatar, validatorConfig)
+    validPopupUserAvatar.resetError(popupAvatar)
 })
 
 
@@ -112,12 +112,11 @@ const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
         popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
         api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
             .then(cardFromServer => {
-                const newCard = new CardNew(cardFromServer, userId, templateSelector)
-                console.log(cardFromServer)
+
                 const section = new Section({
                     cards: cardFromServer,
                     renderer: (cardFromServer) => {
-                        const cardElement = new Card(cardFromServer.link, cardFromServer.name, userTemplateLi, cardFromServer, userId).createCards()
+                        const cardElement = new Card(cardFromServer, userId, templateSelector).generate()
                         const elementImage = cardElement.querySelector('.element__image')
                         section.addItem(cardElement)
                         elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
@@ -163,8 +162,8 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         userAvatar.src = avatar
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
-        userInfo.getUserInfo({ name, about })
-        userInfo.updateUserInfo(profileUserName, profileUserJob)
+        userInfo.getUserInfo({ name, about, avatar })
+        userInfo.updateUserInfo(profileUserName, profileUserJob, avatar)
         //    cards.reverse().forEach((card, index) => {
         //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
         //        cardElement.createCards()
@@ -172,7 +171,7 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         const section = new Section({
             cards,
             renderer: (card) => {
-                const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId).createCards()
+                const cardElement = new Card(card, userId, templateSelector).generate()
                 const elementImage = cardElement.querySelector('.element__image')
                 section.addItem(cardElement)
                 elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage

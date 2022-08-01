@@ -7,6 +7,7 @@ export class UserInfo {
   }
 
   getUserInfo(data) {
+    console.log(data)
     this._name = data.name
     this._job = data.about
 
@@ -18,6 +19,7 @@ export class UserInfo {
 
 
   setUserInfo({ name: newName, about: newJob }) {
+
     this._name = newName
     this._job = newJob
 
@@ -26,5 +28,6 @@ export class UserInfo {
   updateUserInfo() {
     this.profileUserName.textContent = this._name
     this.profileUserJob.textContent = this._job
+
   }
 }
