@@ -7,7 +7,7 @@ export class UserInfo {
   }
 
   getUserInfo(data) {
-    console.log(data)
+
     this._name = data.name
     this._job = data.about
 

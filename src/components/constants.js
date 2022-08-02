@@ -1,12 +1,16 @@
 export const closeButtons = document.querySelectorAll('.popup__close-button');
+
+
+
 export const popups = document.querySelectorAll('.popup');
 export const openPopupProfileEditButton = document.querySelector('.profile__edit-button')
 
+export const formEditAvatar = document.querySelector('#formEditAvatar')
 
-
-const popupSubmitProfileForm = document.querySelector('.popup__edit-form')
+const popupSubmitProfileForm = document.querySelector('#popupEditForm')
 const popupProfileEdit = document.querySelector('#popupEditProfile')//по-пап редактировать профиль 
 export const submitButtonEditProfile = popupProfileEdit.querySelector('.popup__submit-button')
+export const avatarSubmit = formEditAvatar.querySelector('#avatarSubmitButton')
 
 
 const closePopupProfileEdit = popupProfileEdit.querySelector('.popup__close-button')

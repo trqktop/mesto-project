@@ -8,6 +8,8 @@ import { PopupWithForm } from './PopupWithForm.js'
 import { UserInfo } from './userInfo.js'
 // //0.2 импорт переменных
 import {
+    avatarSubmit,
+    formEditAvatar,
     templateSelector,
     userTemplate,
     popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto,
@@ -21,21 +23,16 @@ import { FormValidator } from './validate.js'
 
 let userId;
 
+
 const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
 api.getUserId()
     .then(data => userId = data._id)
 
+const popup = new Popup(popupProfileEdit)//открытие попапа
+popup.setEventListeners(closeButtons)//закпрытие попапа
 
 
-
-//enableValidation(validatorConfig);//включил валидацию
-
-
-//PopupWithImage._listenerFullScreenImage() {// В ПОПАПАХ 
-//    card.elementImage.addEventListener('click', () => {
-//
-//    })
-//}
+//редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -50,59 +47,51 @@ const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
             })
             .then(newData => userInfo.setUserInfo(newData))
             .then(newData => userInfo.updateUserInfo())
-            .then(newData => popup.closePopup(popupProfileEdit))//закрываю попап
+            .then(newData => popup.closePopup())//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
             .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
     })//слушатель событий сохранить изменения в профиль
+
 })
-
-
-
-
-
-
 popupWithFormProfile.listener()
 
 
-const popup = new Popup(popupProfileEdit)
-popup.setEventListeners(closeButtons)
-const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProfileForm)
-validPopupProfileEdit.enableValidation()
 
-openPopupProfileEditButton.addEventListener('click', () => {
-    popup.openPopup();
-    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-    validPopupProfileEdit.resetError(popupSubmitProfileForm)
+
+
+
+
+const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProfileForm)//валидация попапа
+validPopupProfileEdit.enableValidation()//валидация попапа
+
+openPopupProfileEditButton.addEventListener('click', () => {//открытие попапа
+    popup.openPopup();//открытие попапа
+    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)//открытие попапа
+    validPopupProfileEdit.resetError(popupSubmitProfileForm)//открытие попапа
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
+//редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+
+//дабвления карточки на страницу ------------------------------------------------------------------------------------------------------------------------------
 const popupNewCard = new Popup(popupAddNewPhoto)
 popupNewCard.setEventListeners(closeButtons)
 const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
 validPopupAddCard.enableValidation()
+
+
+
 
 profileAddCardButton.addEventListener('click', () => {
     popupNewCard.openPopup()
     validPopupAddCard.enableValidation()
     popupNewCard.clearInputsValue(popupAddNewPhoto)
     validPopupAddCard.resetError(formNewPhoto)
+    validPopupAddCard.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 })
 
-const popupAva = new Popup(popupAvatar)
-popupAva.setEventListeners(closeButtons)
-const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
-validPopupUserAvatar.enableValidation()
-
-userAvatar.addEventListener('click', () => {
-    popupAva.openPopup()
-    popupAva.clearInputsValue(popupAvatar)
-    validPopupUserAvatar.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
-    validPopupUserAvatar.resetError(popupAvatar)
-})
-
-
-// //4. Добавление карточки
-// //слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -116,12 +105,15 @@ const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
                 const section = new Section({
                     cards: cardFromServer,
                     renderer: (cardFromServer) => {
-                        const cardElement = new Card(cardFromServer, userId, templateSelector).generate()
-                        const elementImage = cardElement.querySelector('.element__image')
+                        const cardElement = new Card({
+                            data: cardFromServer, api, userId, templateSelector,
+                            handleCardClick: (elementImage) => {
+                                elementImage.addEventListener('click', () => {
+                                    popupWithImage.open(cardFromServer)
+                                })
+                            }
+                        }).generate()
                         section.addItem(cardElement)
-                        elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
-                            popupWithImage.open(cardFromServer)//создал слушатель клика по карточке PopupWithImage
-                        })//создал слушатель клика по карточке PopupWithImage
                     }
                 }, elementsGridContainer)
                 section.rendererOneElement()
@@ -139,23 +131,10 @@ popupFormNewPhoto.listener()
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-
-// //const elements = document.forms.myForm.elements;
-
-
-
-// //3. Загрузка информации о пользователе с сервера
-
-
-
-// const initCard = new Card()
-// constructor(srcValue, titleValue, userTemplateLi, cardFromServer, userId)
-// // //getInitialCards()
-
 const popupWithImage = new PopupWithImage(popupFullScreen)
 const userInfo = new UserInfo(profileUserName, profileUserJob)
 
-
+//инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
 Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
     .then(([userData, cards]) => {
         const { name, about, avatar, _id: userId, cohort } = userData//деконструировал объект  userData в константы
@@ -164,19 +143,19 @@ Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
         //profileUserJob.textContent = about
         userInfo.getUserInfo({ name, about, avatar })
         userInfo.updateUserInfo(profileUserName, profileUserJob, avatar)
-        //    cards.reverse().forEach((card, index) => {
-        //        const cardElement = new Card(card.link, card.name, userTemplateLi, card, userId, elementsGridContainer)
-        //        cardElement.createCards()
-        //    })
         const section = new Section({
             cards,
             renderer: (card) => {
-                const cardElement = new Card(card, userId, templateSelector).generate()
-                const elementImage = cardElement.querySelector('.element__image')
+                const cardElement = new Card({
+                    data: card, api, userId, templateSelector, handleCardClick: (elementImage) => {
+                        elementImage.addEventListener('click', () => {
+                            popupWithImage.open(card)
+                        })
+                    }
+                }).generate()
+                //  const elementImage = cardElement.querySelector('.element__image')
                 section.addItem(cardElement)
-                elementImage.addEventListener('click', () => {//создал слушатель клика по карточке PopupWithImage
-                    popupWithImage.open(card)//создал слушатель клика по карточке PopupWithImage
-                })//создал слушатель клика по карточке PopupWithImage
+
             }
         }, elementsGridContainer)
         section.renderer()
@@ -204,16 +183,40 @@ export const hidePen = () => {
 }
 
 
-popupAvatarForm.addEventListener('submit', (evt) => {
-    evt.preventDefault()
-    const submitButton = evt.submitter
-    submitButton.textContent = 'Сохранение...'
-    api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
-        .then(res => {
-            userAvatar.src = res.avatar
-            closePopup(popupAvatar)
-        })
-        .catch(err => console.log(err))
-        .finally(res => submitButton.textContent = 'Сохранить')
+
+//редактирование аватара------------------------------------------------
+
+
+const popupAva = new Popup(popupAvatar)
+popupAva.setEventListeners(closeButtons)
+const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
+validPopupUserAvatar.enableValidation()
+
+userAvatar.addEventListener('click', () => {
+    popupAva.openPopup()
+
+    popupAva.clearInputsValue()
+    validPopupUserAvatar.disableSubmitButton(avatarSubmit, validatorConfig.inactiveButtonClass)
+    validPopupUserAvatar.resetError(popupAvatar)
 })
+
+
+
+const popupAvaForm = new PopupWithForm(formEditAvatar, () => {
+    formEditAvatar.addEventListener('submit', (evt) => {
+        evt.preventDefault()
+        const submitButton = formEditAvatar.querySelector('#avatarSubmitButton')
+        submitButton.textContent = 'Сохранение...'
+        api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
+            .then(res => {
+                userAvatar.src = res.avatar
+                popupAva.closePopup()
+            })
+            .catch(err => console.log(err))
+            .finally(res => submitButton.textContent = 'Сохранить')
+    })
+})
+
+popupAvaForm.listener()
+
 
