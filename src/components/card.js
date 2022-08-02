@@ -1,99 +1,120 @@
 
-import { fullScreenImage, fullScreenImageDescription, popupFullScreen } from './constants.js'
-import { openPopup } from './modal.js'
-import { putLikeOnServer, deleteLikeFromServer, requestToDeleteFromTheServer } from "./api.js"
-
-
-function createCards(srcValue, titleValue, userTemplateLi, cardFromServer, userId) {
-    const cardElement = userTemplateLi.cloneNode(true);//копируем контейнер выше в объявленную переменную
-    const elementImage = cardElement.querySelector('.element__image')
-    elementImage.setAttribute('src', srcValue) //установил аттрибут ссылки на картинку и задал источник
-    elementImage.setAttribute('alt', titleValue)
-    cardElement.querySelector('.element__caption-about').textContent = titleValue;// установил текст контент из источника
-    listenerFullScreenImage(elementImage, cardElement)
-    renderLikeCount(cardFromServer, cardElement)
-    likeButtonListener(cardElement, cardFromServer)
-    checkCardOwn(cardFromServer, userId, cardElement)
-    renderActiveLikes(userId, cardFromServer, cardElement)
-    return cardElement
-}
-
-
-function insertCard(elementsGridContainer, cardElement) {
-    elementsGridContainer.prepend(cardElement);//вставил копированную карточку в контейнер 
-}
-
-export const likeButtonListener = (cardElement, cardFromServer) => {
-    const like = cardElement.querySelector('.element__button')
-    like.addEventListener('click', () => {
-        likeActive(like, cardFromServer, cardElement)
-    })
-}
-
-function likeActive(like, cardFromServer, cardElement) {
-    if (!like.classList.contains('element__button_active')) {
-        putLikeOnServer(cardFromServer._id)
-            .then(newCard => renderLikeCount(newCard, cardElement))
-            .then(res => like.classList.add('element__button_active'))
-            .catch(err => console.log(err))
+export class Card {
+    constructor({data, api, userId, templateSelector, handleCardClick}) {
+        this.api = api
+        this.data = data
+        this.name = data.name
+        this.link = data.link
+        this.owner = data.owner._id
+        this.templateSelector = templateSelector
+        this.cardId = data._id
+        this.likes = data.likes
+        this.userId = userId
+        this.handleCardClick = handleCardClick
     }
-    else {
-        deleteLikeFromServer(cardFromServer._id)
-            .then(newCard => renderLikeCount(newCard, cardElement))
-            .then(res => like.classList.remove('element__button_active'))
-            .catch(err => console.log(err))
+
+
+    _getElement() {
+        return document
+            .querySelector(this.templateSelector)
+            .content
+            .querySelector('li')
+            .cloneNode(true)
     }
-}
 
-export const renderLikeCount = (cardFromServer, cardElement) => {
-    cardElement.querySelector('.element__like-count').textContent = cardFromServer.likes.length
-}
-
-
-export const deleteCardButtonListener = (cardElement, cardFromServer) => {
-    cardElement.querySelector('.element__delete-button').addEventListener('click', () => {
-        requestToDeleteFromTheServer(cardFromServer._id)
-            .then(res => cardElement.remove())
-            .catch(err => console.log(err))
-    })
-}
-
-
-function listenerFullScreenImage(elementImage, cardElement) {
-    elementImage.addEventListener('click', function () {
-        fullScreenImage.src = elementImage.src;
-        fullScreenImageDescription.textContent = cardElement.querySelector('.element__caption-about').textContent;
-        fullScreenImage.alt = elementImage.alt
-        openPopup(popupFullScreen)
-    })
-}
-
-
-export const checkCardOwn = (cardFromServer, userId, cardElement) => {
-    //const deleteArrayButton = document.querySelectorAll('.element__delete-button')
-    if (cardFromServer.owner._id !== userId) {
-        removeTrashIcon(cardElement)
+    generate() {
+        this.element = this._getElement()
+        this.elementImage = this.element.querySelector('.element__image')
+        this.elementCaption = this.element.querySelector('.element__caption-about')
+        this.elementLike = this.element.querySelector('.element__button')
+        this.elementLikeCount = this.element.querySelector('.element__like-count')
+        this.elementDeleteButton = this.element.querySelector('.element__delete-button')
+        this.elementCaption.textContent = this.name;
+        this.elementImage.setAttribute('src', this.link)
+        this.elementImage.setAttribute('alt', this.name)
+        this._renderLikeCount()
+        this._likeButtonListener()
+        this._checkCardOwn()
+        this._renderActiveLikesFromDom()
+        this.handleCardClick(this.elementImage)
+        return this.element
     }
-    else {
-        deleteCardButtonListener(cardElement, cardFromServer)
+
+
+
+    _likeButtonListener() {
+        this.elementLike.addEventListener('click', () => {
+            this._likeActive()
+        })
     }
-}
 
 
-export const renderActiveLikes = (userId, card, cardElement) => {
-    const like = cardElement.querySelector('.element__button')
-    card.likes.forEach(owner => {
-        if (owner._id === userId) {
-            like.classList.add('element__button_active')
+    _likeActive() {
+        if (!this.elementLike.classList.contains('element__button_active')) {
+            this.api.putLikeOnServer(this.cardId)
+                .then(newCard => {
+                    this.likes = newCard.likes
+                    this._renderLikeCount()
+                })
+                .then(res => this.elementLike.classList.add('element__button_active'))
+                .catch(err => console.log(err))
         }
         else {
-            like.classList.remove('element__button_active')
+            this.api.deleteLikeFromServer(this.cardId)
+                .then(newCard => {
+                    this.likes = newCard.likes
+                    this._renderLikeCount(newCard)
+                })
+                .then(res => this.elementLike.classList.remove('element__button_active'))
+                .catch(err => console.log(err))
         }
-    })
+    }
+
+    _renderLikeCount() {
+        this.elementLikeCount.textContent = this.likes.length
+    }
+
+
+    _deleteCardButtonListener() {
+        this.elementDeleteButton.addEventListener('click', () => {
+            this.api.requestToDeleteFromTheServer(this.cardId)
+                .then(res => {
+                    console.log(this.element)
+                    this.element.remove()
+                })
+                .catch(err => console.log(err))
+        })
+    }
+
+
+    _checkCardOwn() {
+        if (this.owner !== this.userId) {
+            this._removeTrashIconFromDom()
+        }
+        else {
+            this._deleteCardButtonListener()
+        }
+    }
+
+
+    _removeTrashIconFromDom() {
+        this.elementDeleteButton.style.display = "none"
+    }
+
+    _renderActiveLikesFromDom() {
+        this.likes.forEach(owner => {
+            if (owner._id === this.userId) {
+                this.elementLike.classList.add('element__button_active')
+            }
+            else {
+                this.elementLike.classList.remove('element__button_active')
+            }
+        })
+    }
+
 }
 
-export const removeTrashIcon = (cardElement) => {
-    cardElement.querySelector('.element__delete-button').style.display = "none"
-}
 
-export { insertCard, createCards }
+
+
+

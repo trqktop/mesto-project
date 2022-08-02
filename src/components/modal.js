@@ -1,70 +1,70 @@
 
-import { addNewPhotoSubmitButton, popupArr, validatorConfig } from "./constants.js"
-import { disableSubmitButton } from "./validate.js"
+
+export class Popup {
+    constructor(selector) {
+        this.popupElement = selector
+        this.closePopupEscHandle = this._closePopupEsc.bind(this)
+        this.closePopupOverlay = this._closePopupOverlay.bind(this)
+    }
+
+    showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
+        profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+        profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
+    }
+
+    openPopup() {//Функция открытия попапа
+        this.setEventListeners()
+        this.popupElement.classList.add('popup_opened')
+        document.addEventListener("keydown", this.closePopupEscHandle)//(c)'добавлять обработчик события в функции открытия попапов'        })
+        document.addEventListener('mousedown', this.closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов' и { once: true } - удаляет
+    }
+
+    closePopup() {
+        this.popupElement.classList.remove('popup_opened')
+        this.removeEventListener()
+    }
+
+    removeEventListener() {
+        document.removeEventListener("keydown", this.closePopupEscHandle)// (c)'удалять его при закрытии попапов.'
+        document.removeEventListener('mousedown', this.closePopupOverlay) // (c)'удалять его при закрытии попапов.'
+    }
+
+
+    saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
+        profileUserJob.textContent = profileJobInput.value;
+        profileUserName.textContent = profileNameInput.value;
+    }
+
+    clearInputsValue() {
+        this.popupElement.querySelector('form').reset()
+    }
+
+    _closePopupEsc(evt) {
+        if (evt.key === 'Escape') {
+            this.closePopup()
+        }
+    }
+
+    _closePopupOverlay(evt) {
+        if (evt.target.classList.contains('popup')) {
+            this.closePopup()
+        }
+    }
+
+    toggleSubmitButtonTextContent(submitButtonEditProfile, value) {
+        submitButtonEditProfile.textContent = value
+    }//меняю текст контент кнопок субмит 
 
 
 
-
-
-
-
-
-
-function showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
-    profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-    profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-}
-
-
-function openPopup(popupElement) {//Функция открытия попапа
-    popupElement.classList.add('popup_opened')
-    document.addEventListener("keydown", closePopupEsc)//(c)'добавлять обработчик события в функции открытия попапов'
-    document.addEventListener('mousedown', closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов'
-}
-
-
-function closePopup(popupElement) {
-    popupElement.classList.remove('popup_opened')
-    document.removeEventListener("keydown", closePopupEsc)// (c)'удалять его при закрытии попапов.'
-    document.removeEventListener('mousedown', closePopupOverlay)// (c)'удалять его при закрытии попапов.'
-}
-
-
-
-function saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
-    profileUserJob.textContent = profileJobInput.value;
-    profileUserName.textContent = profileNameInput.value;
-}
-
-
-function clearInputsValue(popupAddNewPhoto) {
-    popupAddNewPhoto.querySelector('form').reset()
-    disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
-}
-
-
-
-
-
-function closePopupEsc(evt) {
-    if (evt.key === 'Escape') {
-        const openedPopup = document.querySelector('.popup_opened')
-        closePopup(openedPopup)
+    setEventListeners() {
+        const button = this.popupElement.querySelector('.popup__close-button')
+        button.addEventListener('click', () => {
+            this.closePopup()
+        });//закрытие всех попапов слушатель
     }
 }
 
-function closePopupOverlay(evt) {
-    if (evt.target.classList.contains('popup'))
-        closePopup(evt.target)
-}
-
-
-
-
-
-export const toggleSubmitButtonTextContent = (submitButtonEditProfile, value) => {
-    submitButtonEditProfile.textContent = value
-}//меняю текст контент кнопок субмит 
 
 
 
@@ -72,4 +72,4 @@ export const toggleSubmitButtonTextContent = (submitButtonEditProfile, value) =>
 
 
 
-export { clearInputsValue, openPopup, closePopup, saveChange, showInputValueAfterOpenPopup }
+

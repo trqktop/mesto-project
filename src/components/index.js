@@ -1,98 +1,165 @@
-//0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
-import { insertCard, createCards } from "./card.js";//0.1 импорт функций работы с карточками
-import { patchProfileAvatar, getUserId, pushNewCard, pushProfileData, getInitialCards } from "./api.js"
-//0.2 импорт переменных
+import { Card } from "./card.js";//0.1 импорт функций работы с карточками
+import { Api } from "./api.js"
+import { Section } from "./section.js"
+import { PopupWithImage } from "./PopupWithImage.js"
+import { PopupWithForm } from './PopupWithForm.js'
+import { UserInfo } from './userInfo.js'
+// //0.2 импорт переменных
 import {
-    popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto, userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName, popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen, userAvatar,
-    popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile, closeButtons
+    avatarSubmit,
+    formEditAvatar,
+    templateSelector,
+    userTemplate,
+    popupFullScreen, fullScreenCloseButton, validatorConfig, urlImageInput, nameImageInput, popupAddNewPhoto,
+    userTemplateLi, elementsGridContainer, profileJobInput, profileUserJob, profileNameInput, profileUserName,
+    popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen,
+    userAvatar, popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile,
+    closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "./constants.js"
-import { clearInputsValue, showInputValueAfterOpenPopup, openPopup, closePopup, saveChange, toggleSubmitButtonTextContent } from './modal.js'//0.2 импорт Работа модальных окон
-import { resetError, enableValidation } from './validate.js'
+import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
+import { FormValidator } from './validate.js'
+
 let userId;
-enableValidation(validatorConfig);//включил валидацию
+
+
+const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
+api.getUserId()
+    .then(data => userId = data._id)
+
+const popup = new Popup(popupProfileEdit)//открытие попапа
+popup.setEventListeners(closeButtons)//закпрытие попапа
+
+
+//редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
+    popupSubmitProfileForm.addEventListener('submit', (evt) => {
+        evt.preventDefault()
+        popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
+        api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
+            .then(newData => {
+                popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+                return newData
+            })
+            .then(newData => userInfo.setUserInfo(newData))
+            .then(newData => userInfo.updateUserInfo())
+            .then(newData => popup.closePopup())//закрываю попап
+            .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
+            .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
+    })//слушатель событий сохранить изменения в профиль
+
+})
+popupWithFormProfile.listener()
 
 
 
 
 
-closeButtons.forEach((button) => {
-    const popup = button.closest('.popup');
-    button.addEventListener('click', () => closePopup(popup));
-});//закрытие всех попапов слушатель
 
-openPopupProfileEditButton.addEventListener('click', () => {
-    openPopup(popupProfileEdit);
-    showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)
-    resetError(popupProfileEdit, validatorConfig)
+
+const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProfileForm)//валидация попапа
+validPopupProfileEdit.enableValidation()//валидация попапа
+
+openPopupProfileEditButton.addEventListener('click', () => {//открытие попапа
+    popup.openPopup();//открытие попапа
+    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)//открытие попапа
+    validPopupProfileEdit.resetError(popupSubmitProfileForm)//открытие попапа
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
+//редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
-popupSubmitProfileForm.addEventListener('submit', (evt) => {
-    evt.preventDefault()
-    toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
-    pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
-        .then(res => saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName))
-        .then(res => closePopup(popupProfileEdit))//закрываю попап
-        .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
-        .finally(res => toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
-})//слушатель событий сохранить изменения в профиль
 
+//дабвления карточки на страницу ------------------------------------------------------------------------------------------------------------------------------
+const popupNewCard = new Popup(popupAddNewPhoto)
+popupNewCard.setEventListeners(closeButtons)
+const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
+validPopupAddCard.enableValidation()
 
 
 
 
 profileAddCardButton.addEventListener('click', () => {
-    openPopup(popupAddNewPhoto)
-    clearInputsValue(popupAddNewPhoto)
-    resetError(popupAddNewPhoto, validatorConfig)
+    popupNewCard.openPopup()
+    validPopupAddCard.enableValidation()
+    popupNewCard.clearInputsValue(popupAddNewPhoto)
+    validPopupAddCard.resetError(formNewPhoto)
+    validPopupAddCard.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 })
 
-//4. Добавление карточки
-//слушатели-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-formNewPhoto.addEventListener('submit', (evt) => {
-    evt.preventDefault()//отменяем дефолтный субмит
-    toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
-    pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер 
-        .then(newCard => {
-            insertCard(elementsGridContainer, createCards(urlImageInput.value, nameImageInput.value, userTemplateLi, newCard, newCard.owner._id))
-            return newCard
-        })//Вставляем карточку на страницу
-        .then(newCard => {
-            closePopup(popupAddNewPhoto)
-        })//закрываем попап 
-        .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
-        .finally(res => toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
-})//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов 
 
 
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
+    formNewPhoto.addEventListener('submit', (evt) => {
+        evt.preventDefault()//отменяем дефолтный субмит
+        popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
+        api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
+            .then(cardFromServer => {
+
+                const section = new Section({
+                    cards: cardFromServer,
+                    renderer: (cardFromServer) => {
+                        const cardElement = new Card({
+                            data: cardFromServer, api, userId, templateSelector,
+                            handleCardClick: (elementImage) => {
+                                elementImage.addEventListener('click', () => {
+                                    popupWithImage.open(cardFromServer)
+                                })
+                            }
+                        }).generate()
+                        section.addItem(cardElement)
+                    }
+                }, elementsGridContainer)
+                section.rendererOneElement()
+            })
+            .then(newCard => {
+                popupNewCard.closePopup()
+            })//закрываем попап
+            .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
+            .finally(res => popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
+    })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов
+
+})
+
+popupFormNewPhoto.listener()
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+const popupWithImage = new PopupWithImage(popupFullScreen)
+const userInfo = new UserInfo(profileUserName, profileUserJob)
 
-
-
-
-
-
-
-//3. Загрузка информации о пользователе с сервера
-
-
-
-
-
-Promise.all([getUserId(), getInitialCards()])
+//инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
+Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
     .then(([userData, cards]) => {
-        userId = userData._id
-        userAvatar.src = userData.avatar
-        profileUserName.textContent = userData.name
-        profileUserJob.textContent = userData.about
-        cards.reverse().forEach((card, index) => {
-            const cardElement = createCards(card.link, card.name, userTemplateLi, card, userId)
-            insertCard(elementsGridContainer, cardElement, card)
-        })
+        const { name, about, avatar, _id: userId, cohort } = userData//деконструировал объект  userData в константы
+        userAvatar.src = avatar
+        //profileUserName.textContent = name
+        //profileUserJob.textContent = about
+        userInfo.getUserInfo({ name, about, avatar })
+        userInfo.updateUserInfo(profileUserName, profileUserJob, avatar)
+        const section = new Section({
+            cards,
+            renderer: (card) => {
+                const cardElement = new Card({
+                    data: card, api, userId, templateSelector, handleCardClick: (elementImage) => {
+                        elementImage.addEventListener('click', () => {
+                            popupWithImage.open(card)
+                        })
+                    }
+                }).generate()
+                //  const elementImage = cardElement.querySelector('.element__image')
+                section.addItem(cardElement)
+
+            }
+        }, elementsGridContainer)
+        section.renderer()
+
     })
     .catch(err => {
         console.log(err)
@@ -115,35 +182,41 @@ export const hidePen = () => {
     avatarEditPen.style.display = "none"
 }
 
+
+
+//редактирование аватара------------------------------------------------
+
+
+const popupAva = new Popup(popupAvatar)
+popupAva.setEventListeners(closeButtons)
+const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
+validPopupUserAvatar.enableValidation()
+
 userAvatar.addEventListener('click', () => {
-    openPopup(popupAvatar)
-    clearInputsValue(popupAvatar)
-    resetError(popupAvatar, validatorConfig)
-})
+    popupAva.openPopup()
 
-
-popupAvatarForm.addEventListener('submit', (evt) => {
-    evt.preventDefault()
-    const submitButton = evt.submitter
-    submitButton.textContent = 'Сохранение...'
-    patchProfileAvatar(popupAvatarUrlInput.value)
-        .then(res => {
-            userAvatar.src = res.avatar
-            closePopup(popupAvatar)
-        })
-        .catch(err => console.log(err))
-        .finally(res => submitButton.textContent = 'Сохранить')
+    popupAva.clearInputsValue()
+    validPopupUserAvatar.disableSubmitButton(avatarSubmit, validatorConfig.inactiveButtonClass)
+    validPopupUserAvatar.resetError(popupAvatar)
 })
 
 
 
+const popupAvaForm = new PopupWithForm(formEditAvatar, () => {
+    formEditAvatar.addEventListener('submit', (evt) => {
+        evt.preventDefault()
+        const submitButton = formEditAvatar.querySelector('#avatarSubmitButton')
+        submitButton.textContent = 'Сохранение...'
+        api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
+            .then(res => {
+                userAvatar.src = res.avatar
+                popupAva.closePopup()
+            })
+            .catch(err => console.log(err))
+            .finally(res => submitButton.textContent = 'Сохранить')
+    })
+})
 
-
-
-
-
-
-
-
+popupAvaForm.listener()
 
 
