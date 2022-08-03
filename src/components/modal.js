@@ -5,6 +5,7 @@ export class Popup {
         this.popupElement = selector
         this.closePopupEscHandle = this._closePopupEsc.bind(this)
         this.closePopupOverlay = this._closePopupOverlay.bind(this)
+        this.button = this.popupElement.querySelector('.popup__close-button')
     }
     // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
     //showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
@@ -29,7 +30,7 @@ export class Popup {
         document.removeEventListener('mousedown', this.closePopupOverlay) // (c)'удалять его при закрытии попапов.'
     }//заприватить
 
-// ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
+    // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
     //saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
     //    profileUserJob.textContent = profileJobInput.value;
     //    profileUserName.textContent = profileNameInput.value;
@@ -59,8 +60,7 @@ export class Popup {
 
 
     setEventListeners() {//метод публичный. в него можно передавать кнопку с индекса
-        const button = this.popupElement.querySelector('.popup__close-button')
-        button.addEventListener('click', () => {
+        this.button.addEventListener('click', () => {
             this.closePopup()
         });//закрытие всех попапов слушатель
     }

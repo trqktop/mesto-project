@@ -35,6 +35,9 @@ const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
 api.getUserId()
     .then(data => userId = data._id)
 
+
+
+
 const popup = new Popup(popupProfileEdit)//открытие попапа
 popup.setEventListeners(closeButtons)//закпрытие попапа
 
@@ -46,23 +49,26 @@ popup.setEventListeners(closeButtons)//закпрытие попапа
 const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
     popupSubmitProfileForm.addEventListener('submit', (evt) => {
         evt.preventDefault()
+        //this.profileJobInput = profileJobInput
+        //this.profileNameInput = profileNameInput
         popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
             .then(newData => {
-                popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
+
+                //   popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
                 return newData
             })
             .then(newData => userInfo.setUserInfo(newData))
             .then(newData => userInfo.updateUserInfo())
-            .then(newData => popup.closePopup())//закрываю попап
+            //  .then(newData => popup.closePopup())//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
             .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
     })//слушатель событий сохранить изменения в профиль
 
 })
-popupWithFormProfile.listener()
+popupWithFormProfile.setEventListeners({ profileUserJob, profileUserName })
 
-
+console.log(popupWithFormProfile)
 
 
 
@@ -134,7 +140,7 @@ const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
 
 })
 
-popupFormNewPhoto.listener()
+popupFormNewPhoto.setEventListeners()
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -142,9 +148,9 @@ const popupWithImage = new PopupWithImage(popupFullScreen)
 const userInfo = new UserInfo(profileUserName, profileUserJob)
 
 //инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
-Promise.all([api.getUserId(), api.getInitialCards()])//добавил api.
+Promise.all([api.getUserId(), api.getInitialCards()])//переписать getUserId() на UserInfo class
     .then(([userData, cards]) => {
-        const { name, about, avatar, _id: userId, cohort } = userData//деконструировал объект  userData в константы
+        const { name, about, avatar, _id: userId, cohort } = userData
         userAvatar.src = avatar
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
@@ -201,7 +207,6 @@ validPopupUserAvatar.enableValidation()
 
 userAvatar.addEventListener('click', () => {
     popupAva.openPopup()
-
     popupAva.clearInputsValue()
     validPopupUserAvatar.disableSubmitButton(avatarSubmit, validatorConfig.inactiveButtonClass)
     validPopupUserAvatar.resetError(popupAvatar)
@@ -224,6 +229,6 @@ const popupAvaForm = new PopupWithForm(formEditAvatar, () => {
     })
 })
 
-popupAvaForm.listener()
+popupAvaForm.setEventListeners()
 
 
