@@ -17,14 +17,21 @@ import {
     popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen,
     userAvatar, popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile,
     closeButtons, options, fullScreenImage, fullScreenImageDescription
-} from "./constants.js"
+} from "./constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
 import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
-import { FormValidator } from './validate.js'
+import { FormValidator } from './FormValidator.js'
 
 let userId;
+//вызвать UserInfo вначале Index.js и определить все переменные. этот класс вызывается 1 раз!
+//////Класс UserInfo теперь должен устанавливать все данные пользователя, включая аватар (и желательно еще и _id тоже)
+//названия классов и файлов не соответствуют чек-листу и заданию.
+//класс Popup нельзя использовать в index.js. Он только для наследования
+//код классов не соответствует заданию: класс Popup не должен заниматься вставкой данных
+//Все данные инпутов собирает метод _getInputValues из класса PopupWithForm и передает их в функцию сабмита submitHandler.
 
 
-const api = new Api(options)//вызвал конструктор . передал конфиг и записал в константу
+
+const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
 api.getUserId()
     .then(data => userId = data._id)
 

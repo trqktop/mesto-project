@@ -1,4 +1,4 @@
-import { Card } from './card.js';
+
 
 export class Section {
     constructor({ cards, renderer }, selector) {
