@@ -1,6 +1,6 @@
 
 export class Card {
-    constructor({data, api, userId, templateSelector, handleCardClick}) {
+    constructor({ data, api, userId, templateSelector, handleCardClick }) {
         this.api = api
         this.data = data
         this.name = data.name
@@ -100,6 +100,8 @@ export class Card {
     _removeTrashIconFromDom() {
         this.elementDeleteButton.style.display = "none"
     }
+
+
 
     _renderActiveLikesFromDom() {
         this.likes.forEach(owner => {

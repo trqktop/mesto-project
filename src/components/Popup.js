@@ -3,9 +3,14 @@
 export class Popup {
     constructor(selector) {
         this.popupElement = selector
+
+
+        this.form = this.popupElement.querySelector('form')
+        this.submitButton = this.popupElement.querySelector('.popup__submit-button')
+        this.button = this.popupElement.querySelector('.popup__close-button')
+
         this.closePopupEscHandle = this._closePopupEsc.bind(this)
         this.closePopupOverlay = this._closePopupOverlay.bind(this)
-        this.button = this.popupElement.querySelector('.popup__close-button')
     }
     // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
     //showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
@@ -22,10 +27,10 @@ export class Popup {
 
     closePopup() {
         this.popupElement.classList.remove('popup_opened')
-        this.removeEventListener()
+        this._removeEventListener()
     }
 
-    removeEventListener() {//заприватить
+    _removeEventListener() {//заприватить
         document.removeEventListener("keydown", this.closePopupEscHandle)// (c)'удалять его при закрытии попапов.'
         document.removeEventListener('mousedown', this.closePopupOverlay) // (c)'удалять его при закрытии попапов.'
     }//заприватить
@@ -52,9 +57,9 @@ export class Popup {
         }
     }
 
-    toggleSubmitButtonTextContent(submitButtonEditProfile, value) {//по заданию попап содержит 3 публичных метода.
+    toggleSubmitButtonTextContent(value) {//по заданию попап содержит 3 публичных метода.
         //это скорее всего перенести в попап витх форм
-        submitButtonEditProfile.textContent = value
+        this.submitButton.textContent = value
     }//меняю текст контент кнопок субмит 
 
 

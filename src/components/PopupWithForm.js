@@ -1,10 +1,11 @@
-import { Popup } from "./modal.js"
+import { Popup } from "./Popup.js"
 
 export class PopupWithForm extends Popup {
-    constructor(selector, handler) {
+    constructor({ selector, handler }) {
         super(selector)
-        this.form = selector
-        this.handler = handler
+        //this.closePopup = super.closePopup
+        this.popupElement = selector
+        this.handler = handler.bind(this)
         this.inputList = Array.from(this.form.querySelectorAll('.popup__input'))
         //  this.inputNameImage = this.form.querySelector('#nameImageInput')
         //  this.inputUrlImage = this.form.querySelector('#urlImageInput')
@@ -12,19 +13,22 @@ export class PopupWithForm extends Popup {
         //  this.inputJobProfile = this.form.querySelector('#profileJobInput')
         //  this.inputUrlAvatar = this.form.querySelector('#urlNewAvatar')
     }
-
     //seper.setEventListeners() перезаписываем родительский листенер
     //this._closePopup() 
 
-    closePopup() {
+    close() {
         super.closePopup()
         this.form.reset()
     }
-    
+
     setEventListeners() {
+        super.setEventListeners()
+        this.form.addEventListener('submit', (evt) => {
+            evt.preventDefault()
+            this.handler(this._getInputValues())
+        })
         // this.button = super.button
         // super.setEventListeners()
-        this.handler()
     }
 
     _getInputValues() {
@@ -35,7 +39,6 @@ export class PopupWithForm extends Popup {
         //переносим с попап родителя метод сбор данных с полей
         // this.input.textContent =
     }
-
 }
 
 // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ

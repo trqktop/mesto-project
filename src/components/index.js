@@ -1,8 +1,8 @@
 // //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 import "../pages/index.css";//0.3 импорт для вебпака 
-import { Card } from "./card.js";//0.1 импорт функций работы с карточками
+import { Card } from "./Card.js";//0.1 импорт функций работы с карточками
 import { Api } from "./api.js"
-import { Section } from "./section.js"
+import { Section } from "./Section.js"
 import { PopupWithImage } from "./PopupWithImage.js"
 import { PopupWithForm } from './PopupWithForm.js'
 import { UserInfo } from './userInfo.js'
@@ -18,10 +18,24 @@ import {
     userAvatar, popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile,
     closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "./constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
-import { Popup } from './modal.js'//0.2 импорт Работа модальных окон
+import { Popup } from './Popup.js'//0.2 импорт Работа модальных окон
 import { FormValidator } from './FormValidator.js'
 
 let userId;
+const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
+
+
+api.getUserId()
+    .then(data => userId = data._id)
+
+
+
+const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: userAvatar })
+
+
+
+
+
 //вызвать UserInfo вначале Index.js и определить все переменные. этот класс вызывается 1 раз!
 //////Класс UserInfo теперь должен устанавливать все данные пользователя, включая аватар (и желательно еще и _id тоже)
 //названия классов и файлов не соответствуют чек-листу и заданию.
@@ -30,10 +44,6 @@ let userId;
 //Все данные инпутов собирает метод _getInputValues из класса PopupWithForm и передает их в функцию сабмита submitHandler.
 
 
-
-const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
-api.getUserId()
-    .then(data => userId = data._id)
 
 
 
@@ -46,15 +56,14 @@ popup.setEventListeners(closeButtons)//закпрытие попапа
 
 
 
-const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
-    popupSubmitProfileForm.addEventListener('submit', (evt) => {
-        evt.preventDefault()
+const popupWithFormProfile = new PopupWithForm({
+    selector: popupProfileEdit, handler: () => {
         //this.profileJobInput = profileJobInput
         //this.profileNameInput = profileNameInput
-        popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
+        popupWithFormProfile.toggleSubmitButtonTextContent('Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
             .then(newData => {
-
+                popupWithFormProfile.close()
                 //   popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
                 return newData
             })
@@ -62,13 +71,12 @@ const popupWithFormProfile = new PopupWithForm(popupSubmitProfileForm, () => {
             .then(newData => userInfo.updateUserInfo())
             //  .then(newData => popup.closePopup())//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
-            .finally(res => popup.toggleSubmitButtonTextContent(submitButtonEditProfile, 'Сохранить'))//возвращаю текст контент кнопке
-    })//слушатель событий сохранить изменения в профиль
-
+            .finally(res => popupWithFormProfile.toggleSubmitButtonTextContent('Сохранить'))//возвращаю текст контент кнопке
+    }
 })
-popupWithFormProfile.setEventListeners({ profileUserJob, profileUserName })
+popupWithFormProfile.setEventListeners()
 
-console.log(popupWithFormProfile)
+
 
 
 
@@ -90,93 +98,131 @@ openPopupProfileEditButton.addEventListener('click', () => {//открытие �
 
 //дабвления карточки на страницу ------------------------------------------------------------------------------------------------------------------------------
 const popupNewCard = new Popup(popupAddNewPhoto)
+
 popupNewCard.setEventListeners(closeButtons)
+
+
 const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
 validPopupAddCard.enableValidation()
-
 
 
 
 profileAddCardButton.addEventListener('click', () => {
     popupNewCard.openPopup()
     validPopupAddCard.enableValidation()
-    popupNewCard.clearInputsValue(popupAddNewPhoto)
-    validPopupAddCard.resetError(formNewPhoto)
-    validPopupAddCard.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
+    // popupNewCard.clearInputsValue(popupAddNewPhoto)
+    // validPopupAddCard.resetError(formNewPhoto)
+    // validPopupAddCard.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
 })
 
 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const popupFormNewPhoto = new PopupWithForm(formNewPhoto, () => {
-    formNewPhoto.addEventListener('submit', (evt) => {
-        evt.preventDefault()//отменяем дефолтный субмит
-        popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
-        api.pushNewCard(nameImageInput.value, urlImageInput.value)//пушим карточку на сервер
+const popupFormNewCard = new PopupWithForm({
+    selector: popupAddNewPhoto,
+    handler: ([inputName, inputSrc]) => {
+        popupFormNewCard.toggleSubmitButtonTextContent('Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
+        api.pushNewCard(inputName, inputSrc)//пушим карточку на сервер
             .then(cardFromServer => {
 
+
+                //создаем карточку
+                const cardData = new Card({
+                    data: cardFromServer, api, userId, templateSelector,
+                    handleCardClick: (elementImage) => {
+                        elementImage.addEventListener('click', () => {
+                            popupWithImage.open(cardFromServer)
+                        })
+                    }
+                })
+                const cardElement = cardData.generate()
+
+
+
+                //вставляем карточку в разметку
                 const section = new Section({
                     cards: cardFromServer,
-                    renderer: (cardFromServer) => {
-                        const cardElement = new Card({
-                            data: cardFromServer, api, userId, templateSelector,
-                            handleCardClick: (elementImage) => {
-                                elementImage.addEventListener('click', () => {
-                                    popupWithImage.open(cardFromServer)
-                                })
-                            }
-                        }).generate()
+                    renderer: () => {
                         section.addItem(cardElement)
                     }
                 }, elementsGridContainer)
-                section.rendererOneElement()
+                section.addItem(cardElement)
+
+
+
             })
             .then(newCard => {
-                popupNewCard.closePopup()
-            })//закрываем попап
+                popupFormNewCard.close()
+
+
+
+            })
             .catch(err => console.log(err))//выводим в консоль ошибку в случае возвращения с сервера ошибки
-            .finally(res => popupFormNewPhoto.toggleSubmitButtonTextContent(addNewPhotoSubmitButton, 'Сохранить'))//возвращаем текст контент кнопки сохранить
-    })//функция добавления новой карточки отсылающая к ранее созданной функции с заменой аргументов
-
+            .finally(res => {
+                popupFormNewCard.toggleSubmitButtonTextContent('Сохранить')
+            })//возвращаем текст контент кнопки сохранить
+    }
 })
+popupFormNewCard.setEventListeners()
 
-popupFormNewPhoto.setEventListeners()
+
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 const popupWithImage = new PopupWithImage(popupFullScreen)
-const userInfo = new UserInfo(profileUserName, profileUserJob)
+
 
 //инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
 Promise.all([api.getUserId(), api.getInitialCards()])//переписать getUserId() на UserInfo class
     .then(([userData, cards]) => {
         const { name, about, avatar, _id: userId, cohort } = userData
-        userAvatar.src = avatar
+        // userAvatar.src = avatar
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
-        userInfo.getUserInfo({ name, about, avatar })
-        userInfo.updateUserInfo(profileUserName, profileUserJob, avatar)
-        const section = new Section({
-            cards,
-            renderer: (card) => {
-                const cardElement = new Card({
-                    data: card, api, userId, templateSelector, handleCardClick: (elementImage) => {
-                        elementImage.addEventListener('click', () => {
-                            popupWithImage.open(card)
-                        })
-                    }
-                }).generate()
-                //  const elementImage = cardElement.querySelector('.element__image')
-                section.addItem(cardElement)
+        userInfo.getUserInfo({ name, about, avatar })//аватар не работает
+        userInfo.updateUserInfo(profileUserName, profileUserJob, userAvatar)//аватар не работает
 
-            }
-        }, elementsGridContainer)
-        section.renderer()
+
+        cards.forEach(card => {
+            const cardData = new Card({
+                data: card, api, userId, templateSelector,
+                handleCardClick: (elementImage) => {
+                    elementImage.addEventListener('click', () => {
+                        console.log(card)
+                        popupWithImage.open(card)
+                    })
+                }
+            })
+            const cardElement = cardData.generate()
+
+
+
+
+            const section = new Section({
+                card,
+                renderer: () => {
+                    section.addItem(cardElement)
+                }
+            }, elementsGridContainer)
+            section.renderer()
+        })
+
+
 
     })
     .catch(err => {
         console.log(err)
     })
+
+
+
+
+
+
+
+
+
+
 
 
 userAvatar.addEventListener('mouseover', () => {
@@ -214,21 +260,20 @@ userAvatar.addEventListener('click', () => {
 
 
 
-const popupAvaForm = new PopupWithForm(formEditAvatar, () => {
-    formEditAvatar.addEventListener('submit', (evt) => {
-        evt.preventDefault()
-        const submitButton = formEditAvatar.querySelector('#avatarSubmitButton')
-        submitButton.textContent = 'Сохранение...'
+const popupAvaForm = new PopupWithForm({
+    selector: popupAvatar, handler: () => {
+        //  submitButton.textContent = 'Сохранение...'
         api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
             .then(res => {
                 userAvatar.src = res.avatar
-                popupAva.closePopup()
+                popupAvaForm.close()
             })
             .catch(err => console.log(err))
-            .finally(res => submitButton.textContent = 'Сохранить')
-    })
+        //   .finally(res => submitButton.textContent = 'Сохранить')
+
+    }
 })
 
+
+
 popupAvaForm.setEventListeners()
-
-

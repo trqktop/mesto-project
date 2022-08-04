@@ -22,6 +22,7 @@ export class FormValidator {
         this.errorList = Array.from(this.currentElementValidate.querySelectorAll(this.errorClass))
     }
     enableValidation() {
+        this._disableSubmitButton()
         this._resetError()
         this._setEventListeners()
     }
