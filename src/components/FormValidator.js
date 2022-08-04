@@ -1,8 +1,3 @@
-//export { resetError, enableValidation, disableSubmitButton, findErrorMessage, hideErrorMessage }
-
-
-// включение валидации вызовом enableValidation
-// все настройки передаются при вызове
 
 export class FormValidator {
     constructor(config, currentElementValidate) {//принимает вторым параметром элемент той формы, которая валидируется;

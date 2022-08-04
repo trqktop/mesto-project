@@ -1,5 +1,4 @@
 
-
 export class Popup {
     constructor(selector) {
         this.popupElement = selector
@@ -28,6 +27,7 @@ export class Popup {
     closePopup() {
         this.popupElement.classList.remove('popup_opened')
         this._removeEventListener()
+        return true
     }
 
     _removeEventListener() {//заприватить
@@ -64,7 +64,7 @@ export class Popup {
 
 
 
-    setEventListeners() {//метод публичный. в него можно передавать кнопку с индекса
+    setEventListeners() {
         this.button.addEventListener('click', () => {
             this.closePopup()
         });//закрытие всех попапов слушатель

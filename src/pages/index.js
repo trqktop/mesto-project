@@ -1,11 +1,11 @@
 // //0. импорт-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-import "../pages/index.css";//0.3 импорт для вебпака 
-import { Card } from "./Card.js";//0.1 импорт функций работы с карточками
-import { Api } from "./api.js"
-import { Section } from "./Section.js"
-import { PopupWithImage } from "./PopupWithImage.js"
-import { PopupWithForm } from './PopupWithForm.js'
-import { UserInfo } from './userInfo.js'
+import "./index.css";//0.3 импорт для вебпака 
+import { Card } from "../components/Card.js";//0.1 импорт функций работы с карточками
+import { Api } from "../components/Api.js"
+import { Section } from "../components/Section.js"
+import { PopupWithImage } from "../components/PopupWithImage.js"
+import { PopupWithForm } from '../components/PopupWithForm.js'
+import { UserInfo } from '../components/UserInfo.js'
 // //0.2 импорт переменных
 import {
     avatarSubmit,
@@ -17,49 +17,42 @@ import {
     popupProfileEdit, popupSubmitProfileForm, openPopupProfileEditButton, profileAddCardButton, formNewPhoto, avatarEditPen,
     userAvatar, popupAvatar, popupAvatarForm, popupAvatarUrlInput, addNewPhotoSubmitButton, submitButtonEditProfile,
     closeButtons, options, fullScreenImage, fullScreenImageDescription
-} from "./constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
-import { Popup } from './Popup.js'//0.2 импорт Работа модальных окон
-import { FormValidator } from './FormValidator.js'
+} from "../utils/constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
+import { FormValidator } from '../components/FormValidator.js'
+
+
 
 let userId;
+let userProfileName;
+let userProfileJob;
+let userProfileAvatar;
+
+const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: userAvatar })//тут определяем все данные на странице. в том числе userId
 const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
 
 
-api.getUserId()
-    .then(data => userId = data._id)
+api.getUserProfileInfo()
 
-
-
-const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: userAvatar })
-
-
-
-
-
-//вызвать UserInfo вначале Index.js и определить все переменные. этот класс вызывается 1 раз!
-//////Класс UserInfo теперь должен устанавливать все данные пользователя, включая аватар (и желательно еще и _id тоже)
-//названия классов и файлов не соответствуют чек-листу и заданию.
-//класс Popup нельзя использовать в index.js. Он только для наследования
-//код классов не соответствует заданию: класс Popup не должен заниматься вставкой данных
-//Все данные инпутов собирает метод _getInputValues из класса PopupWithForm и передает их в функцию сабмита submitHandler.
-
-
-
-
-
-
-const popup = new Popup(popupProfileEdit)//открытие попапа
-popup.setEventListeners(closeButtons)//закпрытие попапа
-
+    .then(data => {
+        const userData = userInfo.getUserInfo(data)
+        userInfo.setUserInfo(userData)
+        userId = userData._id;
+        userProfileName = userData.name;
+        userProfileJob = userData.about;
+        userProfileAvatar = userData.avatar;
+    })
+    .catch(res => console.log(res))
 
 //редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 const popupWithFormProfile = new PopupWithForm({
-    selector: popupProfileEdit, handler: () => {
-        //this.profileJobInput = profileJobInput
-        //this.profileNameInput = profileNameInput
+    selector: popupProfileEdit, handler: (data) => {
+
+        // profileUserName.textContent = data[0]
+        // profileUserJob.textContent = data[1]
+        //  // profileNameInput.textContent = profileNameInput
         popupWithFormProfile.toggleSubmitButtonTextContent('Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
         api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
             .then(newData => {
@@ -68,7 +61,7 @@ const popupWithFormProfile = new PopupWithForm({
                 return newData
             })
             .then(newData => userInfo.setUserInfo(newData))
-            .then(newData => userInfo.updateUserInfo())
+            //.then(newData => userInfo.updateUserInfo())
             //  .then(newData => popup.closePopup())//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
             .finally(res => popupWithFormProfile.toggleSubmitButtonTextContent('Сохранить'))//возвращаю текст контент кнопке
@@ -86,9 +79,13 @@ const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProf
 validPopupProfileEdit.enableValidation()//валидация попапа
 
 openPopupProfileEditButton.addEventListener('click', () => {//открытие попапа
-    popup.openPopup();//открытие попапа
-    popup.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)//открытие попапа
-    validPopupProfileEdit.resetError(popupSubmitProfileForm)//открытие попапа
+    profileJobInput.value = profileUserJob.textContent
+    profileNameInput.value = profileUserName.textContent
+    validPopupProfileEdit.enableValidation()
+    popupWithFormProfile.openPopup();//открытие попапа
+
+    //popupWithFormProfile.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)//открытие попапа
+    //validPopupProfileEdit.resetError(popupSubmitProfileForm)//открытие попапа
 })//слушатель событий кнопки открыть по-пап редактирования профиля
 
 //редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
@@ -97,9 +94,8 @@ openPopupProfileEditButton.addEventListener('click', () => {//открытие �
 
 
 //дабвления карточки на страницу ------------------------------------------------------------------------------------------------------------------------------
-const popupNewCard = new Popup(popupAddNewPhoto)
-
-popupNewCard.setEventListeners(closeButtons)
+//const popupNewCard = new Popup(popupAddNewPhoto)
+//popupNewCard.setEventListeners(closeButtons)
 
 
 const validPopupAddCard = new FormValidator(validatorConfig, formNewPhoto)
@@ -108,8 +104,9 @@ validPopupAddCard.enableValidation()
 
 
 profileAddCardButton.addEventListener('click', () => {
-    popupNewCard.openPopup()
     validPopupAddCard.enableValidation()
+    formNewPhoto.reset()
+    popupFormNewCard.openPopup()
     // popupNewCard.clearInputsValue(popupAddNewPhoto)
     // validPopupAddCard.resetError(formNewPhoto)
     // validPopupAddCard.disableSubmitButton(addNewPhotoSubmitButton, validatorConfig.inactiveButtonClass)
@@ -179,8 +176,8 @@ Promise.all([api.getUserId(), api.getInitialCards()])//переписать getU
         // userAvatar.src = avatar
         //profileUserName.textContent = name
         //profileUserJob.textContent = about
-        userInfo.getUserInfo({ name, about, avatar })//аватар не работает
-        userInfo.updateUserInfo(profileUserName, profileUserJob, userAvatar)//аватар не работает
+        // userInfo.getUserInfo({ name, about, avatar })//аватар не работает
+        // userInfo.updateUserInfo(profileUserName, profileUserJob, userAvatar)//аватар не работает
 
 
         cards.forEach(card => {
@@ -188,11 +185,11 @@ Promise.all([api.getUserId(), api.getInitialCards()])//переписать getU
                 data: card, api, userId, templateSelector,
                 handleCardClick: (elementImage) => {
                     elementImage.addEventListener('click', () => {
-                        console.log(card)
                         popupWithImage.open(card)
                     })
                 }
             })
+
             const cardElement = cardData.generate()
 
 
@@ -246,34 +243,37 @@ export const hidePen = () => {
 //редактирование аватара------------------------------------------------
 
 
-const popupAva = new Popup(popupAvatar)
-popupAva.setEventListeners(closeButtons)
+//const popupAva = new Popup(popupAvatar)
+//popupAva.setEventListeners(closeButtons)
 const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
 validPopupUserAvatar.enableValidation()
 
 userAvatar.addEventListener('click', () => {
-    popupAva.openPopup()
-    popupAva.clearInputsValue()
-    validPopupUserAvatar.disableSubmitButton(avatarSubmit, validatorConfig.inactiveButtonClass)
-    validPopupUserAvatar.resetError(popupAvatar)
+    validPopupUserAvatar.enableValidation()
+    popupAvatarForm.reset()
+    popupAvaForm.openPopup()
+    // popupAva.clearInputsValue()
+    //  validPopupUserAvatar.disableSubmitButton(avatarSubmit, validatorConfig.inactiveButtonClass)
+    // validPopupUserAvatar.resetError(popupAvatar)
 })
 
 
 
 const popupAvaForm = new PopupWithForm({
-    selector: popupAvatar, handler: () => {
-        //  submitButton.textContent = 'Сохранение...'
+    selector: popupAvatar,
+    handler: () => {
+        popupAvaForm.toggleSubmitButtonTextContent('Сохранение...')
+
         api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
             .then(res => {
                 userAvatar.src = res.avatar
                 popupAvaForm.close()
             })
             .catch(err => console.log(err))
-        //   .finally(res => submitButton.textContent = 'Сохранить')
+            .finally(res => popupAvaForm.toggleSubmitButtonTextContent('Сохранить'))
 
     }
 })
 
-
-
 popupAvaForm.setEventListeners()
+

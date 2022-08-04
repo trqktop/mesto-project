@@ -8,15 +8,19 @@ export class UserInfo {
     this.profileUserAvatar = profileAvatar
   }
 
-  getUserInfo(data) {
+  getUserInfo(data) {//api === data
     this._name = data.name
     this._job = data.about
     this._avatar = data.avatar
+    this._id = data._id
 
-    // return {
-    //   name: this._name,
-    //   job: this._job
-    // }
+
+    return {
+      name: this._name,
+      about: this._job,
+      avatar: this._avatar,
+      _id: this._id
+    }
   }
 
 
@@ -24,6 +28,7 @@ export class UserInfo {
     this._name = newName
     this._job = newJob
     this._avatar = avatar
+    this.updateUserInfo()
   }
 
   updateUserInfo() {

@@ -1,14 +1,3 @@
-//import {options} from './constants.js'
-
-//конфиг
-//-------------------------------------------------------------------------------------------------------------------------------------------- 
-//const api = new Api({
-//    baseUrl: 'https://nomoreparties.co/v1/cohort-42',
-//    headers: {
-//        authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
-//        'Content-Type': 'application/json'
-//    }
-//});
 
 export class Api {
     constructor(options) {//в опции передаются только юрл и хедер
@@ -27,7 +16,7 @@ export class Api {
         return fetch(`${this.baseUrl}/users/me`, {
             headers: this.headers
         })
-            .then(res => checkResponse(res))
+            .then(res => this.checkResponse(res))
 
     }//3. Загрузка информации о пользователе с сервера
 
@@ -141,34 +130,3 @@ export class Api {
         return Promise.reject(`Ошибка: ${res.status}`)
     }
 }
-//--------------------------------------------------------------------------------------------------------------------------------------------
-
-//--------------------------------------------------------------------------------------------------------------------------------------------
-
-
-//export default class Api {
-//    constructor(){
-//    переносим вксь апи сюда
-//onrespone заприватить
-//}
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
