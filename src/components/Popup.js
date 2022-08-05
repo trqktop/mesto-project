@@ -1,13 +1,8 @@
 
 export class Popup {
-    constructor(selector) {
-        this.popupElement = selector
-
-
-        this.form = this.popupElement.querySelector('form')
-        this.submitButton = this.popupElement.querySelector('.popup__submit-button')
+    constructor(popupElement) {
+        this.popupElement = popupElement
         this.button = this.popupElement.querySelector('.popup__close-button')
-
         this.closePopupEscHandle = this._closePopupEsc.bind(this)
         this.closePopupOverlay = this._closePopupOverlay.bind(this)
     }
@@ -18,7 +13,6 @@ export class Popup {
     //}
 
     openPopup() {//Функция открытия попапа
-        this.setEventListeners()
         this.popupElement.classList.add('popup_opened')
         document.addEventListener("keydown", this.closePopupEscHandle)//(c)'добавлять обработчик события в функции открытия попапов'        })
         document.addEventListener('mousedown', this.closePopupOverlay)//(c)'добавлять обработчик события в функции открытия попапов' и { once: true } - удаляет
@@ -57,10 +51,6 @@ export class Popup {
         }
     }
 
-    toggleSubmitButtonTextContent(value) {//по заданию попап содержит 3 публичных метода.
-        //это скорее всего перенести в попап витх форм
-        this.submitButton.textContent = value
-    }//меняю текст контент кнопок субмит 
 
 
 

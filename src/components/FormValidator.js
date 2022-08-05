@@ -14,12 +14,14 @@ export class FormValidator {
         this.currentInput
         this.currentErrorMessage
         this.currentSubmitButton = this.currentElementValidate.querySelector(this.submitButtonSelector)
-        this.errorList = Array.from(this.currentElementValidate.querySelectorAll(this.errorClass))
+        this.inputList = Array.from(this.currentElementValidate.querySelectorAll(this.inputSelector))
     }
     enableValidation() {
         this._disableSubmitButton()
-        this._resetError()
+        this._hideErrorMessage()
+        // this._resetError()
         this._setEventListeners()
+
     }
 
     _setEventListeners() {
@@ -32,6 +34,8 @@ export class FormValidator {
     _checkValidation() {
         return this.currentElementValidate.checkValidity()
     }
+
+
 
     _hasValidForm() {
         this.currentErrorMessage = this._findErrorMessage()
@@ -51,12 +55,20 @@ export class FormValidator {
     _showErrorMessage() {
         this.currentInput.classList.add(this.inputErrorClass)
         this.currentErrorMessage.textContent = this.currentInput.validationMessage
-
     }
 
+
     _hideErrorMessage() {
-        this.currentInput.classList.remove(this.inputErrorClass)
-        this.currentErrorMessage.textContent = '';
+        this.inputList.forEach(input => {
+            input.classList.remove(this.inputErrorClass)
+            this.currentInput = input
+            this._findErrorMessage().textContent = ''
+            //  this.currentElementValidate.querySelector(`.${input.id}-error`).textContent = ''
+        })
+
+
+        //this.currentInput.classList.remove(this.inputErrorClass)
+        //this.currentErrorMessage.textContent = '';
     }
 
 
@@ -69,13 +81,4 @@ export class FormValidator {
         this.currentSubmitButton.classList.remove(this.inactiveButtonClass)
         this.currentSubmitButton.disabled = false;
     }
-
-
-    _resetError() {
-        this.errorList.forEach(errorElement => {
-            errorElement.textContent = ''
-        });
-    }
 }
-
-

@@ -1,12 +1,15 @@
+import { data } from "autoprefixer"
 import { Popup } from "./Popup.js"
 
 export class PopupWithForm extends Popup {
-    constructor({ selector, handler }) {
+    constructor({selector, handler}) {
         super(selector)
         //this.closePopup = super.closePopup
-        this.popupElement = selector
+        this.form = this.popupElement.querySelector('form')
+        this.submitButton = this.popupElement.querySelector('.popup__submit-button')
         this.handler = handler.bind(this)
         this.inputList = Array.from(this.form.querySelectorAll('.popup__input'))
+
         //  this.inputNameImage = this.form.querySelector('#nameImageInput')
         //  this.inputUrlImage = this.form.querySelector('#urlImageInput')
         //  this.inputNameProfile = this.form.querySelector('#profileNameInput')
@@ -15,13 +18,18 @@ export class PopupWithForm extends Popup {
     }
     //seper.setEventListeners() перезаписываем родительский листенер
     //this._closePopup() 
+    toggleSubmitButtonTextContent(value) {//по заданию попап содержит 3 публичных метода.
+        //это скорее всего перенести в попап витх форм
+        this.submitButton.textContent = value
+    }//меняю текст контент кнопок субмит 
 
     close() {
         super.closePopup()
-       // this.form.reset()
+        this.form.reset()
     }
 
     setEventListeners() {
+
         super.setEventListeners()
         this.form.addEventListener('submit', (evt) => {
             evt.preventDefault()
@@ -32,9 +40,17 @@ export class PopupWithForm extends Popup {
     }
 
     _getInputValues() {
-        return this.inputList.map(input => {
-            return input.value
+        this._formValues = {};
+        // добавляем в этот объект значения всех полей
+        this.inputList.forEach(input => {
+            this._formValues[input.name] = input.value;
         });
+        // возвращаем объект значений
+        return this._formValues;
+
+        //return this.inputList.map(input => {
+        //   return input.value
+        //});
         //тут работаем с даннымыи всех полей формы.                
         //переносим с попап родителя метод сбор данных с полей
         // this.input.textContent =

@@ -1,9 +1,8 @@
 import { Popup } from "./Popup.js"
 
 export class PopupWithImage extends Popup {
-    constructor(selector) {
-        super(selector)
-        this.popupElement = selector
+    constructor(popupElement) {
+        super(popupElement)
         this.popupFullscreenImage = this.popupElement.querySelector('.popup__fullscreen-image')
         this.popupDescription = this.popupElement.querySelector('.popup__caption')
     }
