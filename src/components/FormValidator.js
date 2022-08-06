@@ -21,8 +21,12 @@ export class FormValidator {
         this._hideErrorMessage()
         // this._resetError()
         this._setEventListeners()
-
     }
+
+
+
+
+
 
     _setEventListeners() {
         this.currentElementValidate.addEventListener('input', (evt) => {
@@ -81,4 +85,13 @@ export class FormValidator {
         this.currentSubmitButton.classList.remove(this.inactiveButtonClass)
         this.currentSubmitButton.disabled = false;
     }
+
+
+
+    resetValidation() {
+        this._disableSubmitButton();
+        this._hideErrorMessage()
+    }
 }
+
+

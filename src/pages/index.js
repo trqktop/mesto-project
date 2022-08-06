@@ -19,6 +19,7 @@ import {
     closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "../utils/constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
 import { FormValidator } from '../components/FormValidator.js'
+
 let userId
 
 const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
@@ -26,6 +27,17 @@ const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: 
 const popupWithImage = new PopupWithImage(popupFullScreen)
 
 
+function createCard(item) {
+    const cardData = new Card({
+        data: item, api, userId, templateSelector,
+        handleCardClick: (elementImage) => {
+            elementImage.addEventListener('click', () => {
+                popupWithImage.open(item)
+            })
+        }
+    })
+    return cardData.generate()
+}
 
 
 
@@ -42,19 +54,21 @@ Promise.all([api.getUserProfileInfo(), api.getInitialCards()])//переписа
         const section = new Section({
             cards,
             renderer: (item) => {
-                const cardData = new Card({
-                    data: item, api, userId, templateSelector,
-                    handleCardClick: (elementImage) => {
-                        elementImage.addEventListener('click', () => {
-                            popupWithImage.open(item)
-                        })
-                    }
-                })
-                const cardElement = cardData.generate()
-                section.addItem(cardElement)
+                section.addItem(createCard(item))
+                //     const cardData = new Card({
+                //         data: item, api, userId, templateSelector,
+                //         handleCardClick: (elementImage) => {
+                //             elementImage.addEventListener('click', () => {
+                //                 popupWithImage.open(item)
+                //             })
+                //         }
+                //     })
+                //     const cardElement = cardData.generate()
+                //     section.addItem(cardElement)
             }
         }, elementsGridContainer)
         section.renderItems(cards)
+
 
     })
     .catch(err => {
@@ -65,25 +79,19 @@ Promise.all([api.getUserProfileInfo(), api.getInitialCards()])//переписа
 
 
 const popupWithFormProfile = new PopupWithForm({
-    popupElement: popupProfileEdit, handler: (data) => {
-
-        // profileUserName.textContent = data[0]
-        // profileUserJob.textContent = data[1]
-        //  // profileNameInput.textContent = profileNameInput
+    popupElement: popupProfileEdit, handler: ({ username, userabout }) => {
         popupWithFormProfile.toggleSubmitButtonTextContent('Сохранение...')//меняю текстконтент кнопки пока идет загрузка с сервера
-        api.pushProfileData(profileNameInput, profileJobInput)//5. Редактирование профиля
+        api.pushProfileData(username, userabout)//5. Редактирование профиля
             .then(newData => {
                 popupWithFormProfile.close()
-                //   popup.saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName)
                 return newData
             })
             .then(newData => userInfo.setUserInfo(newData))
-            //.then(newData => userInfo.updateUserInfo())
-            //  .then(newData => popup.closePopup())//закрываю попап
             .catch((err) => console.log(err))//в случае ошибки вывожу ее в консоль
             .finally(res => popupWithFormProfile.toggleSubmitButtonTextContent('Сохранить'))//возвращаю текст контент кнопке
     }
 })
+
 popupWithFormProfile.setEventListeners()
 
 
@@ -96,9 +104,10 @@ const validPopupProfileEdit = new FormValidator(validatorConfig, popupSubmitProf
 validPopupProfileEdit.enableValidation()//валидация попапа
 
 openPopupProfileEditButton.addEventListener('click', () => {//открытие попапа
-    profileJobInput.value = profileUserJob.textContent
-    profileNameInput.value = profileUserName.textContent
-    validPopupProfileEdit.enableValidation()
+    validPopupProfileEdit.resetValidation()
+    const userData = userInfo.getUserInfo()
+    profileJobInput.value = userData.about
+    profileNameInput.value = userData.name
     popupWithFormProfile.openPopup();//открытие попапа
 
     //popupWithFormProfile.showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName)//открытие попапа
@@ -121,8 +130,8 @@ validPopupAddCard.enableValidation()
 
 
 profileAddCardButton.addEventListener('click', () => {
-    validPopupAddCard.enableValidation()
     formNewPhoto.reset()
+    validPopupAddCard.resetValidation()
     popupFormNewCard.openPopup()
     // popupNewCard.clearInputsValue(popupAddNewPhoto)
     // validPopupAddCard.resetError(formNewPhoto)
@@ -141,26 +150,27 @@ const popupFormNewCard = new PopupWithForm({
 
 
                 //создаем карточку
-                const cardData = new Card({
-                    data: cardFromServer, api, userId, templateSelector,
-                    handleCardClick: (elementImage) => {
-                        elementImage.addEventListener('click', () => {
-                            popupWithImage.open(cardFromServer)
-                        })
-                    }
-                })
-                const cardElement = cardData.generate()
+                //    const cardData = new Card({
+                //        data: cardFromServer, api, userId, templateSelector,
+                //        handleCardClick: (elementImage) => {
+                //            elementImage.addEventListener('click', () => {
+                //                popupWithImage.open(cardFromServer)
+                //            })
+                //        }
+                //    })
+                //    const cardElement = cardData.generate()
 
 
 
                 //вставляем карточку в разметку
                 const section = new Section({
                     cards: cardFromServer,
-                    renderer: () => {
-                        section.addItem(cardElement)
+                    renderer: (cardFromServer) => {
+                        //section.addItem(cardElement)
+                        section.addItem(createCard(cardFromServer))
                     }
                 }, elementsGridContainer)
-                section.addItem(cardElement)
+                section.renderer(cardFromServer)
 
 
 
@@ -181,15 +191,6 @@ popupFormNewCard.setEventListeners()
 
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
-
 
 
 
@@ -223,7 +224,7 @@ const validPopupUserAvatar = new FormValidator(validatorConfig, popupAvatarForm)
 validPopupUserAvatar.enableValidation()
 
 userAvatar.addEventListener('click', () => {
-    validPopupUserAvatar.enableValidation()
+    validPopupUserAvatar.resetValidation()
     popupAvatarForm.reset()
     popupAvaForm.openPopup()
     // popupAva.clearInputsValue()
@@ -237,15 +238,13 @@ const popupAvaForm = new PopupWithForm({
     popupElement: popupAvatar,
     handler: () => {
         popupAvaForm.toggleSubmitButtonTextContent('Сохранение...')
-
         api.patchProfileAvatar(popupAvatarUrlInput.value)//добавил api.
-            .then(res => {
-                userAvatar.src = res.avatar
+            .then(avatar => {
+                userInfo.setUserInfo(avatar)
                 popupAvaForm.close()
             })
             .catch(err => console.log(err))
             .finally(res => popupAvaForm.toggleSubmitButtonTextContent('Сохранить'))
-
     }
 })
 

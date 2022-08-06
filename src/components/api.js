@@ -26,8 +26,8 @@ export class Api {
             method: 'PATCH',
             headers: this.headers,
             body: JSON.stringify({
-                name: userName.value,
-                about: userJob.value
+                name: userName,
+                about: userJob
             })
         })
             .then(res => this.checkResponse(res))

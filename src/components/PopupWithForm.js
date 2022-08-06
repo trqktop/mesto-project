@@ -11,16 +11,10 @@ export class PopupWithForm extends Popup {
         this.handler = handler.bind(this)
         this.inputList = Array.from(this.form.querySelectorAll('.popup__input'))
 
-        //  this.inputNameImage = this.form.querySelector('#nameImageInput')
-        //  this.inputUrlImage = this.form.querySelector('#urlImageInput')
-        //  this.inputNameProfile = this.form.querySelector('#profileNameInput')
-        //  this.inputJobProfile = this.form.querySelector('#profileJobInput')
-        //  this.inputUrlAvatar = this.form.querySelector('#urlNewAvatar')
+
     }
-    //  //seper.setEventListeners() перезаписываем родительский листенер
-    //  //this._closePopup() 
-    toggleSubmitButtonTextContent(value) {//по заданию попап содержит 3 публичных метода.
-        //это скорее всего перенести в попап витх форм
+
+    toggleSubmitButtonTextContent(value) {
         this.submitButton.textContent = value
     }//меняю текст контент кнопок субмит 
 
@@ -35,8 +29,6 @@ export class PopupWithForm extends Popup {
             evt.preventDefault()
             this.handler(this._getInputValues())
         })
-        // this.button = super.button
-        // super.setEventListeners()
     }
 
     _getInputValues() {
@@ -52,15 +44,3 @@ export class PopupWithForm extends Popup {
     }
 }
 
-// ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
-    //saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
-    //    profileUserJob.textContent = profileJobInput.value;
-    //    profileUserName.textContent = profileNameInput.value;
-    //}
-
-
-        // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
-    //showInputValueAfterOpenPopup(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
-    //    profileJobInput.value = profileUserJob.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-    //    profileNameInput.value = profileUserName.textContent;//«Имя» и «О себе»  заполнены теми значениями, которые отображаются на странице.
-    //}

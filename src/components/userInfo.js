@@ -9,10 +9,10 @@ export class UserInfo {
   }
 
   getUserInfo(data) {//api === data
-    this._name = data.name
-    this._job = data.about
-    this._avatar = data.avatar
-    this._id = data._id
+  // this._name = data.name
+  // this._job = data.about
+  // this._avatar = data.avatar
+  // this._id = data._id
 
 
     return {
