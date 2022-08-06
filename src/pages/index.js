@@ -161,7 +161,6 @@ const popupFormNewCard = new PopupWithForm({
                 //    const cardElement = cardData.generate()
 
 
-
                 //вставляем карточку в разметку
                 const section = new Section({
                     cards: cardFromServer,
