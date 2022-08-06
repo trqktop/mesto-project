@@ -19,36 +19,53 @@ import {
     closeButtons, options, fullScreenImage, fullScreenImageDescription
 } from "../utils/constants.js"//РАЗОБРАТЬСЯ С КОНСТАНТАМИ
 import { FormValidator } from '../components/FormValidator.js'
+let userId
 
-
-
-let userId;
-let userProfileName;
-let userProfileJob;
-let userProfileAvatar;
-
-const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: userAvatar })//тут определяем все данные на странице. в том числе userId
 const api = new Api(options)//api.СОЗДАЕТСЯ 1 РАЗ
+const userInfo = new UserInfo({ profileUserName, profileUserJob, profileAvatar: userAvatar })//тут определяем все данные на странице. в том числе userId
+const popupWithImage = new PopupWithImage(popupFullScreen)
 
 
-api.getUserProfileInfo()
 
-    .then(data => {
-        const userData = userInfo.getUserInfo(data)
+
+
+//инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
+Promise.all([api.getUserProfileInfo(), api.getInitialCards()])//переписать getUserId() на UserInfo class
+    .then(([userData, cards]) => {
         userInfo.setUserInfo(userData)
-        userId = userData._id;
-        userProfileName = userData.name;
-        userProfileJob = userData.about;
-        userProfileAvatar = userData.avatar;
+        const { name, about, avatar, _id, cohort } = userData
+        userId = _id
+        return { userId, cards }
     })
-    .catch(res => console.log(res))
+    .then(({ userId, cards }) => {
 
-//редактирование профиля ------------------------------------------------------------------------------------------------------------------------------------------------
+        const section = new Section({
+            cards,
+            renderer: (item) => {
+                const cardData = new Card({
+                    data: item, api, userId, templateSelector,
+                    handleCardClick: (elementImage) => {
+                        elementImage.addEventListener('click', () => {
+                            popupWithImage.open(item)
+                        })
+                    }
+                })
+                const cardElement = cardData.generate()
+                section.addItem(cardElement)
+            }
+        }, elementsGridContainer)
+        section.renderItems(cards)
+
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
 
 
 
 const popupWithFormProfile = new PopupWithForm({
-    selector: popupProfileEdit, handler: (data) => {
+    popupElement: popupProfileEdit, handler: (data) => {
 
         // profileUserName.textContent = data[0]
         // profileUserJob.textContent = data[1]
@@ -116,10 +133,10 @@ profileAddCardButton.addEventListener('click', () => {
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 const popupFormNewCard = new PopupWithForm({
-    selector: popupAddNewPhoto,
-    handler: ([inputName, inputSrc]) => {
+    popupElement: popupAddNewPhoto,
+    handler: ({ imagename, imageurl }) => {
         popupFormNewCard.toggleSubmitButtonTextContent('Сохранение...')//меняем тексконтент кнопки , пока идет запрос на сервер
-        api.pushNewCard(inputName, inputSrc)//пушим карточку на сервер
+        api.pushNewCard(imagename, imageurl)//пушим карточку на сервер
             .then(cardFromServer => {
 
 
@@ -166,50 +183,7 @@ popupFormNewCard.setEventListeners()
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-const popupWithImage = new PopupWithImage(popupFullScreen)
 
-
-//инициализация карточек при первом запуске ----------------------------------------------------------------------------------------------------------------
-Promise.all([api.getUserId(), api.getInitialCards()])//переписать getUserId() на UserInfo class
-    .then(([userData, cards]) => {
-        const { name, about, avatar, _id: userId, cohort } = userData
-        // userAvatar.src = avatar
-        //profileUserName.textContent = name
-        //profileUserJob.textContent = about
-        // userInfo.getUserInfo({ name, about, avatar })//аватар не работает
-        // userInfo.updateUserInfo(profileUserName, profileUserJob, userAvatar)//аватар не работает
-
-
-        cards.forEach(card => {
-            const cardData = new Card({
-                data: card, api, userId, templateSelector,
-                handleCardClick: (elementImage) => {
-                    elementImage.addEventListener('click', () => {
-                        popupWithImage.open(card)
-                    })
-                }
-            })
-
-            const cardElement = cardData.generate()
-
-
-
-
-            const section = new Section({
-                card,
-                renderer: () => {
-                    section.addItem(cardElement)
-                }
-            }, elementsGridContainer)
-            section.renderer()
-        })
-
-
-
-    })
-    .catch(err => {
-        console.log(err)
-    })
 
 
 
@@ -260,7 +234,7 @@ userAvatar.addEventListener('click', () => {
 
 
 const popupAvaForm = new PopupWithForm({
-    selector: popupAvatar,
+    popupElement: popupAvatar,
     handler: () => {
         popupAvaForm.toggleSubmitButtonTextContent('Сохранение...')
 

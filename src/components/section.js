@@ -1,17 +1,29 @@
 
 
 export class Section {
-    constructor({ cards, renderer }, selector) {//Вам нужно удалить слово Selector из названий, если это не селекторы Это container
+    constructor({ items, renderer }, container) {//Вам нужно удалить слово Selector из названий, если это не селекторы Это container
         this._renderer = renderer
-        this.selector = selector
-        this.cards = cards
+        this.container = container
+        this.items = items
     }
-    renderer() {//по заданию в классе Section должен быть метод renderItems для отрисовки всего массива карточек
-        this._renderer(/*[cards]*/)
+    //  renderItems(items) {
+    //      console.log(items)
+    //      items.forEach(item => {
+    //          addItem(item)
+    //      });
+    //  }
+    renderItems(items) {
+        items.forEach(item => {
+            this._renderer(item)
+        });
+    }
+
+    renderer(item) {//Свойство renderer — это функция, которая отвечает за создание и отрисовку данных на странице.
+        this._renderer(item)
     }//Для отрисовки массива карточек нужно немного изменить метод renderItems в классе Section, чтобы он теперь принимал в вызов этот массив renderItems(items) {
 
     addItem(card) {
-        this.selector.prepend(card);
+        this.container.prepend(card);
     }
 
 }

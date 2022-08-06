@@ -1,10 +1,11 @@
-import { data } from "autoprefixer"
+
 import { Popup } from "./Popup.js"
 
 export class PopupWithForm extends Popup {
-    constructor({selector, handler}) {
-        super(selector)
+    constructor({ popupElement, handler }) {
+        super(popupElement)
         //this.closePopup = super.closePopup
+        this.popupElement = popupElement
         this.form = this.popupElement.querySelector('form')
         this.submitButton = this.popupElement.querySelector('.popup__submit-button')
         this.handler = handler.bind(this)
@@ -16,8 +17,8 @@ export class PopupWithForm extends Popup {
         //  this.inputJobProfile = this.form.querySelector('#profileJobInput')
         //  this.inputUrlAvatar = this.form.querySelector('#urlNewAvatar')
     }
-    //seper.setEventListeners() перезаписываем родительский листенер
-    //this._closePopup() 
+    //  //seper.setEventListeners() перезаписываем родительский листенер
+    //  //this._closePopup() 
     toggleSubmitButtonTextContent(value) {//по заданию попап содержит 3 публичных метода.
         //это скорее всего перенести в попап витх форм
         this.submitButton.textContent = value
@@ -29,7 +30,6 @@ export class PopupWithForm extends Popup {
     }
 
     setEventListeners() {
-
         super.setEventListeners()
         this.form.addEventListener('submit', (evt) => {
             evt.preventDefault()
@@ -48,12 +48,7 @@ export class PopupWithForm extends Popup {
         // возвращаем объект значений
         return this._formValues;
 
-        //return this.inputList.map(input => {
-        //   return input.value
-        //});
-        //тут работаем с даннымыи всех полей формы.                
-        //переносим с попап родителя метод сбор данных с полей
-        // this.input.textContent =
+
     }
 }
 

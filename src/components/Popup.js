@@ -55,6 +55,7 @@ export class Popup {
 
 
     setEventListeners() {
+  
         this.button.addEventListener('click', () => {
             this.closePopup()
         });//закрытие всех попапов слушатель
