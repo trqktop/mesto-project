@@ -91,7 +91,7 @@
     <div class="popup__container">
       <button aria-label="close" class="popup__close-button" type="reset"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
-      <form name="user-edit" action="#" class="popup__edit-form" novalidate>
+      <form name="user-edit" action="#" class="popup__edit-form" id="popupEditForm" novalidate>
         <div class="popup__error-fieldset">
           <input class="popup__input" value="" placeholder="Имя" type="text" id="profileNameInput" name="username"
             minlength="2" maxlength="40" required>
@@ -129,7 +129,7 @@
     </div>
   </section>
   <!--попап открытие картинки-->
-  <section class="popup popup__fullscreen ">
+  <section class="popup popup__fullscreen">
     <figure class="popup__fullscreen-container">
       <button aria-label="close" class="popup__close-button popup__image-button" type="reset"></button>
       <img alt="" src="<%=require('./images/dombai-unsplash.jpg')%>" class="popup__fullscreen-image">
@@ -143,13 +143,13 @@
     <div class="popup__container">
       <button aria-label="close" class="popup__close-button" id="" type="reset"></button>
       <h3 class="popup__title">Обновить аватар</h3>
-      <form name="user-edit" action="#" class="popup__edit-form" id="" novalidate>
+      <form name="user-edit" action="#" class="popup__edit-form" id="formEditAvatar" novalidate>
         <div class="popup__error-fieldset">
           <input class="popup__input" value="" type="url" placeholder="Ссылка на картинку" id="urlNewAvatar"
             name="imageurl" required>
           <span class="popup__input-error urlNewAvatar-error error"></span>
         </div>
-        <button type="submit" id="" class="popup__submit-button popup__submit-button_disabled"
+        <button type="submit" id="avatarSubmitButton" class="popup__submit-button popup__submit-button_disabled"
           disabled>Сохранить</button>
       </form>
     </div>
