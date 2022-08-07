@@ -20,8 +20,13 @@ export class PopupWithForm extends Popup {
 
     close() {
         super.closePopup()
-        this.form.reset()
     }
+    
+    open() {
+        this.form.reset()
+        super.openPopup()
+    }
+
 
     setEventListeners() {
         super.setEventListeners()
@@ -39,8 +44,6 @@ export class PopupWithForm extends Popup {
         });
         // возвращаем объект значений
         return this._formValues;
-
-
     }
 }
 

@@ -1,6 +1,6 @@
 
 export class Card {
-    constructor({ data, api, userId, templateSelector, handleCardClick }) {
+    constructor({ data, api, userId, templateSelector, handleCardClick, handleCardDeleteButtonListener, handleCardlikeButtonListenerActive, handleCardlikeButtonListenerDelete }) {
         this.api = api
         this.data = data
         this.name = data.name
@@ -11,6 +11,9 @@ export class Card {
         this.likes = data.likes
         this.userId = userId
         this.handleCardClick = handleCardClick
+        this.handleCardDeleteButtonListener = handleCardDeleteButtonListener
+        this.handleCardlikeButtonListenerActive = handleCardlikeButtonListenerActive
+        this.handleCardlikeButtonListenerDelete = handleCardlikeButtonListenerDelete
     }
 
 
@@ -32,68 +35,45 @@ export class Card {
         this.elementCaption.textContent = this.name;
         this.elementImage.setAttribute('src', this.link)
         this.elementImage.setAttribute('alt', this.name)
+        this._checkOwnCard()
         this._renderLikeCount()
-        this._likeButtonListener()
-        this._checkCardOwn()
+        // this._likeButtonListener()
         this._renderActiveLikesFromDom()
-        this.handleCardClick(this.elementImage)
+        this._setEventListener()
         return this.element
     }
 
+    _setEventListener() {
+        this.elementImage.addEventListener('click', () => {
+            this.handleCardClick()
+        })
 
-
-    _likeButtonListener() {
+        this.elementDeleteButton.addEventListener('click', () => {
+            if (this._checkOwnCard())
+                this.handleCardDeleteButtonListener(this.element, this.cardId)
+        })
         this.elementLike.addEventListener('click', () => {
-            this._likeActive()
+
+            if (!this.elementLike.classList.contains('element__button_active')) {
+                this.handleCardlikeButtonListenerActive(this.cardId, this.elementLike, this.elementLikeCount)
+            }
+            else {
+                this.handleCardlikeButtonListenerDelete(this.cardId, this.elementLike, this.elementLikeCount)
+            }
         })
     }
 
 
-    _likeActive() {
-        if (!this.elementLike.classList.contains('element__button_active')) {
-            this.api.putLikeOnServer(this.cardId)
-                .then(newCard => {
-                    this.likes = newCard.likes
-                    this._renderLikeCount()
-                })
-                .then(res => this.elementLike.classList.add('element__button_active'))
-                .catch(err => console.log(err))
-        }
+    _checkOwnCard() {
+        if (this.owner === this.userId)
+            return true
         else {
-            this.api.deleteLikeFromServer(this.cardId)
-                .then(newCard => {
-                    this.likes = newCard.likes
-                    this._renderLikeCount(newCard)
-                })
-                .then(res => this.elementLike.classList.remove('element__button_active'))
-                .catch(err => console.log(err))
+            this._removeTrashIconFromDom()
         }
     }
 
     _renderLikeCount() {
         this.elementLikeCount.textContent = this.likes.length
-    }
-
-
-    _deleteCardButtonListener() {
-        this.elementDeleteButton.addEventListener('click', () => {
-            this.api.requestToDeleteFromTheServer(this.cardId)
-                .then(res => {
-                    console.log(this.element)
-                    this.element.remove()
-                })
-                .catch(err => console.log(err))
-        })
-    }
-
-
-    _checkCardOwn() {
-        if (this.owner !== this.userId) {
-            this._removeTrashIconFromDom()
-        }
-        else {
-            this._deleteCardButtonListener()
-        }
     }
 
 

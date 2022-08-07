@@ -21,7 +21,6 @@ export class Popup {
     closePopup() {
         this.popupElement.classList.remove('popup_opened')
         this._removeEventListener()
-        return true
     }
 
     _removeEventListener() {//заприватить
@@ -29,15 +28,6 @@ export class Popup {
         document.removeEventListener('mousedown', this.closePopupOverlay) // (c)'удалять его при закрытии попапов.'
     }//заприватить
 
-    // ЭТОТ МЕТОД ПЕРЕНОСИТСЯ В ПОПАП ВИТХ ФОРМ
-    //saveChange(profileJobInput, profileUserJob, profileNameInput, profileUserName) {
-    //    profileUserJob.textContent = profileJobInput.value;
-    //    profileUserName.textContent = profileNameInput.value;
-    //}
-
-    //clearInputsValue() {
-    //    this.popupElement.querySelector('form').reset()
-    //}
 
     _closePopupEsc(evt) {//_handleEscClose переименовать
         if (evt.key === 'Escape') {
@@ -55,7 +45,6 @@ export class Popup {
 
 
     setEventListeners() {
-  
         this.button.addEventListener('click', () => {
             this.closePopup()
         });//закрытие всех попапов слушатель
